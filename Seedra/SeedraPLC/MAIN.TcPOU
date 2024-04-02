@@ -4,7 +4,7 @@
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
     ControlSource_HMI : FB_ControlSource_HMI_Machine;
-    Seedra          : FB_Machine := (Name := 'Seedra_');
+    Seedra          : FB_Machine := (Name := 'SeedraMachine');
     InitComplete      : BOOL;
 
     //Debug testing Recipe manager
