@@ -995,7 +995,7 @@ External Setpoint Generation:
 				</Task>
 			</Tasks>
 			<TypeSystem>
-				<AdditionalTmcFile Name="Seedra" File="SeedraPLC\Machine\Events\Seedra.tmc"/>
+				<AdditionalTmcFile Name="SeedraPLC" File="SeedraPLC\Machine\Events\SeedraPLC.tmc"/>
 			</TypeSystem>
 		</System>
 		<Motion>
