@@ -116,7 +116,6 @@
     <Folder Include="Machine\EquipmentModules" />
     <Folder Include="DUTs" />
     <Folder Include="Machine\HMI Connections" />
-    <Folder Include="Machine\Events" />
     <Folder Include="Machine\Templates" />
     <Folder Include="Machine\VISUs" />
     <Folder Include="Machine\VISUs\VisuOjects" />
@@ -219,17 +218,6 @@
     <LibraryReference Include="VisuSymbols,newest,System">
       <Namespace>VisuSymbols</Namespace>
     </LibraryReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Machine\Events\SeedraTable.xlsx">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Machine\Events\Seedra.tmc">
-      <SubType>Content</SubType>
-    </Content>
-    <None Include="SeedraPLC.tmc">
-      <SubType>Content</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <PlaceholderResolution Include="CAA Callback">
@@ -373,6 +361,11 @@
     <PlaceholderResolution Include="VisuDialogs">
       <Resolution>VisuDialogs, * (System)</Resolution>
     </PlaceholderResolution>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SeedraPLC.tmc">
+      <SubType>Content</SubType>
+    </None>
   </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>

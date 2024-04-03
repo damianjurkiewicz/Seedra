@@ -5,7 +5,7 @@
       <Data>
         <o xml:space="preserve" t="VisualObject">
           <n n="LastVisuLanguageModelEntry" />
-          <v n="UniqueIdGenerator">"12"</v>
+          <v n="UniqueIdGenerator">"13"</v>
           <o n="VisualElemList" t="VisualElemList">
             <l n="VisualElementList" t="VisualElemCollection" cet="GenericVisualElem">
               <o>
@@ -160,7 +160,7 @@
                 <n n="VisualElementFrameInformation" />
                 <d n="VisualElementInputActions" t="Hashtable" />
                 <v n="VisualElementIdentification">{c7267d2c-974b-411a-8f8a-e2621908a04c}</v>
-                <v n="VisualElementOwningObjectGuid">{38d3adcf-05a5-497d-bb81-55443dba2d43}</v>
+                <v n="VisualElementOwningObjectGuid">{36f6a3ae-b99e-0ef0-3759-f9efb58a3c39}</v>
                 <a n="LMGuids" et="Guid" />
                 <d n="SubElements" t="Hashtable" />
                 <v n="VisualElementId">5</v>
@@ -335,7 +335,7 @@
                   </a>
                 </d>
                 <v n="VisualElementIdentification">{1a525bff-1c1a-4cc3-bc3c-66ca69c3c24c}</v>
-                <v n="VisualElementOwningObjectGuid">{38d3adcf-05a5-497d-bb81-55443dba2d43}</v>
+                <v n="VisualElementOwningObjectGuid">{36f6a3ae-b99e-0ef0-3759-f9efb58a3c39}</v>
                 <a n="LMGuids" et="Guid" />
                 <d n="SubElements" t="Hashtable" />
                 <v n="VisualElementId">7</v>
@@ -509,7 +509,7 @@
                   </a>
                 </d>
                 <v n="VisualElementIdentification">{03195f2d-1d28-495f-b34d-808608a416f0}</v>
-                <v n="VisualElementOwningObjectGuid">{38d3adcf-05a5-497d-bb81-55443dba2d43}</v>
+                <v n="VisualElementOwningObjectGuid">{36f6a3ae-b99e-0ef0-3759-f9efb58a3c39}</v>
                 <a n="LMGuids" et="Guid" />
                 <d n="SubElements" t="Hashtable" />
                 <v n="VisualElementId">9</v>
@@ -683,7 +683,7 @@
                   </a>
                 </d>
                 <v n="VisualElementIdentification">{87aec826-770c-4ffa-a795-5366f645d87f}</v>
-                <v n="VisualElementOwningObjectGuid">{38d3adcf-05a5-497d-bb81-55443dba2d43}</v>
+                <v n="VisualElementOwningObjectGuid">{36f6a3ae-b99e-0ef0-3759-f9efb58a3c39}</v>
                 <a n="LMGuids" et="Guid" />
                 <d n="SubElements" t="Hashtable" />
                 <v n="VisualElementId">11</v>
@@ -857,7 +857,7 @@
                   </a>
                 </d>
                 <v n="VisualElementIdentification">{04a5c45c-dda1-4804-aafd-5577146bbad5}</v>
-                <v n="VisualElementOwningObjectGuid">{38d3adcf-05a5-497d-bb81-55443dba2d43}</v>
+                <v n="VisualElementOwningObjectGuid">{36f6a3ae-b99e-0ef0-3759-f9efb58a3c39}</v>
                 <a n="LMGuids" et="Guid" />
                 <d n="SubElements" t="Hashtable" />
                 <v n="VisualElementId">13</v>
@@ -1031,7 +1031,7 @@
                   </a>
                 </d>
                 <v n="VisualElementIdentification">{3242ee25-66af-4b8f-9729-36da15dd61ba}</v>
-                <v n="VisualElementOwningObjectGuid">{38d3adcf-05a5-497d-bb81-55443dba2d43}</v>
+                <v n="VisualElementOwningObjectGuid">{36f6a3ae-b99e-0ef0-3759-f9efb58a3c39}</v>
                 <a n="LMGuids" et="Guid" />
                 <d n="SubElements" t="Hashtable" />
                 <v n="VisualElementId">15</v>
@@ -1205,7 +1205,7 @@
                   </a>
                 </d>
                 <v n="VisualElementIdentification">{024208a7-f2d4-46e7-9bfd-8e1f07e2c197}</v>
-                <v n="VisualElementOwningObjectGuid">{38d3adcf-05a5-497d-bb81-55443dba2d43}</v>
+                <v n="VisualElementOwningObjectGuid">{36f6a3ae-b99e-0ef0-3759-f9efb58a3c39}</v>
                 <a n="LMGuids" et="Guid" />
                 <d n="SubElements" t="Hashtable" />
                 <v n="VisualElementId">17</v>
@@ -1379,7 +1379,7 @@
                   </a>
                 </d>
                 <v n="VisualElementIdentification">{2227eb6d-9358-40d1-8987-e1b1a9e848e5}</v>
-                <v n="VisualElementOwningObjectGuid">{38d3adcf-05a5-497d-bb81-55443dba2d43}</v>
+                <v n="VisualElementOwningObjectGuid">{36f6a3ae-b99e-0ef0-3759-f9efb58a3c39}</v>
                 <a n="LMGuids" et="Guid" />
                 <d n="SubElements" t="Hashtable" />
                 <v n="VisualElementId">19</v>
@@ -1553,7 +1553,7 @@
                   </a>
                 </d>
                 <v n="VisualElementIdentification">{80727b49-e8d0-4caf-b6d1-ae86ba95ae3c}</v>
-                <v n="VisualElementOwningObjectGuid">{38d3adcf-05a5-497d-bb81-55443dba2d43}</v>
+                <v n="VisualElementOwningObjectGuid">{36f6a3ae-b99e-0ef0-3759-f9efb58a3c39}</v>
                 <a n="LMGuids" et="Guid" />
                 <d n="SubElements" t="Hashtable" />
                 <v n="VisualElementId">21</v>
@@ -1727,7 +1727,7 @@
                   </a>
                 </d>
                 <v n="VisualElementIdentification">{4cf7162b-f2cd-4859-83b6-6899a98d5262}</v>
-                <v n="VisualElementOwningObjectGuid">{38d3adcf-05a5-497d-bb81-55443dba2d43}</v>
+                <v n="VisualElementOwningObjectGuid">{36f6a3ae-b99e-0ef0-3759-f9efb58a3c39}</v>
                 <a n="LMGuids" et="Guid" />
                 <d n="SubElements" t="Hashtable" />
                 <v n="VisualElementId">23</v>
@@ -2201,7 +2201,7 @@
                 </o>
                 <d n="VisualElementInputActions" t="Hashtable" />
                 <v n="VisualElementIdentification">{1a9cdd03-c4e0-40c0-b3fd-275dba50b538}</v>
-                <v n="VisualElementOwningObjectGuid">{38d3adcf-05a5-497d-bb81-55443dba2d43}</v>
+                <v n="VisualElementOwningObjectGuid">{36f6a3ae-b99e-0ef0-3759-f9efb58a3c39}</v>
                 <a n="LMGuids" et="Guid" />
                 <d n="SubElements" t="Hashtable" />
                 <v n="VisualElementId">0</v>
@@ -2329,7 +2329,7 @@
                 <n n="VisualElementFrameInformation" />
                 <d n="VisualElementInputActions" t="Hashtable" />
                 <v n="VisualElementIdentification">{b4c4617c-a374-4543-b3f4-db09eafcc7ac}</v>
-                <v n="VisualElementOwningObjectGuid">{38d3adcf-05a5-497d-bb81-55443dba2d43}</v>
+                <v n="VisualElementOwningObjectGuid">{36f6a3ae-b99e-0ef0-3759-f9efb58a3c39}</v>
                 <a n="LMGuids" et="Guid" />
                 <d n="SubElements" t="Hashtable" />
                 <v n="VisualElementId">49</v>
@@ -2495,7 +2495,7 @@
               <o>
                 <v n="Id">12L</v>
                 <n n="Tag" />
-                <v n="Text">"	HMI : ST_PackMLModuleBase_HMI;"</v>
+                <v n="Text">"	HMI : ST_PackMLBaseModule_HMI;"</v>
               </o>
               <o>
                 <v n="Id">1L</v>
