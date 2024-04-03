@@ -15,8 +15,6 @@ UpgradeLog.htm
 *.tpy
 LineIDs.dbg
 LineIDs.dbg.bak
-SeedraPLC.tmc
-
 #Scope stuff
 *.tcscopex
 *.vsm
