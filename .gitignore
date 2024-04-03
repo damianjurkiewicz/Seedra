@@ -15,9 +15,7 @@ UpgradeLog.htm
 *.tpy
 LineIDs.dbg
 LineIDs.dbg.bak
-Seedra/SeedraPLC/SeedraPLC.tmc
 SeedraPLC.tmc
-**/SeedraPLC.tmc
 
 #Scope stuff
 *.tcscopex
@@ -164,4 +162,3 @@ artifacts/
 ##Seedra/SeedraPLC/_Libraries/beckhoff automation llc/base types/3.0.0/
 
 Seedra/SeedraPLC/SeedraPLC.tmc
-*.tmc
