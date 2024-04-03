@@ -9,7 +9,7 @@ UpgradeLog.htm
 
 # TwinCAT files
 
-## .tmc file should not be ignored. Results in broken links.
+
 ## .tpy file can be ignored. They are a holdover from CoDeSys and aren't used much by beckhoff
 ## Source: https://infosys.beckhoff.com/english.php?content=../content/1033/tc3_sourcecontrol/18014398915785483.html&id=
 *.tpy
