@@ -4,7 +4,7 @@
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Machine EXTENDS FB_PackML_BaseModule // IMPLEMENTS I_ControlsProductionRate
 VAR
     // Sub Modules
-    PullWheels : FB_PullWheel := (Name := 'Pull Wheel', LogStateChanges := TRUE);
+    GantryXY   : FB_GantryXY  := (Name := 'Gantry', LogStateChanges := TRUE);
     Sealer     : FB_Sealer    := (Name := 'Sealer', LogStateChanges := TRUE);
     Unwind     : FB_Unwind    := (Name := 'Unwind', LogStateChanges := TRUE);
 
@@ -27,10 +27,10 @@ VAR
     sealTimeEnd   : ULINT;
     sealingTime   : LREAL;
     sealTrig      : R_TRIG;
-    pullTimeStart : ULINT;
-    pullTimeEnd   : ULINT;
-    pullingTime   : LREAL;
-    pulltrig      : R_TRIG;
+    gantrylTimeStart : ULINT;
+    gantryTimeEnd   : ULINT;
+    gantryTime   : LREAL;
+    gantryTrig      : R_TRIG;
     partTimeStart : ULINT;
     partTimeEnd   : ULINT;
     partTime      : LREAL;
@@ -47,8 +47,8 @@ VAR CONSTANT
     LENGTH         : INT := 1;
     SEALTEMP       : INT := 2;
     SEALTIME       : INT := 3;
-    PULLWHEELS_VEL : INT := 4;
-    PULLWHEELS_ACC : INT := 5;
+    GANTRY_VEL     : INT := 4;
+    GANTRY_ACC     : INT := 5;
     SEALER_VEL     : INT := 6;
     SEALER_ACC     : INT := 7;
     UNWIND_VEL     : INT := 8;
@@ -191,9 +191,9 @@ END_VAR]]></Declaration>
             sealTimeStart := partTimeStart;
         END_IF
 
-        pulltrig(CLK := SequenceState = 20);
-        IF pulltrig.Q THEN
-            pullTimeStart := F_GetActualDcTime64();
+        gantryTrig(CLK := SequenceState = 20);
+        IF gantryTrig.Q THEN
+            gantrylTimeStart := F_GetActualDcTime64();
         END_IF
 
 		IF THIS^.Sealer.sealbar.InTempRange THEN
@@ -212,14 +212,14 @@ END_VAR]]></Declaration>
 						sealingTime   := ULINT_TO_LREAL(sealtimeEnd - sealTimeStart) * 1E-9;
 					END_IF
 				20: // Run Pullwheels
-					PullWheels.ChangeState(E_PMLCommand.ePMLCommand_Start);
-					IF PullWheels.CurrentState = E_PMLState.ePMLState_Complete THEN
+					GantryXY.ChangeState(E_PMLCommand.ePMLCommand_Start);
+					IF GantryXY.CurrentState = E_PMLState.ePMLState_Complete THEN
 						partTimeEnd   := F_GetActualDcTime64();
 						parts         := parts + 1;
 						SequenceState := 10;
-						PullWheels.ChangeState(E_PMLCommand.ePMLCommand_Reset);
-						pullTimeEnd := F_GetActualDcTime64();
-						pullingTime := ULINT_TO_LREAL(pullTimeEnd - pullTimeStart) * 1E-9;
+						GantryXY.ChangeState(E_PMLCommand.ePMLCommand_Reset);
+						gantryTimeEnd := F_GetActualDcTime64();
+						gantryTime := ULINT_TO_LREAL(gantryTimeEnd - gantrylTimeStart) * 1E-9;
 					END_IF
 			END_CASE
 		ELSE
@@ -297,7 +297,7 @@ END_VAR]]></Declaration>
     //=================================PRODUCTION MODE==================================
     E_PMLUnitMode.ePMLUnitMode_Production:
         IF (Sealer.CurrentState = E_PMLState.ePMLState_Complete OR Sealer.CurrentState = E_PMLState.ePMLState_Idle) AND
-           (PullWheels.CurrentState = E_PMLState.ePMLState_Complete OR PullWheels.CurrentState = E_PMLState.ePMLState_Idle) THEN
+           (GantryXY.CurrentState = E_PMLState.ePMLState_Complete OR GantryXY.CurrentState = E_PMLState.ePMLState_Idle) THEN
             StateComplete();
         END_IF
     E_PMLUnitMode.ePMLUnitMode_Maintenance, E_PMLUnitMode.ePMLUnitMode_Manual:
@@ -314,7 +314,7 @@ END_VAR]]></Declaration>
         <ST><![CDATA[Initialize := FALSE;
 CASE DescendantSequenceState OF
     0:
-		RegisterSubmodule(PullWheels);
+		RegisterSubmodule(GantryXY);
 		RegisterSubmodule(Sealer);
 		RegisterSubmodule(Unwind);
 		
@@ -409,14 +409,14 @@ _PackTags.Command.Product[1].ProcessVariables[SEALTIME].ID          := _PackTags
 _PackTags.Command.Product[1].ProcessVariables[SEALTIME].Name        := 'Sealing Time';
 _PackTags.Command.Product[1].ProcessVariables[SEALTIME].Unit        := 'ms';
 _PackTags.Command.Product[1].ProcessVariables[SEALTIME].Value       := 50;
-_PackTags.Command.Product[1].ProcessVariables[PULLWHEELS_VEL].ID    := _PackTags.Command.Product[1].ProductID * 20 + 4;
-_PackTags.Command.Product[1].ProcessVariables[PULLWHEELS_VEL].Name  := 'Pull Wheels Vel';
-_PackTags.Command.Product[1].ProcessVariables[PULLWHEELS_VEL].Unit  := 'mm/s';
-_PackTags.Command.Product[1].ProcessVariables[PULLWHEELS_VEL].Value := 100;
-_PackTags.Command.Product[1].ProcessVariables[PULLWHEELS_ACC].ID    := _PackTags.Command.Product[1].ProductID * 20 + 5;
-_PackTags.Command.Product[1].ProcessVariables[PULLWHEELS_ACC].Name  := 'Pull Wheels Acc';
-_PackTags.Command.Product[1].ProcessVariables[PULLWHEELS_ACC].Unit  := 'mm/s2';
-_PackTags.Command.Product[1].ProcessVariables[PULLWHEELS_ACC].Value := 1000;
+_PackTags.Command.Product[1].ProcessVariables[GANTRY_VEL].ID    := _PackTags.Command.Product[1].ProductID * 20 + 4;
+_PackTags.Command.Product[1].ProcessVariables[GANTRY_VEL].Name  := 'Gantry Vel';
+_PackTags.Command.Product[1].ProcessVariables[GANTRY_VEL].Unit  := 'mm/s';
+_PackTags.Command.Product[1].ProcessVariables[GANTRY_VEL].Value := 100;
+_PackTags.Command.Product[1].ProcessVariables[GANTRY_ACC].ID    := _PackTags.Command.Product[1].ProductID * 20 + 5;
+_PackTags.Command.Product[1].ProcessVariables[GANTRY_ACC].Name  := 'Gantry Acc';
+_PackTags.Command.Product[1].ProcessVariables[GANTRY_ACC].Unit  := 'mm/s2';
+_PackTags.Command.Product[1].ProcessVariables[GANTRY_ACC].Value := 1000;
 _PackTags.Command.Product[1].ProcessVariables[OPEN_POS].ID          := _PackTags.Command.Product[1].ProductID * 20 + 6;
 _PackTags.Command.Product[1].ProcessVariables[OPEN_POS].Name        := 'Sealer Open Position';
 _PackTags.Command.Product[1].ProcessVariables[OPEN_POS].Unit        := 'mm';
@@ -465,14 +465,14 @@ _PackTags.Command.Product[2].ProcessVariables[SEALTIME].ID     := _PackTags.Comm
 _PackTags.Command.Product[2].ProcessVariables[SEALTIME].Name   := 'Sealing Time';
 _PackTags.Command.Product[2].ProcessVariables[SEALTIME].Unit   := 'ms';
 _PackTags.Command.Product[2].ProcessVariables[SEALTIME].Value  := 100;
-_PackTags.Command.Product[2].ProcessVariables[PULLWHEELS_VEL].ID    := _PackTags.Command.Product[1].ProductID * 20 + 4;
-_PackTags.Command.Product[2].ProcessVariables[PULLWHEELS_VEL].Name  := 'Pull Wheels Vel';
-_PackTags.Command.Product[2].ProcessVariables[PULLWHEELS_VEL].Unit  := 'mm/s';
-_PackTags.Command.Product[2].ProcessVariables[PULLWHEELS_VEL].Value := 200;
-_PackTags.Command.Product[2].ProcessVariables[PULLWHEELS_ACC].ID    := _PackTags.Command.Product[1].ProductID * 20 + 5;
-_PackTags.Command.Product[2].ProcessVariables[PULLWHEELS_ACC].Name  := 'Pull Wheels Acc';
-_PackTags.Command.Product[2].ProcessVariables[PULLWHEELS_ACC].Unit  := 'mm/s2';
-_PackTags.Command.Product[2].ProcessVariables[PULLWHEELS_ACC].Value := 2000;
+_PackTags.Command.Product[2].ProcessVariables[GANTRY_VEL].ID    := _PackTags.Command.Product[1].ProductID * 20 + 4;
+_PackTags.Command.Product[2].ProcessVariables[GANTRY_VEL].Name  := 'Gantry Vel';
+_PackTags.Command.Product[2].ProcessVariables[GANTRY_VEL].Unit  := 'mm/s';
+_PackTags.Command.Product[2].ProcessVariables[GANTRY_VEL].Value := 200;
+_PackTags.Command.Product[2].ProcessVariables[GANTRY_ACC].ID    := _PackTags.Command.Product[1].ProductID * 20 + 5;
+_PackTags.Command.Product[2].ProcessVariables[GANTRY_ACC].Name  := 'Gantry Acc';
+_PackTags.Command.Product[2].ProcessVariables[GANTRY_ACC].Unit  := 'mm/s2';
+_PackTags.Command.Product[2].ProcessVariables[GANTRY_ACC].Value := 2000;
 _PackTags.Command.Product[2].ProcessVariables[OPEN_POS].ID          := _PackTags.Command.Product[1].ProductID * 20 + 6;
 _PackTags.Command.Product[2].ProcessVariables[OPEN_POS].Name        := 'Sealer Open Position';
 _PackTags.Command.Product[2].ProcessVariables[OPEN_POS].Unit        := 'mm';
@@ -521,14 +521,14 @@ _PackTags.Command.Product[3].ProcessVariables[SEALTIME].ID     := _PackTags.Comm
 _PackTags.Command.Product[3].ProcessVariables[SEALTIME].Name   := 'Sealing Time';
 _PackTags.Command.Product[3].ProcessVariables[SEALTIME].Unit   := 'ms';
 _PackTags.Command.Product[3].ProcessVariables[SEALTIME].Value  := 20;
-_PackTags.Command.Product[3].ProcessVariables[PULLWHEELS_VEL].ID    := _PackTags.Command.Product[1].ProductID * 20 + 4;
-_PackTags.Command.Product[3].ProcessVariables[PULLWHEELS_VEL].Name  := 'Pull Wheels Vel';
-_PackTags.Command.Product[3].ProcessVariables[PULLWHEELS_VEL].Unit  := 'mm/s';
-_PackTags.Command.Product[3].ProcessVariables[PULLWHEELS_VEL].Value := 300;
-_PackTags.Command.Product[3].ProcessVariables[PULLWHEELS_ACC].ID    := _PackTags.Command.Product[1].ProductID * 20 + 5;
-_PackTags.Command.Product[3].ProcessVariables[PULLWHEELS_ACC].Name  := 'Pull Wheels Acc';
-_PackTags.Command.Product[3].ProcessVariables[PULLWHEELS_ACC].Unit  := 'mm/s2';
-_PackTags.Command.Product[3].ProcessVariables[PULLWHEELS_ACC].Value := 3000;
+_PackTags.Command.Product[3].ProcessVariables[GANTRY_VEL].ID    := _PackTags.Command.Product[1].ProductID * 20 + 4;
+_PackTags.Command.Product[3].ProcessVariables[GANTRY_VEL].Name  := 'Gantry Vel';
+_PackTags.Command.Product[3].ProcessVariables[GANTRY_VEL].Unit  := 'mm/s';
+_PackTags.Command.Product[3].ProcessVariables[GANTRY_VEL].Value := 300;
+_PackTags.Command.Product[3].ProcessVariables[GANTRY_ACC].ID    := _PackTags.Command.Product[1].ProductID * 20 + 5;
+_PackTags.Command.Product[3].ProcessVariables[GANTRY_ACC].Name  := 'Gantry Acc';
+_PackTags.Command.Product[3].ProcessVariables[GANTRY_ACC].Unit  := 'mm/s2';
+_PackTags.Command.Product[3].ProcessVariables[GANTRY_ACC].Value := 3000;
 _PackTags.Command.Product[3].ProcessVariables[OPEN_POS].ID          := _PackTags.Command.Product[1].ProductID * 20 + 6;
 _PackTags.Command.Product[3].ProcessVariables[OPEN_POS].Name        := 'Sealer Open Position';
 _PackTags.Command.Product[3].ProcessVariables[OPEN_POS].Unit        := 'mm';
@@ -577,14 +577,14 @@ _PackTags.Command.Product[4].ProcessVariables[SEALTIME].ID     := _PackTags.Comm
 _PackTags.Command.Product[4].ProcessVariables[SEALTIME].Name   := 'Sealing Time';
 _PackTags.Command.Product[4].ProcessVariables[SEALTIME].Unit   := 'ms';
 _PackTags.Command.Product[4].ProcessVariables[SEALTIME].Value  := 80;
-_PackTags.Command.Product[4].ProcessVariables[PULLWHEELS_VEL].ID    := _PackTags.Command.Product[1].ProductID * 20 + 4;
-_PackTags.Command.Product[4].ProcessVariables[PULLWHEELS_VEL].Name  := 'Pull Wheels Vel';
-_PackTags.Command.Product[4].ProcessVariables[PULLWHEELS_VEL].Unit  := 'mm/s';
-_PackTags.Command.Product[4].ProcessVariables[PULLWHEELS_VEL].Value := 100;
-_PackTags.Command.Product[4].ProcessVariables[PULLWHEELS_ACC].ID    := _PackTags.Command.Product[1].ProductID * 20 + 5;
-_PackTags.Command.Product[4].ProcessVariables[PULLWHEELS_ACC].Name  := 'Pull Wheels Acc';
-_PackTags.Command.Product[4].ProcessVariables[PULLWHEELS_ACC].Unit  := 'mm/s2';
-_PackTags.Command.Product[4].ProcessVariables[PULLWHEELS_ACC].Value := 1000;
+_PackTags.Command.Product[4].ProcessVariables[GANTRY_VEL].ID    := _PackTags.Command.Product[1].ProductID * 20 + 4;
+_PackTags.Command.Product[4].ProcessVariables[GANTRY_VEL].Name  := 'Gantry Vel';
+_PackTags.Command.Product[4].ProcessVariables[GANTRY_VEL].Unit  := 'mm/s';
+_PackTags.Command.Product[4].ProcessVariables[GANTRY_VEL].Value := 100;
+_PackTags.Command.Product[4].ProcessVariables[GANTRY_ACC].ID    := _PackTags.Command.Product[1].ProductID * 20 + 5;
+_PackTags.Command.Product[4].ProcessVariables[GANTRY_ACC].Name  := 'Gantry Acc';
+_PackTags.Command.Product[4].ProcessVariables[GANTRY_ACC].Unit  := 'mm/s2';
+_PackTags.Command.Product[4].ProcessVariables[GANTRY_ACC].Value := 1000;
 _PackTags.Command.Product[4].ProcessVariables[OPEN_POS].ID          := _PackTags.Command.Product[1].ProductID * 20 + 6;
 _PackTags.Command.Product[4].ProcessVariables[OPEN_POS].Name        := 'Sealer Open Position';
 _PackTags.Command.Product[4].ProcessVariables[OPEN_POS].Unit        := 'mm';
@@ -633,14 +633,14 @@ _PackTags.Command.Product[5].ProcessVariables[SEALTIME].ID     := _PackTags.Comm
 _PackTags.Command.Product[5].ProcessVariables[SEALTIME].Name   := 'Sealing Time';
 _PackTags.Command.Product[5].ProcessVariables[SEALTIME].Unit   := 'ms';
 _PackTags.Command.Product[5].ProcessVariables[SEALTIME].Value  := 200;
-_PackTags.Command.Product[5].ProcessVariables[PULLWHEELS_VEL].ID    := _PackTags.Command.Product[1].ProductID * 20 + 4;
-_PackTags.Command.Product[5].ProcessVariables[PULLWHEELS_VEL].Name  := 'Pull Wheels Vel';
-_PackTags.Command.Product[5].ProcessVariables[PULLWHEELS_VEL].Unit  := 'mm/s';
-_PackTags.Command.Product[5].ProcessVariables[PULLWHEELS_VEL].Value := 100;
-_PackTags.Command.Product[5].ProcessVariables[PULLWHEELS_ACC].ID    := _PackTags.Command.Product[1].ProductID * 20 + 5;
-_PackTags.Command.Product[5].ProcessVariables[PULLWHEELS_ACC].Name  := 'Pull Wheels Acc';
-_PackTags.Command.Product[5].ProcessVariables[PULLWHEELS_ACC].Unit  := 'mm/s2';
-_PackTags.Command.Product[5].ProcessVariables[PULLWHEELS_ACC].Value := 1000;
+_PackTags.Command.Product[5].ProcessVariables[GANTRY_VEL].ID    := _PackTags.Command.Product[1].ProductID * 20 + 4;
+_PackTags.Command.Product[5].ProcessVariables[GANTRY_VEL].Name  := 'Gantry Vel';
+_PackTags.Command.Product[5].ProcessVariables[GANTRY_VEL].Unit  := 'mm/s';
+_PackTags.Command.Product[5].ProcessVariables[GANTRY_VEL].Value := 100;
+_PackTags.Command.Product[5].ProcessVariables[GANTRY_ACC].ID    := _PackTags.Command.Product[1].ProductID * 20 + 5;
+_PackTags.Command.Product[5].ProcessVariables[GANTRY_ACC].Name  := 'Gantry Acc';
+_PackTags.Command.Product[5].ProcessVariables[GANTRY_ACC].Unit  := 'mm/s2';
+_PackTags.Command.Product[5].ProcessVariables[GANTRY_ACC].Value := 1000;
 _PackTags.Command.Product[5].ProcessVariables[OPEN_POS].ID          := _PackTags.Command.Product[1].ProductID * 20 + 6;
 _PackTags.Command.Product[5].ProcessVariables[OPEN_POS].Name        := 'Sealer Open Position';
 _PackTags.Command.Product[5].ProcessVariables[OPEN_POS].Unit        := 'mm';
@@ -707,9 +707,9 @@ END_VAR]]></Declaration>
     E_PMLUnitMode.ePMLUnitMode_Production:
         IF DataFromPackML THEN
             product           := LREAL_TO_INT(_PackTags.Command.Parameter[2].Value);
-            PullWheels.Length := _PackTags.Command.Product[product].ProcessVariables[LENGTH].Value;
-			PullWheels.Velocity := _PackTags.Command.Product[product].ProcessVariables[PULLWHEELS_VEL].Value;
-			PullWheels.Acceleration := _PackTags.Command.Product[product].ProcessVariables[PULLWHEELS_ACC].Value;
+            GantryXY.Length := _PackTags.Command.Product[product].ProcessVariables[LENGTH].Value;
+			GantryXY.Velocity := _PackTags.Command.Product[product].ProcessVariables[GANTRY_VEL].Value;
+			GantryXY.Acceleration := _PackTags.Command.Product[product].ProcessVariables[GANTRY_ACC].Value;
             Sealer.SealTime   := _PackTags.Command.Product[product].ProcessVariables[SEALTIME].Value;
             Sealer.Temp       := _PackTags.Command.Product[product].ProcessVariables[SEALTEMP].Value;
 			Sealer.OpenPos := _PackTags.Command.Product[product].ProcessVariables[OPEN_POS].Value;
@@ -810,7 +810,7 @@ END_VAR]]></Declaration>
     //=================================PRODUCTION MODE==================================
     E_PMLUnitMode.ePMLUnitMode_Production:
         IF (Sealer.CurrentState = E_PMLState.ePMLState_Complete OR Sealer.CurrentState = E_PMLState.ePMLState_Idle) AND
-           (PullWheels.CurrentState = E_PMLState.ePMLState_Complete OR PullWheels.CurrentState = E_PMLState.ePMLState_Idle) THEN
+           (GantryXY.CurrentState = E_PMLState.ePMLState_Complete OR GantryXY.CurrentState = E_PMLState.ePMLState_Idle) THEN
             StateComplete();
         END_IF
     E_PMLUnitMode.ePMLUnitMode_Maintenance, E_PMLUnitMode.ePMLUnitMode_Manual:

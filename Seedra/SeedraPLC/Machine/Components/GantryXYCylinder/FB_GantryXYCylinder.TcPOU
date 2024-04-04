@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
-  <POU Name="FB_Cylinder" Id="{84ff1c9d-387b-40dd-9e52-4cc6c2a7141b}" SpecialFunc="None">
+  <POU Name="FB_GantryXYCylinder" Id="{84ff1c9d-387b-40dd-9e52-4cc6c2a7141b}" SpecialFunc="None">
     <Declaration><![CDATA[(*	This FB is used for a single output solenoid 
 	It uses the times to say when Extended/Retracted  	
 	It starts assuming retracted and the output off.
 *)
-FUNCTION_BLOCK FB_Cylinder EXTENDS FB_ComponentBase IMPLEMENTS I_Cylinder
+FUNCTION_BLOCK FB_GantryXYCylinder EXTENDS FB_ComponentBase IMPLEMENTS I_Cylinder
 VAR
     //Output
     Output AT %Q* : BOOL;

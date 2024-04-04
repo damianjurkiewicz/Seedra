@@ -1,24 +1,11 @@
 <?xml version="1.0"?>
 <TcModuleClass>
 	<Translations>
-		<Text TxtId="PullWheels"/>
+		<Text TxtId="Sealer"/>
 		<Text TxtId="DT_GLOBAL_INIT_REFERENCE_EVENT">
 			<Text LcId="1033"><![CDATA[Init Reference should never be set]]></Text>
 		</Text>
 		<Text TxtId="Reference Event that should be the first in all event classes"/>
-		<Text TxtId="DT_PullWheels_Event_StartTimeout">
-			<Text LcId="1033"><![CDATA[{0} - Start up timeout]]></Text>
-		</Text>
-		<Text TxtId="DT_PullWheels_Event_InfoMessage">
-			<Text LcId="1033"><![CDATA[{0} - Info Message]]></Text>
-		</Text>
-		<Text TxtId="DT_PullWheels_Event_WarnMessage">
-			<Text LcId="1033"><![CDATA[{0} - Warning Message]]></Text>
-		</Text>
-		<Text TxtId="DT_PullWheels_Event_AlarmMessage">
-			<Text LcId="1033"><![CDATA[{0} - Error Message]]></Text>
-		</Text>
-		<Text TxtId="Sealer"/>
 		<Text TxtId="DT_Sealer_Event_TemeratureOutOfRange">
 			<Text LcId="1033"><![CDATA[{0} - Out of Temperature Range ({1}-{2})]]></Text>
 		</Text>
@@ -63,42 +50,20 @@
 		<Text TxtId="DT_Seedra_Event_AlarmMessage">
 			<Text LcId="1033"><![CDATA[{0} - Error Message]]></Text>
 		</Text>
+		<Text TxtId="DT_PullWheels_Event_StartTimeout">
+			<Text LcId="1033"><![CDATA[{0} - Start up timeout]]></Text>
+		</Text>
+		<Text TxtId="DT_PullWheels_Event_InfoMessage">
+			<Text LcId="1033"><![CDATA[{0} - Info Message]]></Text>
+		</Text>
+		<Text TxtId="DT_PullWheels_Event_WarnMessage">
+			<Text LcId="1033"><![CDATA[{0} - Warning Message]]></Text>
+		</Text>
+		<Text TxtId="DT_PullWheels_Event_AlarmMessage">
+			<Text LcId="1033"><![CDATA[{0} - Error Message]]></Text>
+		</Text>
 	</Translations>
 	<DataTypes>
-		<DataType>
-			<Name GUID="{5183A52A-113E-4097-88B2-113A388DD5DE}">PullWheels</Name>
-			<DisplayName TxtId=""><![CDATA[PullWheels]]></DisplayName>
-			<EventId>
-				<Name Id="1">InitReferenceEvent</Name>
-				<DisplayName TxtId=""><![CDATA[DT_GLOBAL_INIT_REFERENCE_EVENT]]></DisplayName>
-				<Comment TxtId=""><![CDATA[Reference Event that should be the first in all event classes]]></Comment>
-				<Severity>Info</Severity>
-			</EventId>
-			<EventId>
-				<Name Id="2">StartTimeout</Name>
-				<DisplayName TxtId=""><![CDATA[DT_PullWheels_Event_StartTimeout]]></DisplayName>
-				<Severity>Error</Severity>
-			</EventId>
-			<EventId>
-				<Name Id="3">InfoMessage</Name>
-				<DisplayName TxtId=""><![CDATA[DT_PullWheels_Event_InfoMessage]]></DisplayName>
-				<Severity>Info</Severity>
-			</EventId>
-			<EventId>
-				<Name Id="4">WarnMessage</Name>
-				<DisplayName TxtId=""><![CDATA[DT_PullWheels_Event_WarnMessage]]></DisplayName>
-				<Severity>Warning</Severity>
-			</EventId>
-			<EventId>
-				<Name Id="5">AlarmMessage</Name>
-				<DisplayName TxtId=""><![CDATA[DT_PullWheels_Event_AlarmMessage]]></DisplayName>
-				<Severity>Error</Severity>
-			</EventId>
-			<Hides>
-				<Hide GUID="{A5BD974C-C533-4ACD-B99F-6411EA0C5C96}"/>
-				<Hide GUID="{A04CDD29-0161-4E74-8C91-ED1B590B33FC}"/>
-			</Hides>
-		</DataType>
 		<DataType>
 			<Name GUID="{6B0100BE-3916-4BDE-A328-3F8C35350258}">Sealer</Name>
 			<DisplayName TxtId=""><![CDATA[Sealer]]></DisplayName>
@@ -211,6 +176,41 @@
 				<Hide GUID="{FE9A29DC-E7F7-4FBC-BA63-9EF8F58A116B}"/>
 				<Hide GUID="{A57A63D3-319B-49B6-9D4A-5C2DDCEE5F11}"/>
 				<Hide GUID="{253CBB3E-FA4D-478D-8422-9E3E0A457FEC}"/>
+			</Hides>
+		</DataType>
+		<DataType>
+			<Name GUID="{CE9A93F0-C88C-4BE4-81B6-A545B48F61E2}">Gantry</Name>
+			<DisplayName TxtId=""><![CDATA[Gantry]]></DisplayName>
+			<EventId>
+				<Name Id="1">InitReferenceEvent</Name>
+				<DisplayName TxtId=""><![CDATA[DT_GLOBAL_INIT_REFERENCE_EVENT]]></DisplayName>
+				<Comment TxtId=""><![CDATA[Reference Event that should be the first in all event classes]]></Comment>
+				<Severity>Info</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="2">StartTimeout</Name>
+				<DisplayName TxtId=""><![CDATA[DT_PullWheels_Event_StartTimeout]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="3">InfoMessage</Name>
+				<DisplayName TxtId=""><![CDATA[DT_PullWheels_Event_InfoMessage]]></DisplayName>
+				<Severity>Info</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="4">WarnMessage</Name>
+				<DisplayName TxtId=""><![CDATA[DT_PullWheels_Event_WarnMessage]]></DisplayName>
+				<Severity>Warning</Severity>
+			</EventId>
+			<EventId>
+				<Name Id="5">AlarmMessage</Name>
+				<DisplayName TxtId=""><![CDATA[DT_PullWheels_Event_AlarmMessage]]></DisplayName>
+				<Severity>Error</Severity>
+			</EventId>
+			<Hides>
+				<Hide GUID="{A5BD974C-C533-4ACD-B99F-6411EA0C5C96}"/>
+				<Hide GUID="{A04CDD29-0161-4E74-8C91-ED1B590B33FC}"/>
+				<Hide GUID="{5183A52A-113E-4097-88B2-113A388DD5DE}"/>
 			</Hides>
 		</DataType>
 	</DataTypes>

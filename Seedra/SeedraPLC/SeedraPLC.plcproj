@@ -23,7 +23,7 @@
     <Compile Include="DUTs\Recipe\ST_AxisRecipe.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\Recipe\ST_PullWheelsRecipe.TcDUT">
+    <Compile Include="DUTs\Recipe\ST_GantryXY.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\Recipe\ST_SealerRecipe.TcDUT">
@@ -44,28 +44,28 @@
     <Compile Include="GlobalTextList.TcGTLO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Machine\Components\Cylinder\FB_Cylinder.TcPOU">
+    <Compile Include="Machine\Components\GantryXYCylinder\FB_GantryXYCylinder.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Machine\Components\Cylinder\I_Cylinder.TcIO">
+    <Compile Include="Machine\Components\GantryXYCylinder\I_Cylinder.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Machine\Components\Cylinder\ST_Cylinder_Command.TcDUT">
+    <Compile Include="Machine\Components\GantryXYCylinder\ST_Cylinder_Command.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Machine\Components\Cylinder\ST_Cylinder_Config.TcDUT">
+    <Compile Include="Machine\Components\GantryXYCylinder\ST_Cylinder_Config.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Machine\Components\Cylinder\ST_Cylinder_HMI.TcDUT">
+    <Compile Include="Machine\Components\GantryXYCylinder\ST_Cylinder_HMI.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Machine\Components\Cylinder\ST_Cylinder_Status.TcDUT">
+    <Compile Include="Machine\Components\GantryXYCylinder\ST_Cylinder_Status.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Machine\Components\FB_SealBar.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Machine\EquipmentModules\FB_PullWheel.TcPOU">
+    <Compile Include="Machine\EquipmentModules\FB_GantryXY.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Machine\EquipmentModules\FB_Unwind.TcPOU">
@@ -112,7 +112,7 @@
     <Folder Include="DUTs\Recipe" />
     <Folder Include="Machine" />
     <Folder Include="Machine\Components" />
-    <Folder Include="Machine\Components\Cylinder" />
+    <Folder Include="Machine\Components\GantryXYCylinder" />
     <Folder Include="Machine\EquipmentModules" />
     <Folder Include="DUTs" />
     <Folder Include="Machine\HMI Connections" />

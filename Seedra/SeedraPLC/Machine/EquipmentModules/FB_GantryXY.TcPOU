@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
-  <POU Name="FB_PullWheel" Id="{496b17f1-4b0a-4954-89f4-eec9ef72b2f5}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_PullWheel EXTENDS FB_PackML_BaseModule
+  <POU Name="FB_GantryXY" Id="{496b17f1-4b0a-4954-89f4-eec9ef72b2f5}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_GantryXY EXTENDS FB_PackML_BaseModule
 VAR
     // Sub module definitions here
 
@@ -9,15 +9,15 @@ VAR
     ipSubModules_Init : ARRAY[1..Parameters_PackML_Base.MAX_NO_OF_SUBMODULES] OF I_PackML_BaseModule := [];
 
     // Component definitions here
-    LeftPullWheel     : FB_Component_BasicSlaveAxis := (Name := 'Left');
-    RightPullWheel    : FB_Component_BasicSlaveAxis := (Name := 'Right');
-    PullWheelCylinder : FB_Cylinder                 := (Name := 'Cylinder');
+    GantryAxisX       : FB_Component_BasicSlaveAxis := (Name := 'Left');
+    GantryAxisY    	  : FB_Component_BasicSlaveAxis := (Name := 'Right');
+    GantryCylinder    : FB_GantryXYCylinder                 := (Name := 'Cylinder');
 
     //Alarms for this module
-    PullWheelAlarms : ARRAY[1..PULL_WHEELS_ALARM_COUNT] OF FB_TcAlarm;
+    GantryAlarms : ARRAY[1..GANTRY_ALARM_COUNT] OF FB_TcAlarm;
 
 	//Data for recipe
-	Recipe : ST_PullWheelsRecipe;
+	Recipe : ST_GantryXY;
     (*Parameters from PackTags for module
     _Param  : ARRAY[1..10] OF ST_Descriptor2;*)
     _Report : ARRAY[1..10] OF ST_Descriptor2;
@@ -32,7 +32,7 @@ VAR CONSTANT
     FAULT : INT := 1;
 
     //Alarms
-    PULL_WHEELS_ALARM_COUNT : INT := 5;
+    GANTRY_ALARM_COUNT : INT := 5;
 END_VAR
 
 //Simulation variables for messaging
@@ -60,19 +60,19 @@ END_VAR]]></Declaration>
         NoStateTasksToComplete := FALSE;
         SequenceState          := SequenceState + 10;
     10:
-        LeftPullWheel.Stop();
-        RightPullWheel.Stop();
-        IF LeftPullWheel.Stopped AND RightPullWheel.Stopped THEN
+        GantryAxisX.Stop();
+        GantryAxisY.Stop();
+        IF GantryAxisX.Stopped AND GantryAxisY.Stopped THEN
             SequenceState := SequenceState + 10;
         END_IF
     20:
         // Disable here
-        LeftPullWheel.Disable();
-        RightPullWheel.Disable();
-        PullWheelCylinder.Retract();
+        GantryAxisX.Disable();
+        GantryAxisY.Disable();
+        GantryCylinder.Retract();
 
         // Check not enabled here
-        IF NOT LeftPullWheel.Enabled AND NOT RightPullWheel.Enabled AND PullWheelCylinder.Retracted THEN
+        IF NOT GantryAxisX.Enabled AND NOT GantryAxisY.Enabled AND GantryCylinder.Retracted THEN
             SequenceState := SequenceState + 10;
         END_IF
 
@@ -105,15 +105,15 @@ END_VAR]]></Declaration>
         SequenceState          := SequenceState + 10;
     10:
         //Reset any alarms that get latched
-        PullWheelAlarms[E_PullWheels.StartTimeout].Clear(0, 0);
+        GantryAlarms[E_Gantry.StartTimeout].Clear(0, 0);
         SequenceState := SequenceState + 10;
     20:
         // Enable here
-        LeftPullWheel.Enable();
-        RightPullWheel.Enable();
+        GantryAxisX.Enable();
+        GantryAxisY.Enable();
 
         // Check enabled here
-        IF LeftPullWheel.Enabled AND RightPullWheel.Enabled THEN
+        IF GantryAxisX.Enabled AND GantryAxisY.Enabled THEN
             SequenceState := SequenceState + 10;
         END_IF
     30:
@@ -129,9 +129,9 @@ VAR_INPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[// Add your event creation here
-F_CreateAllEventsInClass(Alarms     := PullWheelAlarms,
-                         ClassSize  := SIZEOF(TC_EVENTS.PullWheels),
-                         pInitEvent := ADR(TC_EVENTS.PullWheels.InitReferenceEvent),
+F_CreateAllEventsInClass(Alarms     := GantryAlarms,
+                         ClassSize  := SIZEOF(TC_EVENTS.Gantry),
+                         pInitEvent := ADR(TC_EVENTS.Gantry.InitReferenceEvent),
                          Prefix     := _Name);
 
 // Super call to base
@@ -154,7 +154,7 @@ SUPER^.CyclicLogic();
 fbControlSourceHMI.CyclicLogic();
 
 //Set the current alarm severity for this module
-_CurrentAlarmSeverity := F_GetMaxSeverityRaised(Alarms := PullWheelAlarms, CurrentSeverity := _CurrentAlarmSeverity);
+_CurrentAlarmSeverity := F_GetMaxSeverityRaised(Alarms := GantryAlarms, CurrentSeverity := _CurrentAlarmSeverity);
 
 //Simulate Alarm Messaging
 CyclicLogic_Simulation();]]></ST>
@@ -174,22 +174,22 @@ Here the alarms will raise and clear on its own if the input changes
 *)
 
 //Generic Alarms for Testing
-IF ErrorInput AND NOT PullWheelAlarms[E_PullWheels.AlarmMessage].bRaised THEN
-    RaiseAlarm2Args(PullWheelAlarms[E_PullWheels.AlarmMessage], '', '');
-ELSIF NOT ErrorInput AND PullWheelAlarms[E_PullWheels.AlarmMessage].bRaised THEN
-    PullWheelAlarms[E_PullWheels.AlarmMessage].Clear(0, 0);
+IF ErrorInput AND NOT GantryAlarms[E_Gantry.AlarmMessage].bRaised THEN
+    RaiseAlarm2Args(GantryAlarms[E_Gantry.AlarmMessage], '', '');
+ELSIF NOT ErrorInput AND GantryAlarms[E_Gantry.AlarmMessage].bRaised THEN
+    GantryAlarms[E_Gantry.AlarmMessage].Clear(0, 0);
 END_IF
 
-IF WarnInput AND NOT PullWheelAlarms[E_PullWheels.WarnMessage].bRaised THEN
-    RaiseAlarm2Args(PullWheelAlarms[E_PullWheels.WarnMessage], '', '');
-ELSIF NOT WarnInput AND PullWheelAlarms[E_PullWheels.WarnMessage].bRaised THEN
-    PullWheelAlarms[E_PullWheels.WarnMessage].Clear(0, 0);
+IF WarnInput AND NOT GantryAlarms[E_Gantry.WarnMessage].bRaised THEN
+    RaiseAlarm2Args(GantryAlarms[E_Gantry.WarnMessage], '', '');
+ELSIF NOT WarnInput AND GantryAlarms[E_Gantry.WarnMessage].bRaised THEN
+    GantryAlarms[E_Gantry.WarnMessage].Clear(0, 0);
 END_IF
 
-IF InfoInput AND NOT PullWheelAlarms[E_PullWheels.InfoMessage].bRaised THEN
-    RaiseAlarm2Args(PullWheelAlarms[E_PullWheels.InfoMessage], '', '');
-ELSIF NOT InfoInput AND PullWheelAlarms[E_PullWheels.InfoMessage].bRaised THEN
-    PullWheelAlarms[E_PullWheels.InfoMessage].Clear(0, 0);
+IF InfoInput AND NOT GantryAlarms[E_Gantry.InfoMessage].bRaised THEN
+    RaiseAlarm2Args(GantryAlarms[E_Gantry.InfoMessage], '', '');
+ELSIF NOT InfoInput AND GantryAlarms[E_Gantry.InfoMessage].bRaised THEN
+    GantryAlarms[E_Gantry.InfoMessage].Clear(0, 0);
 END_IF]]></ST>
       </Implementation>
     </Method>
@@ -201,9 +201,9 @@ END_VAR]]></Declaration>
         <ST><![CDATA[// Function based on mode.  NO need to make SUPER^.Executing() since it does nothing.
 CASE _CurrentMode OF
     E_PMLUnitMode.ePMLUnitMode_Production:
-        IF LeftPullWheel.InPosition AND NOT LeftPullWheel.Busy THEN
-            PullWheelCylinder.Retract();
-            IF PullWheelCylinder.Retracted THEN
+        IF GantryAxisX.InPosition AND NOT GantryAxisX.Busy THEN
+            GantryCylinder.Retract();
+            IF GantryCylinder.Retracted THEN
                 StateComplete();
             END_IF
         END_IF
@@ -229,9 +229,9 @@ END_VAR
         <ST><![CDATA[Initialize := FALSE;
 CASE DescendantSequenceState OF
     0:
-		RegisterComponent(LeftPullWheel);
-		RegisterComponent(RightPullWheel);		
-		RegisterComponent(PullWheelCylinder);
+		RegisterComponent(GantryAxisX);
+		RegisterComponent(GantryAxisY);		
+		RegisterComponent(GantryCylinder);
 		
         _LogModeChanges         := FALSE;
         _LogStateChanges        := FALSE;
@@ -354,13 +354,13 @@ END_VAR]]></Declaration>
                 SequenceState          := SequenceState + 10;
             10:
                 /// No reason to gear to the master LeftPullWheel.Master1  REF= MAIN.Seedra.Master.Axis;
-                RightPullWheel.Master1 REF= LeftPullWheel.Axis;
+                GantryAxisY.Master1 REF= GantryAxisX.Axis;
 
                 ///LeftPullWheel.GearIn();
-                RightPullWheel.GearIn();
+                GantryAxisY.GearIn();
                 SequenceState := SequenceState + 10;
             20:
-                IF (*LeftPullWheel.InGear AND*) RightPullWheel.InGear THEN
+                IF (*LeftPullWheel.InGear AND*) GantryAxisY.InGear THEN
                     StateTasksComplete := TRUE;
                 END_IF
         END_CASE
@@ -391,21 +391,21 @@ END_VAR]]></Declaration>
                 NoStateTasksToComplete := FALSE;
                 SequenceState          := SequenceState + 10;
             10:
-                PullWheelCylinder.Extend();
-                IF PullWheelCylinder.Extended THEN
+                GantryCylinder.Extend();
+                IF GantryCylinder.Extended THEN
                     NoStateTasksToComplete     := FALSE;
-                    LeftPullWheel.Velocity     := Recipe.LeftAxis.Velocity;
-                    LeftPullWheel.Acceleration := Recipe.LeftAxis.Acceleration;
-                    LeftPullWheel.MoveRelative(Distance := Recipe.Length, FALSE);
+                    GantryAxisX.Velocity     := Recipe.LeftAxis.Velocity;
+                    GantryAxisX.Acceleration := Recipe.LeftAxis.Acceleration;
+                    GantryAxisX.MoveRelative(Distance := Recipe.Length, FALSE);
                     SequenceState := SequenceState + 10;
                 END_IF
             20:
-                IF LeftPullWheel.Busy THEN
+                IF GantryAxisX.Busy THEN
                     SequenceState := SequenceState + 10;
                 END_IF
 
-                IF StartTimer.Q AND NOT PullWheelAlarms[E_PullWheels.StartTimeout].bRaised THEN
-                    RaiseAlarm2Args(PullWheelAlarms[E_PullWheels.StartTimeout], '', '');
+                IF StartTimer.Q AND NOT GantryAlarms[E_Gantry.StartTimeout].bRaised THEN
+                    RaiseAlarm2Args(GantryAlarms[E_Gantry.StartTimeout], '', '');
                     SequenceState := SequenceState + 10;
                 END_IF
             30:
@@ -432,10 +432,10 @@ END_VAR]]></Declaration>
         CASE SequenceState OF
             0:
                 NoStateTasksToComplete := FALSE;
-                PullWheelCylinder.Retract();
+                GantryCylinder.Retract();
                 SequenceState := SequenceState + 10;
             10:
-                IF PullWheelCylinder.Retracted THEN
+                IF GantryCylinder.Retracted THEN
                     SequenceState := SequenceState + 10;
                 END_IF
             20:
