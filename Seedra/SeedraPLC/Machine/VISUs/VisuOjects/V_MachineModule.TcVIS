@@ -22,15 +22,15 @@
                       <v n="Id">494569607L</v>
                       <l n="Value" t="ArrayList" cet="NamedStyleColor">
                         <o>
-                          <v n="Color">-16777216</v>
-                          <v n="CanonicalName">"BasicElement-Frame-Color"</v>
+                          <v n="Color">-1</v>
+                          <v n="CanonicalName">"White"</v>
                         </o>
                       </l>
                     </o>
                     <o>
                       <v n="Id">2812299069L</v>
                       <l n="Value" t="ArrayList" cet="UInt32">
-                        <v>4286644223</v>
+                        <v>4291749887</v>
                       </l>
                     </o>
                     <o>
@@ -93,19 +93,19 @@
                     </o>
                     <o>
                       <v n="Id">1649127785L</v>
-                      <v n="Value">8</v>
-                    </o>
-                    <o>
-                      <v n="Id">357335551L</v>
                       <v n="Value">3</v>
                     </o>
                     <o>
+                      <v n="Id">357335551L</v>
+                      <v n="Value">4</v>
+                    </o>
+                    <o>
                       <v n="Id">2422045748L</v>
-                      <v n="Value" t="Int16">649</v>
+                      <v n="Value">627</v>
                     </o>
                     <o>
                       <v n="Id">2134141914L</v>
-                      <v n="Value">268</v>
+                      <v n="Value">253</v>
                     </o>
                     <o>
                       <v n="Id">3729828405L</v>
@@ -128,11 +128,11 @@
                     </o>
                     <o>
                       <v n="Id">550940142L</v>
-                      <v n="Value">332</v>
+                      <v n="Value">316</v>
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
-                      <v n="Value">137</v>
+                      <v n="Value">130</v>
                     </o>
                     <o>
                       <v n="Id">2678395525L</v>
@@ -140,7 +140,7 @@
                     </o>
                     <o>
                       <v n="Id">564465120L</v>
-                      <v n="Value">"VISU_ST_ROUNDRECT"</v>
+                      <v n="Value">"VISU_ST_RECTANGLE"</v>
                     </o>
                     <o>
                       <v n="Id">390574330L</v>
@@ -155,15 +155,15 @@
                 <v n="VisualElementName">"Rectangle"</v>
                 <v n="VisualElementTypeName">"VisuFbElemSimple"</v>
                 <v n="VisualElementIsRectangle">true</v>
-                <v n="VisualElementIdentifier">"GenElemInst_6"</v>
+                <v n="VisualElementIdentifier">"GenElemInst_53"</v>
                 <n n="VisualElementOfflinePaintCommands" />
                 <n n="VisualElementFrameInformation" />
                 <d n="VisualElementInputActions" t="Hashtable" />
-                <v n="VisualElementIdentification">{c7267d2c-974b-411a-8f8a-e2621908a04c}</v>
+                <v n="VisualElementIdentification">{c4c096f4-cdb6-4caa-b526-aec1d5dcbbeb}</v>
                 <v n="VisualElementOwningObjectGuid">{36f6a3ae-b99e-0ef0-3759-f9efb58a3c39}</v>
                 <a n="LMGuids" et="Guid" />
                 <d n="SubElements" t="Hashtable" />
-                <v n="VisualElementId">5</v>
+                <v n="VisualElementId">51</v>
                 <l n="UserManagementAccessRights" t="ArrayList" />
               </o>
               <o>
@@ -312,6 +312,10 @@
                     <o>
                       <v n="Id">2597686782L</v>
                       <v n="Value">false</v>
+                    </o>
+                    <o>
+                      <v n="Id">29048581L</v>
+                      <v n="Value" t="Int16">0</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -2484,7 +2488,7 @@
             </o>
             <v n="DialogDut">{014a78f0-3d8b-4e43-94b1-aa35c08e972e}</v>
           </o>
-          <v n="LastUsedIdForIdentifier">51</v>
+          <v n="LastUsedIdForIdentifier">53</v>
           <o n="TextDocument" t="TextDocument">
             <a n="TextLines" cet="TextLine">
               <o>
@@ -2522,12 +2526,12 @@
               <v>0</v>
               <o>
                 <v n="Width">857</v>
-                <v n="Height">271</v>
+                <v n="Height">257</v>
               </o>
               <v>1</v>
               <o>
                 <v n="Width">856</v>
-                <v n="Height">272</v>
+                <v n="Height">258</v>
               </o>
             </d2>
             <v n="Version">1</v>
