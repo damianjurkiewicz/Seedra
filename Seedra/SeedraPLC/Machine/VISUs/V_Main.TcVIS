@@ -1346,7 +1346,7 @@
                         <l n="TypeNodeChildren" t="ArrayList" cet="BasicTypeNode">
                           <o>
                             <v n="Flags">2L</v>
-                            <v n="BasicTypeNodeValue">"MAIN.Seedra.Unwind.PackMLBaseModule_HMI"</v>
+                            <v n="BasicTypeNodeValue">"MAIN.Seedra.SpindleZ.PackMLBaseModule_HMI"</v>
                             <v n="BasicTypeNodeAcceptsExpression">true</v>
                             <n n="BasicTypeNodeFastAccess" />
                             <a n="BasicTypeNodeEnumValues" et="String" />
@@ -1406,7 +1406,7 @@
                     </o>
                     <o>
                       <v n="Id">2501871159L</v>
-                      <v n="Value">"MAIN.Seedra.Unwind.PackMLBaseModule_HMI"</v>
+                      <v n="Value">"MAIN.Seedra.SpindleZ.PackMLBaseModule_HMI"</v>
                     </o>
                   </l>
                 </o>
@@ -2405,7 +2405,7 @@
                     </o>
                     <o>
                       <v n="Id">390574330L</v>
-                      <v n="Value">"Clear Unwind"</v>
+                      <v n="Value">"Clear Spindle"</v>
                     </o>
                     <o>
                       <v n="Id">2597686782L</v>
@@ -2413,7 +2413,7 @@
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
-                      <v n="Value">"809"</v>
+                      <v n="Value">"488"</v>
                     </o>
                   </l>
                 </o>
@@ -2427,7 +2427,7 @@
                   <v>OnMouseClick</v>
                   <a cet="STSnippetInputAction">
                     <o>
-                      <v n="STSnippet">"MAIN.Seedra.unwind.PackMLBaseModule_HMI.Command.State := E_PMLCommand.ePMLCommand_Clear;
+                      <v n="STSnippet">"MAIN.Seedra.SpindleZ.PackMLBaseModule_HMI.Command.State := E_PMLCommand.ePMLCommand_Clear;
 "</v>
                     </o>
                   </a>
@@ -2580,7 +2580,7 @@
                     </o>
                     <o>
                       <v n="Id">390574330L</v>
-                      <v n="Value">"Reset Unwind"</v>
+                      <v n="Value">"Reset Spindle"</v>
                     </o>
                     <o>
                       <v n="Id">2597686782L</v>
@@ -2588,7 +2588,7 @@
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
-                      <v n="Value">"538"</v>
+                      <v n="Value">"800"</v>
                     </o>
                   </l>
                 </o>
@@ -2602,7 +2602,7 @@
                   <v>OnMouseClick</v>
                   <a cet="STSnippetInputAction">
                     <o>
-                      <v n="STSnippet">"MAIN.Seedra.unwind.PackMLBaseModule_HMI.Command.State := E_PMLCommand.ePMLCommand_Reset;
+                      <v n="STSnippet">"MAIN.Seedra.SpindleZ.PackMLBaseModule_HMI.Command.State := E_PMLCommand.ePMLCommand_Reset;
 "</v>
                     </o>
                   </a>
@@ -2755,7 +2755,7 @@
                     </o>
                     <o>
                       <v n="Id">390574330L</v>
-                      <v n="Value">"Start Unwind"</v>
+                      <v n="Value">"Start Spindle"</v>
                     </o>
                     <o>
                       <v n="Id">2597686782L</v>
@@ -2763,7 +2763,7 @@
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
-                      <v n="Value">"804"</v>
+                      <v n="Value">"696"</v>
                     </o>
                   </l>
                 </o>
@@ -2777,7 +2777,7 @@
                   <v>OnMouseClick</v>
                   <a cet="STSnippetInputAction">
                     <o>
-                      <v n="STSnippet">"MAIN.Seedra.unwind.PackMLBaseModule_HMI.Command.State := E_PMLCommand.ePMLCommand_Start;
+                      <v n="STSnippet">"MAIN.Seedra.SpindleZ.PackMLBaseModule_HMI.Command.State := E_PMLCommand.ePMLCommand_Start;
 "</v>
                     </o>
                   </a>

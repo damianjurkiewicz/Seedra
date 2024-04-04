@@ -29,7 +29,7 @@
     <Compile Include="DUTs\Recipe\ST_SealerRecipe.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\Recipe\ST_UnwindRecipe.TcDUT">
+    <Compile Include="DUTs\Recipe\ST_SpindleZRecipe.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\ST_Descriptor2.TcDUT">
@@ -68,7 +68,7 @@
     <Compile Include="Machine\EquipmentModules\FB_GantryXY.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Machine\EquipmentModules\FB_Unwind.TcPOU">
+    <Compile Include="Machine\EquipmentModules\FB_SpindleZ.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Machine\EquipmentModules\FB_Sealer.TcPOU">

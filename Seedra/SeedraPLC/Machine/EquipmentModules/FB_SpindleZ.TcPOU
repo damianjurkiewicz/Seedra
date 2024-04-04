@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
-  <POU Name="FB_Unwind" Id="{93b6d370-9060-40d7-8101-95f7e4ba6901}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_Unwind EXTENDS FB_PackML_BaseModule
+  <POU Name="FB_SpindleZ" Id="{93b6d370-9060-40d7-8101-95f7e4ba6901}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_SpindleZ EXTENDS FB_PackML_BaseModule
 VAR
     // Sub module definitions here
 
@@ -13,10 +13,10 @@ VAR
     Sensor : FB_DigitalSensor       := (Name := 'Sensor');
 
     //Alarms for this module
-    UnwindAlarms : ARRAY[1..UNWIND_ALARM_COUNT] OF FB_TcAlarm;
+    SpindleAlarms : ARRAY[1..SPINDLE_ALARM_COUNT] OF FB_TcAlarm;
 
     //Data for recipe
-    Recipe : ST_UnwindRecipe;
+    Recipe : ST_SpindleZRecipe;
 
     (*Parameters from PackTags for module
     //_Param  : ARRAY[1..10] OF ST_Descriptor2;*)
@@ -31,7 +31,7 @@ VAR CONSTANT
     FAULT : INT := 1;
 
     //Alarms
-    UNWIND_ALARM_COUNT : INT := 5;
+    SPINDLE_ALARM_COUNT : INT := 5;
 END_VAR
 
 //Simulation variables for messaging
@@ -101,7 +101,7 @@ END_VAR]]></Declaration>
         SequenceState          := SequenceState + 10;
     10:
         //Reset any alarms that get latched
-        UnwindAlarms[E_Unwind.StartTimeout].Clear(0, 0);
+        SpindleAlarms[E_Spindle.StartTimeout].Clear(0, 0);
         SequenceState := SequenceState + 10;
     20:
         // Enable here
@@ -124,9 +124,9 @@ VAR_INPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[// Add your event creation here
-F_CreateAllEventsInClass(Alarms     := UnwindAlarms,
-                         ClassSize  := SIZEOF(TC_EVENTS.Unwind),
-                         pInitEvent := ADR(TC_EVENTS.Unwind.InitReferenceEvent),
+F_CreateAllEventsInClass(Alarms     := SpindleAlarms,
+                         ClassSize  := SIZEOF(TC_EVENTS.Spindle),
+                         pInitEvent := ADR(TC_EVENTS.Spindle.InitReferenceEvent),
                          Prefix     := Name);
 
 // Super call to base
@@ -149,7 +149,7 @@ SUPER^.CyclicLogic();
 fbControlSourceHMI.CyclicLogic();
 
 //Set the current alarm severity for this module
-_CurrentAlarmSeverity := F_GetMaxSeverityRaised(Alarms := UnwindAlarms, CurrentSeverity := _CurrentAlarmSeverity);
+_CurrentAlarmSeverity := F_GetMaxSeverityRaised(Alarms := SpindleAlarms, CurrentSeverity := _CurrentAlarmSeverity);
 IF _CurrentAlarmSeverity >= TcEventSeverity.Error THEN
     ChangeState(E_PMLCommand.ePMLCommand_Abort);
 END_IF
@@ -169,22 +169,22 @@ Here the alarms will raise and clear on its own if the input changes
 *)
 
 //Generic Alarms for Testing
-IF ErrorInput AND NOT UnwindAlarms[E_Unwind.AlarmMessage].bRaised THEN
-    RaiseAlarm2Args(UnwindAlarms[E_Unwind.AlarmMessage], '', '');
-ELSIF NOT ErrorInput AND UnwindAlarms[E_Unwind.AlarmMessage].bRaised THEN
-    UnwindAlarms[E_Unwind.AlarmMessage].Clear(0, 0);
+IF ErrorInput AND NOT SpindleAlarms[E_Spindle.AlarmMessage].bRaised THEN
+    RaiseAlarm2Args(SpindleAlarms[E_Spindle.AlarmMessage], '', '');
+ELSIF NOT ErrorInput AND SpindleAlarms[E_Spindle.AlarmMessage].bRaised THEN
+    SpindleAlarms[E_Spindle.AlarmMessage].Clear(0, 0);
 END_IF
 
-IF WarnInput AND NOT UnwindAlarms[E_Unwind.WarnMessage].bRaised THEN
-    RaiseAlarm2Args(UnwindAlarms[E_Unwind.WarnMessage], '', '');
-ELSIF NOT WarnInput AND UnwindAlarms[E_Unwind.WarnMessage].bRaised THEN
-    UnwindAlarms[E_Unwind.WarnMessage].Clear(0, 0);
+IF WarnInput AND NOT SpindleAlarms[E_Spindle.WarnMessage].bRaised THEN
+    RaiseAlarm2Args(SpindleAlarms[E_Spindle.WarnMessage], '', '');
+ELSIF NOT WarnInput AND SpindleAlarms[E_Spindle.WarnMessage].bRaised THEN
+    SpindleAlarms[E_Spindle.WarnMessage].Clear(0, 0);
 END_IF
 
-IF InfoInput AND NOT UnwindAlarms[E_Unwind.InfoMessage].bRaised THEN
-    RaiseAlarm2Args(UnwindAlarms[E_Unwind.InfoMessage], '', '');
-ELSIF NOT InfoInput AND UnwindAlarms[E_Unwind.InfoMessage].bRaised THEN
-    UnwindAlarms[E_Unwind.InfoMessage].Clear(0, 0);
+IF InfoInput AND NOT SpindleAlarms[E_Spindle.InfoMessage].bRaised THEN
+    RaiseAlarm2Args(SpindleAlarms[E_Spindle.InfoMessage], '', '');
+ELSIF NOT InfoInput AND SpindleAlarms[E_Spindle.InfoMessage].bRaised THEN
+    SpindleAlarms[E_Spindle.InfoMessage].Clear(0, 0);
 END_IF]]></ST>
       </Implementation>
     </Method>
@@ -320,8 +320,8 @@ END_VAR]]></Declaration>
                     SequenceState := SequenceState + 10;
                 END_IF
 
-                IF StartTimer.Q AND NOT UnwindAlarms[E_Unwind.StartTimeout].bRaised THEN
-                    RaiseAlarm2Args(UnwindAlarms[E_Unwind.StartTimeout], '', '');
+                IF StartTimer.Q AND NOT SpindleAlarms[E_Spindle.StartTimeout].bRaised THEN
+                    RaiseAlarm2Args(SpindleAlarms[E_Spindle.StartTimeout], '', '');
                     SequenceState := SequenceState + 10;
                 END_IF
             30:

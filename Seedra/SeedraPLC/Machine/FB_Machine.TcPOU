@@ -6,7 +6,7 @@ VAR
     // Sub Modules
     GantryXY   : FB_GantryXY  := (Name := 'Gantry', LogStateChanges := TRUE);
     Sealer     : FB_Sealer    := (Name := 'Sealer', LogStateChanges := TRUE);
-    Unwind     : FB_Unwind    := (Name := 'Unwind', LogStateChanges := TRUE);
+    SpindleZ   : FB_SpindleZ    := (Name := 'Spindle', LogStateChanges := TRUE);
 
     // Components
 
@@ -199,8 +199,8 @@ END_VAR]]></Declaration>
 		IF THIS^.Sealer.sealbar.InTempRange THEN
 			CASE SequenceState OF
 				0: //Started
-					Unwind.ChangeState(E_PMLCommand.ePMLCommand_Start);
-					IF Unwind.CurrentState = E_PMLState.ePMLState_Execute THEN
+					SpindleZ.ChangeState(E_PMLCommand.ePMLCommand_Start);
+					IF SpindleZ.CurrentState = E_PMLState.ePMLState_Execute THEN
 						SequenceState := SequenceState + 10;
 					END_IF
 				10: // SEAL First
@@ -316,7 +316,7 @@ CASE DescendantSequenceState OF
     0:
 		RegisterSubmodule(GantryXY);
 		RegisterSubmodule(Sealer);
-		RegisterSubmodule(Unwind);
+		RegisterSubmodule(SpindleZ);
 		
         _LogModeChanges         := FALSE;
         _LogStateChanges        := FALSE;
@@ -716,8 +716,8 @@ END_VAR]]></Declaration>
 			Sealer.ClosedPos := _PackTags.Command.Product[product].ProcessVariables[CLOSED_POS].Value;
 			Sealer.Velocity := _PackTags.Command.Product[product].ProcessVariables[SEALER_VEL].Value;
 			Sealer.Acceleration := _PackTags.Command.Product[product].ProcessVariables[SEALER_ACC].Value;
-			Unwind.Velocity := _PackTags.Command.Product[product].ProcessVariables[UNWIND_VEL].Value;
-			Unwind.Acceleration := _PackTags.Command.Product[product].ProcessVariables[UNWIND_ACC].Value;
+			SpindleZ.Velocity := _PackTags.Command.Product[product].ProcessVariables[UNWIND_VEL].Value;
+			SpindleZ.Acceleration := _PackTags.Command.Product[product].ProcessVariables[UNWIND_ACC].Value;
         END_IF
 
     E_PMLUnitMode.ePMLUnitMode_Maintenance, E_PMLUnitMode.ePMLUnitMode_Manual:
