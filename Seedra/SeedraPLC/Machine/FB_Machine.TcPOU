@@ -8,7 +8,7 @@ VAR
     SpindleZ   : FB_SpindleZ    := (Name := 'Spindle', LogStateChanges := TRUE);
 
     // Components
-	
+
     //Initial List of Components
     ipComponents_Init : ARRAY[1..Parameters_PackML_Base.MAX_NO_OF_COMPONENTS] OF I_ComponentBase := [];
 
