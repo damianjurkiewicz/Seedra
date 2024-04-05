@@ -38,6 +38,12 @@
     <Compile Include="DUTs\ST_PackML_Control_Simplified.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FabrykaBoolinow\FB_JednorazowyBoolin.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FabrykaBoolinow\FB_FabrykaBoolinow.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="GlobalTextList.TcGTLO">
       <SubType>Code</SubType>
     </Compile>
@@ -114,6 +120,7 @@
     <Folder Include="Machine\Templates" />
     <Folder Include="Machine\VISUs" />
     <Folder Include="Machine\VISUs\VisuOjects" />
+    <Folder Include="FabrykaBoolinow" />
   </ItemGroup>
   <ItemGroup>
     <PlaceholderReference Include="SPT Base Types">

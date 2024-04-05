@@ -4,9 +4,10 @@
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
     ControlSource_HMI : FB_ControlSource_HMI_Machine;
-    Seedra          : FB_Machine := (Name := 'SeedraMAIN');
-    InitComplete      : BOOL;
-
+    Seedra            : FB_Machine := (Name := 'SeedraMAIN');
+	InitComplete      : BOOL;
+	obiekt : FB_FabrykaBoolinow;
+	
     //Debug testing Recipe manager
     Value1 : INT;
     Value2 : INT;
@@ -23,6 +24,7 @@ END_VAR]]></Declaration>
     InitComplete := Initialize();
     RETURN;
 END_IF
+
 
 //Machine support HMI & Production Monitor
 ControlSource_HMI.CyclicLogic();
