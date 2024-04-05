@@ -25,7 +25,7 @@ END_VAR
 MainPMLControl_Simplified.StartPermissive :=
     MainPMLControl_Standard.CurrentState = Tc3_PackML_V2.E_PMLState.ePMLState_Idle OR
     (MainPMLControl_Standard.CurrentState = Tc3_PackML_V2.E_PMLState.ePMLState_Held AND
-    MAIN.Seedra.Unwind.CurrentState = E_PMLState.ePMLState_Idle);
+    MAIN.Seedra.SpindleZ.CurrentState = E_PMLState.ePMLState_Idle);
 ]]></ST>
       </Implementation>
     </Method>

@@ -26,10 +26,7 @@
     <Compile Include="DUTs\Recipe\ST_GantryXY.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\Recipe\ST_SealerRecipe.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\Recipe\ST_UnwindRecipe.TcDUT">
+    <Compile Include="DUTs\Recipe\ST_SpindleZRecipe.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\ST_Descriptor2.TcDUT">
@@ -43,6 +40,10 @@
     </Compile>
     <Compile Include="GlobalTextList.TcGTLO">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GVL.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="Machine\Components\GantryXYCylinder\FB_GantryXYCylinder.TcPOU">
       <SubType>Code</SubType>
@@ -62,16 +63,10 @@
     <Compile Include="Machine\Components\GantryXYCylinder\ST_Cylinder_Status.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Machine\Components\FB_SealBar.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Machine\EquipmentModules\FB_GantryXY.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Machine\EquipmentModules\FB_Unwind.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Machine\EquipmentModules\FB_Sealer.TcPOU">
+    <Compile Include="Machine\EquipmentModules\FB_SpindleZ.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Machine\FB_Machine.TcPOU">
