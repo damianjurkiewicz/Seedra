@@ -27,7 +27,7 @@ VAR
     Retract_RTRIG : R_TRIG;
 
     //HMI 
-    Cylinder_HMI : ST_Cylinder_HMI;
+    Cylinder_HMI : ST_Cylinder_HMIX;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
@@ -127,9 +127,9 @@ END_VAR]]></Declaration>
 
 //Handle the requests to extend and retract
 IF ComponentBase_HMI.Status.HMIControlAvailable THEN
-    IF Cylinder_HMI.Command.Extend THEN
+    IF Cylinder_HMI.Command.RetractExtend THEN
         Extend();
-    ELSIF Cylinder_HMI.Command.Retract THEN
+    ELSIF Cylinder_HMI.Command.RetractCylinder THEN
         Retract();
     END_IF
 END_IF

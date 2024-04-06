@@ -32,44 +32,44 @@
     <Compile Include="DUTs\ST_Descriptor2.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\ST_PackML_Control.TcDUT">
+    <Compile Include="DUTs\ST_PackML_ControlX.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\ST_PackML_Control_Simplified.TcDUT">
+    <Compile Include="DUTs\ST_PackML_Control_SimplifiedX.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GlobalTextList.TcGTLO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GVL.TcGVL">
+    <Compile Include="GlobalVariableList.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="Machine\Components\GantryXYCylinder\FB_GantryXYCylinder.TcPOU">
+    <Compile Include="Machine\Components\FB_GantryXYCylinder.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Machine\Components\GantryXYCylinder\I_Cylinder.TcIO">
+    <Compile Include="Machine\Components\I_Cylinder.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Machine\Components\GantryXYCylinder\ST_Cylinder_Command.TcDUT">
+    <Compile Include="Machine\Components\ST_Cylinder_CommandX.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Machine\Components\GantryXYCylinder\ST_Cylinder_Config.TcDUT">
+    <Compile Include="Machine\Components\ST_Cylinder_ConfigX.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Machine\Components\GantryXYCylinder\ST_Cylinder_HMI.TcDUT">
+    <Compile Include="Machine\Components\ST_Cylinder_HMIX.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Machine\Components\GantryXYCylinder\ST_Cylinder_Status.TcDUT">
+    <Compile Include="Machine\Components\ST_Cylinder_StatusX.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Machine\EquipmentModules\FB_GantryXY.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Machine\EquipmentModules\FB_SpindleZ.TcPOU">
+    <Compile Include="Machine\FB_GantryXY.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Machine\FB_Machine.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Machine\FB_SpindleZ.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Machine\HMI Connections\FB_ControlSource_HMI.TcPOU">
@@ -78,18 +78,15 @@
     <Compile Include="Machine\HMI Connections\FB_ControlSource_HMI_Machine.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Machine\Templates\FB_EquipmentModuleTemplate.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Machine\VISUs\VisuOjects\V_MachineModule.TcVIS">
-      <SubType>Code</SubType>
-      <DependentUpon>VisualizationManager.TcVMO</DependentUpon>
-    </Compile>
-    <Compile Include="Machine\VISUs\VisuOjects\V_Module.TcVIS">
+    <Compile Include="Machine\VISUs\V_MachineModule.TcVIS">
       <SubType>Code</SubType>
       <DependentUpon>VisualizationManager.TcVMO</DependentUpon>
     </Compile>
     <Compile Include="Machine\VISUs\V_Main.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>VisualizationManager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="Machine\VISUs\V_Module.TcVIS">
       <SubType>Code</SubType>
       <DependentUpon>VisualizationManager.TcVMO</DependentUpon>
     </Compile>
@@ -107,13 +104,9 @@
     <Folder Include="DUTs\Recipe" />
     <Folder Include="Machine" />
     <Folder Include="Machine\Components" />
-    <Folder Include="Machine\Components\GantryXYCylinder" />
-    <Folder Include="Machine\EquipmentModules" />
     <Folder Include="DUTs" />
     <Folder Include="Machine\HMI Connections" />
-    <Folder Include="Machine\Templates" />
     <Folder Include="Machine\VISUs" />
-    <Folder Include="Machine\VISUs\VisuOjects" />
   </ItemGroup>
   <ItemGroup>
     <PlaceholderReference Include="SPT Base Types">

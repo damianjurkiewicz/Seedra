@@ -12,8 +12,7 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Folder Name="I_CyclicFB" Id="{e68cdfcf-13d3-4757-96bc-cfed3982f6af}" />
-    <Method Name="CyclicLogic" Id="{b9558393-f6df-424b-bb06-aa52f94a69ed}" FolderPath="I_CyclicFB\">
+    <Method Name="CyclicLogic" Id="{b9558393-f6df-424b-bb06-aa52f94a69ed}">
       <Declaration><![CDATA[METHOD CyclicLogic
 VAR_INPUT
 END_VAR

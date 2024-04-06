@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="ST_Cylinder_HMIX" Id="{21cb6520-c345-430b-9d4d-d2bc0c55488f}">
+    <Declaration><![CDATA[TYPE ST_Cylinder_HMIX :
+    STRUCT
+        Config  : ST_Cylinder_Config;
+        Command : ST_Cylinder_CommandX;
+        Status  : ST_Cylinder_StatusX;
+    END_STRUCT
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>
