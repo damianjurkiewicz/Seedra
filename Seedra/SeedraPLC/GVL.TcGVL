@@ -5,7 +5,7 @@
 VAR_GLOBAL
 	StateProteza : UDINT;
 	StateCurrentProteza : DINT;
-	BoolProteza  : BOOL;
+	BoolProteza  : BOOL := TRUE;
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

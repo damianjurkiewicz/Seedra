@@ -20,15 +20,6 @@
     <CombineIds>true</CombineIds>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DUTs\Recipe\ST_AxisRecipe.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\Recipe\ST_GantryXY.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\Recipe\ST_SpindleZRecipe.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="DUTs\ST_Descriptor2.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -101,7 +92,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DUTs\Recipe" />
     <Folder Include="Machine" />
     <Folder Include="Machine\EquipmentModules" />
     <Folder Include="DUTs" />

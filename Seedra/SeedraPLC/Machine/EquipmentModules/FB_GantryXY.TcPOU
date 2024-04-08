@@ -16,11 +16,7 @@ VAR
     //Alarms for this module
     GantryAlarms : ARRAY[1..GANTRY_ALARM_COUNT] OF FB_TcAlarm;
 
-	//Data for recipe
-	Recipe : ST_GantryXY;
-    (*Parameters from PackTags for module
-    _Param  : ARRAY[1..10] OF ST_Descriptor2;*)
-    _Report : ARRAY[1..10] OF ST_Descriptor2;
+
 
     //HMI Control for EM
     fbControlSourceHMI : FB_ControlSource_HMI;
@@ -45,84 +41,7 @@ END_VAR]]></Declaration>
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Folder Name="I_CyclicFB" Id="{1cfc12b1-3488-4708-a9c0-7f5e3200922e}" />
-    <Folder Name="Methods" Id="{7ea91248-a559-47e3-a56f-a225596d5ea4}">
-      <Folder Name="Acting States" Id="{30d294a1-5cf9-40fa-a3c4-3abcbefdbe05}" />
-      <Folder Name="Waiting States" Id="{ce7f79c0-77aa-4f06-a5c0-97eff08c325c}" />
-    </Folder>
-    <Folder Name="Properties" Id="{d979cebd-5da6-4378-800d-7adb88acdfab}" />
-    <Method Name="Aborting" Id="{4c3de770-a28d-4000-93d6-e12df93294dd}" FolderPath="Methods\Acting States\">
-      <Declaration><![CDATA[METHOD PROTECTED Aborting
-VAR_INPUT
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[CASE SequenceState OF
-    0:
-        NoStateTasksToComplete := FALSE;
-        SequenceState          := SequenceState + 10;
-    10:
-        GantryAxisX.Stop();
-        GantryAxisY.Stop();
-        IF GantryAxisX.Stopped AND GantryAxisY.Stopped THEN
-            SequenceState := SequenceState + 10;
-        END_IF
-    20:
-        // Disable here
-        GantryAxisX.Disable();
-        GantryAxisY.Disable();
-        GantryCylinder.Retract();
-
-        // Check not enabled here
-        IF NOT GantryAxisX.Enabled AND NOT GantryAxisY.Enabled AND GantryCylinder.Retracted THEN
-            SequenceState := SequenceState + 10;
-        END_IF
-
-        StateTasksComplete := TRUE;
-END_CASE
-
-SUPER^.Aborting();]]></ST>
-      </Implementation>
-    </Method>
-    <Property Name="Acceleration" Id="{fb737272-8121-443f-bb81-17cc6deb00e3}" FolderPath="Properties\">
-      <Declaration><![CDATA[PROPERTY Acceleration : LREAL]]></Declaration>
-      <Set Name="Set" Id="{a82221d7-d213-426a-9fb3-1813ff8529dc}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[Recipe.LeftAxis.Acceleration := Acceleration;
-Recipe.RightAxis.Acceleration := Acceleration;]]></ST>
-        </Implementation>
-      </Set>
-    </Property>
-    <Method Name="Clearing" Id="{0331837f-22a2-46ed-b836-140316680a45}" FolderPath="Methods\Acting States\">
-      <Declaration><![CDATA[METHOD PROTECTED Clearing
-VAR_INPUT
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[CASE SequenceState OF
-    0:
-        NoStateTasksToComplete := FALSE;
-        SequenceState          := SequenceState + 10;
-    10:
-        //Reset any alarms that get latched
-        GantryAlarms[E_Gantry.StartTimeout].Clear(0, 0);
-        SequenceState := SequenceState + 10;
-    20:
-        // Enable here
-        GantryAxisX.Enable();
-        GantryAxisY.Enable();
-
-        // Check enabled here
-        IF GantryAxisX.Enabled AND GantryAxisY.Enabled THEN
-            SequenceState := SequenceState + 10;
-        END_IF
-    30:
-        StateTasksComplete := TRUE;
-END_CASE
-
-SUPER^.Clearing();]]></ST>
-      </Implementation>
-    </Method>
+    <Folder Name="Methods" Id="{7ea91248-a559-47e3-a56f-a225596d5ea4}" />
     <Method Name="CreateEvents" Id="{4ec0ace2-c308-44b2-84a1-60ba649bd547}" FolderPath="Methods\">
       <Declaration><![CDATA[METHOD PROTECTED CreateEvents
 VAR_INPUT
@@ -156,62 +75,7 @@ fbControlSourceHMI.CyclicLogic();
 //Set the current alarm severity for this module
 _CurrentAlarmSeverity := F_GetMaxSeverityRaised(Alarms := GantryAlarms, CurrentSeverity := _CurrentAlarmSeverity);
 
-//Simulate Alarm Messaging
-CyclicLogic_Simulation();]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="CyclicLogic_Simulation" Id="{848790f4-6965-4320-b33a-fb32f7f918da}" FolderPath="Methods\">
-      <Declaration><![CDATA[METHOD CyclicLogic_Simulation
-VAR_INPUT
-END_VAR
-
-VAR_INST
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[(*	
-This is just for testing. Real hardware can be setup in other places
-Here the alarms will raise and clear on its own if the input changes	
-*)
-
-//Generic Alarms for Testing
-IF ErrorInput AND NOT GantryAlarms[E_Gantry.AlarmMessage].bRaised THEN
-    RaiseAlarm2Args(GantryAlarms[E_Gantry.AlarmMessage], '', '');
-ELSIF NOT ErrorInput AND GantryAlarms[E_Gantry.AlarmMessage].bRaised THEN
-    GantryAlarms[E_Gantry.AlarmMessage].Clear(0, 0);
-END_IF
-
-IF WarnInput AND NOT GantryAlarms[E_Gantry.WarnMessage].bRaised THEN
-    RaiseAlarm2Args(GantryAlarms[E_Gantry.WarnMessage], '', '');
-ELSIF NOT WarnInput AND GantryAlarms[E_Gantry.WarnMessage].bRaised THEN
-    GantryAlarms[E_Gantry.WarnMessage].Clear(0, 0);
-END_IF
-
-IF InfoInput AND NOT GantryAlarms[E_Gantry.InfoMessage].bRaised THEN
-    RaiseAlarm2Args(GantryAlarms[E_Gantry.InfoMessage], '', '');
-ELSIF NOT InfoInput AND GantryAlarms[E_Gantry.InfoMessage].bRaised THEN
-    GantryAlarms[E_Gantry.InfoMessage].Clear(0, 0);
-END_IF]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="Execute" Id="{24f2a84a-cfe1-4269-89c3-0ab58d2e748b}" FolderPath="Methods\Waiting States\">
-      <Declaration><![CDATA[METHOD PROTECTED Execute
-VAR_INPUT
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[// Function based on mode.  NO need to make SUPER^.Executing() since it does nothing.
-CASE _CurrentMode OF
-    E_PMLUnitMode.ePMLUnitMode_Production:
-        IF GantryAxisX.InPosition AND NOT GantryAxisX.Busy THEN
-            GantryCylinder.Retract();
-            IF GantryCylinder.Retracted THEN
-                StateComplete();
-            END_IF
-        END_IF
-    E_PMLUnitMode.ePMLUnitMode_Maintenance:
-        ;
-    E_PMLUnitMode.ePMLUnitMode_Manual:
-        ;
-END_CASE]]></ST>
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="Initialize" Id="{b4a0fd62-4385-4420-ae43-9bea35a3f798}" FolderPath="Methods\">
@@ -233,8 +97,8 @@ CASE DescendantSequenceState OF
 		RegisterComponent(GantryAxisY);		
 		RegisterComponent(GantryCylinder);
 		
-        _LogModeChanges         := FALSE;
-        _LogStateChanges        := FALSE;
+        _LogModeChanges         := TRUE;
+        _LogStateChanges        := TRUE;
         DescendantSequenceState := DescendantSequenceState + 10;
     10:
         //Setup Custom modes here
@@ -271,7 +135,7 @@ CASE DescendantSequenceState OF
             ModeNames[i] := F_UnitModeToString(UDINT_TO_DINT(i));
         END_FOR
 
-        Initialize_TagData();
+
 		RegisterExternalController(Controller := fbControlSourceHMI);
 		fbControlSourceHMI.CyclicLogic();
         DescendantSequenceState := DescendantSequenceState + 10;
@@ -285,44 +149,6 @@ CASE DescendantSequenceState OF
 END_CASE]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Initialize_TagData" Id="{32a2e019-abce-425f-8e3c-cc5fca6b6f69}" FolderPath="Methods\">
-      <Declaration><![CDATA[METHOD Initialize_TagData
-VAR_INPUT
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[// Reports
-_Report[FAULT].ID    := TO_DINT(1 * 10 + 1);
-_Report[FAULT].Name  := 'Fault ID';
-_Report[FAULT].Unit  := 'n/a';
-
-//Recipe
-Recipe.Length := 100;
-Recipe.LeftAxis.Velocity := 100;
-Recipe.LeftAxis.Acceleration := 1000;
-Recipe.RightAxis.Velocity := 100;
-Recipe.RightAxis.Acceleration := 1000;
-]]></ST>
-      </Implementation>
-    </Method>
-    <Property Name="Length" Id="{25f83960-2850-4c98-aac0-0474e792dc9b}" FolderPath="Properties\">
-      <Declaration><![CDATA[PROPERTY Length : LREAL]]></Declaration>
-      <Get Name="Get" Id="{49a64ec1-b283-4c39-b495-d337d077c39a}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[Length := Recipe.Length;]]></ST>
-        </Implementation>
-      </Get>
-      <Set Name="Set" Id="{62003e52-0dea-4a17-a8a3-a51e509c6ad2}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[Recipe.Length := Length;]]></ST>
-        </Implementation>
-      </Set>
-    </Property>
     <Method Name="RaiseAlarm2Args" Id="{3b444795-a02f-4331-ab15-8dec5e002fb2}" FolderPath="Methods\">
       <Declaration><![CDATA[METHOD RaiseAlarm2Args
 VAR_IN_OUT
@@ -340,127 +166,24 @@ END_VAR]]></Declaration>
                                  String_3 := String_2);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Resetting" Id="{c85d70ed-952c-4c53-9986-231b7ace540a}" FolderPath="Methods\Acting States\">
-      <Declaration><![CDATA[METHOD PROTECTED Resetting
-VAR_INPUT
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[CASE _CurrentMode OF
-    //=================================PRODUCTION MODE==================================
-    E_PMLUnitMode.ePMLUnitMode_Production:
-        CASE SequenceState OF
-            0:
-                NoStateTasksToComplete := FALSE;
-                SequenceState          := SequenceState + 10;
-            10:
-                /// No reason to gear to the master LeftPullWheel.Master1  REF= MAIN.Seedra.Master.Axis;
-                GantryAxisY.Master1 REF= GantryAxisX.Axis;
-
-                ///LeftPullWheel.GearIn();
-                GantryAxisY.GearIn();
-                SequenceState := SequenceState + 10;
-            20:
-                IF (*LeftPullWheel.InGear AND*) GantryAxisY.InGear THEN
-                    StateTasksComplete := TRUE;
-                END_IF
-        END_CASE
-
-    //=================================MAINTENANCE & MANUAL MODE==================================	
-    E_PMLUnitMode.ePMLUnitMode_Maintenance, E_PMLUnitMode.ePMLUnitMode_Manual:
-        ;
-END_CASE
-
-SUPER^.Resetting();]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="Starting" Id="{c8ce40ea-dea4-41f3-bfcc-e10ad34fff3f}" FolderPath="Methods\Acting States\">
-      <Declaration><![CDATA[METHOD PROTECTED Starting
-VAR_INPUT
-END_VAR
-
-VAR_INST
-    StartTimer : TON;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[CASE _CurrentMode OF
-    //=================================PRODUCTION MODE==================================
-    E_PMLUnitMode.ePMLUnitMode_Production:
-        CASE SequenceState OF
-            0:
-                // Delay 1 scan to make sure timer is off.  Not guarnteed from last time where it finished.
-                NoStateTasksToComplete := FALSE;
-                SequenceState          := SequenceState + 10;
-            10:
-                GantryCylinder.Extend();
-                IF GantryCylinder.Extended THEN
-                    NoStateTasksToComplete     := FALSE;
-                    GantryAxisX.Velocity     := Recipe.LeftAxis.Velocity;
-                    GantryAxisX.Acceleration := Recipe.LeftAxis.Acceleration;
-                    GantryAxisX.MoveRelative(Distance := Recipe.Length, FALSE);
-                    SequenceState := SequenceState + 10;
-                END_IF
-            20:
-                IF GantryAxisX.Busy THEN
-                    SequenceState := SequenceState + 10;
-                END_IF
-
-                IF StartTimer.Q AND NOT GantryAlarms[E_Gantry.StartTimeout].bRaised THEN
-                    RaiseAlarm2Args(GantryAlarms[E_Gantry.StartTimeout], '', '');
-                    SequenceState := SequenceState + 10;
-                END_IF
-            30:
-                StateTasksComplete := TRUE;
-        END_CASE
-
-    //=================================MAINTENANCE & MANUAL MODE==================================
-    E_PMLUnitMode.ePMLUnitMode_Maintenance, E_PMLUnitMode.ePMLUnitMode_Manual:
-        ;
-END_CASE
-
-SUPER^.Starting();
-StartTimer(IN := ((SequenceState = 10) OR (SequenceState = 20)), PT := T#3S);]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="Stopping" Id="{7d6ebde9-664e-4d12-ba2e-b6039c72785e}" FolderPath="Methods\Acting States\">
-      <Declaration><![CDATA[METHOD PROTECTED Stopping
-VAR_INPUT
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[CASE _CurrentMode OF
-    //=================================PRODUCTION MODE==================================
-    E_PMLUnitMode.ePMLUnitMode_Production:
-        CASE SequenceState OF
-            0:
-                NoStateTasksToComplete := FALSE;
-                GantryCylinder.Retract();
-                SequenceState := SequenceState + 10;
-            10:
-                IF GantryCylinder.Retracted THEN
-                    SequenceState := SequenceState + 10;
-                END_IF
-            20:
-                StateTasksComplete := TRUE;
-        END_CASE
-
-    //=================================MAINTENANCE & MANUAL MODE==================================
-    E_PMLUnitMode.ePMLUnitMode_Maintenance, E_PMLUnitMode.ePMLUnitMode_Manual:
-        ;
-END_CASE
-
-SUPER^.Stopping();]]></ST>
-      </Implementation>
-    </Method>
-    <Property Name="Velocity" Id="{95139607-01c7-400b-9b34-9fbd90d24f62}" FolderPath="Properties\">
-      <Declaration><![CDATA[PROPERTY Velocity : LREAL]]></Declaration>
-      <Set Name="Set" Id="{e26bea52-2635-4098-a40e-4dd141afac28}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[Recipe.LeftAxis.Velocity := Velocity;
-Recipe.RightAxis.Velocity := Velocity;]]></ST>
-        </Implementation>
-      </Set>
-    </Property>
+    <LineIds Name="FB_GantryXY">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_GantryXY.CreateEvents">
+      <LineId Id="3" Count="6" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_GantryXY.CyclicLogic">
+      <LineId Id="3" Count="12" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_GantryXY.Initialize">
+      <LineId Id="3" Count="55" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_GantryXY.RaiseAlarm2Args">
+      <LineId Id="3" Count="2" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>
