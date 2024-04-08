@@ -6,7 +6,7 @@ VAR
     ControlSource_HMI : FB_ControlSource_HMI_Machine;
     Seedra            : FB_Machine := (Name := 'SeedraMAIN');
 	InitComplete      : BOOL;
-	obiekt : FB_FabrykaBoolinow;
+
 	
     //Debug testing Recipe manager
     Value1 : INT;
@@ -48,5 +48,16 @@ ControlSource_HMI.CyclicLogic();
 Initialize := TRUE;]]></ST>
       </Implementation>
     </Method>
+    <LineIds Name="MAIN">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="MAIN.CyclicLogic">
+      <LineId Id="3" Count="9" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="MAIN.Initialize">
+      <LineId Id="3" Count="6" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

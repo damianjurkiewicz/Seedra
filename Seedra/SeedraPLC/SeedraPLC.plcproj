@@ -38,12 +38,6 @@
     <Compile Include="DUTs\ST_PackML_Control_Simplified.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FabrykaBoolinow\FB_JednorazowyBoolin.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FabrykaBoolinow\FB_FabrykaBoolinow.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="GlobalTextList.TcGTLO">
       <SubType>Code</SubType>
     </Compile>
@@ -51,22 +45,22 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="Machine\Components\GantryXYCylinder\FB_GantryXYCylinder.TcPOU">
+    <Compile Include="Machine\EquipmentModules\Components\GantryXYCylinder\FB_GantryXYCylinder.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Machine\Components\GantryXYCylinder\I_Cylinder.TcIO">
+    <Compile Include="Machine\EquipmentModules\Components\GantryXYCylinder\I_Cylinder.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Machine\Components\GantryXYCylinder\ST_Cylinder_Command.TcDUT">
+    <Compile Include="Machine\EquipmentModules\Components\GantryXYCylinder\ST_Cylinder_Command.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Machine\Components\GantryXYCylinder\ST_Cylinder_Config.TcDUT">
+    <Compile Include="Machine\EquipmentModules\Components\GantryXYCylinder\ST_Cylinder_Config.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Machine\Components\GantryXYCylinder\ST_Cylinder_HMI.TcDUT">
+    <Compile Include="Machine\EquipmentModules\Components\GantryXYCylinder\ST_Cylinder_HMI.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Machine\Components\GantryXYCylinder\ST_Cylinder_Status.TcDUT">
+    <Compile Include="Machine\EquipmentModules\Components\GantryXYCylinder\ST_Cylinder_Status.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Machine\EquipmentModules\FB_GantryXY.TcPOU">
@@ -82,9 +76,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Machine\HMI Connections\FB_ControlSource_HMI_Machine.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Machine\Templates\FB_EquipmentModuleTemplate.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Machine\VISUs\VisuOjects\V_MachineModule.TcVIS">
@@ -112,15 +103,13 @@
   <ItemGroup>
     <Folder Include="DUTs\Recipe" />
     <Folder Include="Machine" />
-    <Folder Include="Machine\Components" />
-    <Folder Include="Machine\Components\GantryXYCylinder" />
     <Folder Include="Machine\EquipmentModules" />
     <Folder Include="DUTs" />
+    <Folder Include="Machine\EquipmentModules\Components" />
+    <Folder Include="Machine\EquipmentModules\Components\GantryXYCylinder" />
     <Folder Include="Machine\HMI Connections" />
-    <Folder Include="Machine\Templates" />
     <Folder Include="Machine\VISUs" />
     <Folder Include="Machine\VISUs\VisuOjects" />
-    <Folder Include="FabrykaBoolinow" />
   </ItemGroup>
   <ItemGroup>
     <PlaceholderReference Include="SPT Base Types">

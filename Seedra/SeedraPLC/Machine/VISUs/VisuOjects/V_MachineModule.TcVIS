@@ -93,19 +93,19 @@
                     </o>
                     <o>
                       <v n="Id">1649127785L</v>
-                      <v n="Value">3</v>
+                      <v n="Value" t="Int16">0</v>
                     </o>
                     <o>
                       <v n="Id">357335551L</v>
-                      <v n="Value">4</v>
+                      <v n="Value" t="Int16">0</v>
                     </o>
                     <o>
                       <v n="Id">2422045748L</v>
-                      <v n="Value">627</v>
+                      <v n="Value" t="Int16">630</v>
                     </o>
                     <o>
                       <v n="Id">2134141914L</v>
-                      <v n="Value">253</v>
+                      <v n="Value" t="Int16">260</v>
                     </o>
                     <o>
                       <v n="Id">3729828405L</v>
@@ -128,7 +128,7 @@
                     </o>
                     <o>
                       <v n="Id">550940142L</v>
-                      <v n="Value">316</v>
+                      <v n="Value">315</v>
                     </o>
                     <o>
                       <v n="Id">1473355128L</v>
@@ -2525,13 +2525,13 @@
             <d2 n="Size" ckt="Int32" cvt="VisualObjectSize">
               <v>0</v>
               <o>
-                <v n="Width">857</v>
-                <v n="Height">257</v>
+                <v n="Width">630</v>
+                <v n="Height">260</v>
               </o>
               <v>1</v>
               <o>
-                <v n="Width">856</v>
-                <v n="Height">258</v>
+                <v n="Width">630</v>
+                <v n="Height">260</v>
               </o>
             </d2>
             <v n="Version">1</v>
@@ -2584,5 +2584,27 @@
         <Type n="VisualObjectSizeManager">{5f612b0e-b404-455f-8177-27864e9f5332}</Type>
       </TypeList>
     </XmlArchive>
+    <ObjectProperties>
+      <XmlArchive>
+        <Data>
+          <o xml:space="preserve" t="VisualProperty">
+            <v n="VisuUsageType">0</v>
+            <v n="SizeX">630</v>
+            <v n="SizeY">260</v>
+            <v n="IsStartVisu">false</v>
+            <v n="VisuSizeMode" t="VisualVisuSizeMode">Specified</v>
+            <v n="Internal">false</v>
+            <v n="DialogIsOpaque">false</v>
+            <v n="DialogIsOpaqueIsSet">false</v>
+          </o>
+        </Data>
+        <TypeList>
+          <Type n="Boolean">System.Boolean</Type>
+          <Type n="Int32">System.Int32</Type>
+          <Type n="VisualProperty">{477d844b-9b2a-407e-90a4-d36fd6dde2fc}</Type>
+          <Type n="VisualVisuSizeMode">{34718b76-91f6-43de-8c65-b77e0b1ee621}</Type>
+        </TypeList>
+      </XmlArchive>
+    </ObjectProperties>
   </Visu>
 </TcPlcObject>
