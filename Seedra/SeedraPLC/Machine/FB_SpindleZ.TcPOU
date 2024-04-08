@@ -43,9 +43,7 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Folder Name="I_CyclicFB" Id="{50b2b73b-a7e6-449c-8083-d6eb4b73f60c}" />
-    <Folder Name="Methods" Id="{1fe8be3a-f7d7-42ae-b885-2501b85559e1}" />
-    <Method Name="CreateEvents" Id="{99ddd031-78aa-46a7-b2f9-f0b68a19d02e}" FolderPath="Methods\">
+    <Method Name="CreateEvents" Id="{99ddd031-78aa-46a7-b2f9-f0b68a19d02e}">
       <Declaration><![CDATA[METHOD PROTECTED CreateEvents
 VAR_INPUT
 END_VAR]]></Declaration>
@@ -60,7 +58,7 @@ F_CreateAllEventsInClass(Alarms     := SpindleAlarms,
 SUPER^.CreateEvents();]]></ST>
       </Implementation>
     </Method>
-    <Method Name="CyclicLogic" Id="{ea09e275-dd4c-4ec1-a323-7e0cfd7e21cd}" FolderPath="I_CyclicFB\">
+    <Method Name="CyclicLogic" Id="{ea09e275-dd4c-4ec1-a323-7e0cfd7e21cd}">
       <Declaration><![CDATA[METHOD CyclicLogic
 VAR_INPUT
 END_VAR]]></Declaration>
@@ -84,9 +82,8 @@ END_IF
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Initialize" Id="{59d1fe7d-28ec-4cbf-a3ef-81f06735b3ba}" FolderPath="Methods\">
-      <Declaration><![CDATA[//! @summary Basic module initialization logic
-METHOD PROTECTED Initialize : BOOL;
+    <Method Name="Initialize" Id="{59d1fe7d-28ec-4cbf-a3ef-81f06735b3ba}">
+      <Declaration><![CDATA[METHOD PROTECTED Initialize : BOOL;
 VAR
     i                        : UDINT;
     varInfo                  : __SYSTEM.VAR_INFO;
@@ -106,32 +103,6 @@ CASE DescendantSequenceState OF
         DescendantSequenceState := DescendantSequenceState + 10;
     10:
         //Setup Custom modes here
-
-        (*CustomModes(eMode                          :=,
-                    sName                          :=,
-                    bDisableClearing               :=,
-                    bDisableStarting               :=,
-                    bDisableSuspended              :=,
-                    bDisableStopping               :=,
-                    bDisableAborting               :=,
-                    bDisableHolding                :=,
-                    bDisableHeld                   :=,
-                    bDisableUnholding              :=,
-                    bDisableSuspending             :=,
-                    bDisableUnsuspending           :=,
-                    bDisableResetting              :=,
-                    bDisableIdle                   :=,
-                    bDisableCompleting             :=,
-                    bDisableComplete               :=,
-                    bEnableUnitModeChangeStopped   :=,
-                    bEnableUnitModeChangeIdle      :=,
-                    bEnableUnitModeChangeSuspended :=,
-                    bEnableUnitModeChangeExecute   :=,
-                    bEnableUnitModeChangeAborted   :=,
-                    bEnableUnitModeChangeHeld      :=,
-                    bEnableUnitModeChangeComplete  :=,
-                    bError                         =>,
-                    nErrorId                       =>);*)
         DescendantSequenceState := DescendantSequenceState + 10;
     20:
         //Copy Mode names
@@ -156,8 +127,8 @@ CASE DescendantSequenceState OF
 END_CASE]]></ST>
       </Implementation>
     </Method>
-    <Method Name="RaiseAlarm2Args" Id="{7b5fcd4f-47a7-4be3-b737-1f985fad3866}" FolderPath="Methods\">
-      <Declaration><![CDATA[METHOD RaiseAlarm2Args
+    <Method Name="RaiseTwoArgumentAlarm" Id="{7b5fcd4f-47a7-4be3-b737-1f985fad3866}">
+      <Declaration><![CDATA[METHOD RaiseTwoArgumentAlarm
 VAR_IN_OUT
     Alarm : FB_TcAlarm; //Alarm to be raised
 END_VAR
@@ -187,10 +158,11 @@ END_VAR]]></Declaration>
     <LineIds Name="FB_SpindleZ.Initialize">
       <LineId Id="3" Count="4" />
       <LineId Id="70" Count="0" />
-      <LineId Id="9" Count="50" />
+      <LineId Id="9" Count="3" />
+      <LineId Id="39" Count="20" />
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_SpindleZ.RaiseAlarm2Args">
+    <LineIds Name="FB_SpindleZ.RaiseTwoArgumentAlarm">
       <LineId Id="3" Count="2" />
       <LineId Id="2" Count="0" />
     </LineIds>

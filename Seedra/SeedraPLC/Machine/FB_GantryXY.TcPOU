@@ -40,9 +40,7 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Folder Name="I_CyclicFB" Id="{1cfc12b1-3488-4708-a9c0-7f5e3200922e}" />
-    <Folder Name="Methods" Id="{7ea91248-a559-47e3-a56f-a225596d5ea4}" />
-    <Method Name="CreateEvents" Id="{4ec0ace2-c308-44b2-84a1-60ba649bd547}" FolderPath="Methods\">
+    <Method Name="CreateEvents" Id="{4ec0ace2-c308-44b2-84a1-60ba649bd547}">
       <Declaration><![CDATA[METHOD PROTECTED CreateEvents
 VAR_INPUT
 END_VAR]]></Declaration>
@@ -57,7 +55,7 @@ F_CreateAllEventsInClass(Alarms     := GantryAlarms,
 SUPER^.CreateEvents();]]></ST>
       </Implementation>
     </Method>
-    <Method Name="CyclicLogic" Id="{02def406-fced-425b-89cd-43b7d8052b02}" FolderPath="I_CyclicFB\">
+    <Method Name="CyclicLogic" Id="{02def406-fced-425b-89cd-43b7d8052b02}">
       <Declaration><![CDATA[METHOD CyclicLogic
 VAR_INPUT
 END_VAR]]></Declaration>
@@ -78,7 +76,7 @@ _CurrentAlarmSeverity := F_GetMaxSeverityRaised(Alarms := GantryAlarms, CurrentS
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Initialize" Id="{b4a0fd62-4385-4420-ae43-9bea35a3f798}" FolderPath="Methods\">
+    <Method Name="Initialize" Id="{b4a0fd62-4385-4420-ae43-9bea35a3f798}">
       <Declaration><![CDATA[//! @summary Basic module initialization logic
 METHOD PROTECTED Initialize : BOOL;
 VAR
@@ -103,31 +101,7 @@ CASE DescendantSequenceState OF
     10:
         //Setup Custom modes here
 
-        (*CustomModes(eMode                          :=,
-                    sName                          :=,
-                    bDisableClearing               :=,
-                    bDisableStarting               :=,
-                    bDisableSuspended              :=,
-                    bDisableStopping               :=,
-                    bDisableAborting               :=,
-                    bDisableHolding                :=,
-                    bDisableHeld                   :=,
-                    bDisableUnholding              :=,
-                    bDisableSuspending             :=,
-                    bDisableUnsuspending           :=,
-                    bDisableResetting              :=,
-                    bDisableIdle                   :=,
-                    bDisableCompleting             :=,
-                    bDisableComplete               :=,
-                    bEnableUnitModeChangeStopped   :=,
-                    bEnableUnitModeChangeIdle      :=,
-                    bEnableUnitModeChangeSuspended :=,
-                    bEnableUnitModeChangeExecute   :=,
-                    bEnableUnitModeChangeAborted   :=,
-                    bEnableUnitModeChangeHeld      :=,
-                    bEnableUnitModeChangeComplete  :=,
-                    bError                         =>,
-                    nErrorId                       =>);*)
+      
         DescendantSequenceState := DescendantSequenceState + 10;
     20:
         //Copy Mode names
@@ -149,8 +123,8 @@ CASE DescendantSequenceState OF
 END_CASE]]></ST>
       </Implementation>
     </Method>
-    <Method Name="RaiseAlarm2Args" Id="{3b444795-a02f-4331-ab15-8dec5e002fb2}" FolderPath="Methods\">
-      <Declaration><![CDATA[METHOD RaiseAlarm2Args
+    <Method Name="RaiseTwoArgumentAlarm" Id="{3b444795-a02f-4331-ab15-8dec5e002fb2}">
+      <Declaration><![CDATA[METHOD RaiseTwoArgumentAlarm
 VAR_IN_OUT
     Alarm : FB_TcAlarm; //Alarm to be raised
 END_VAR
@@ -178,10 +152,14 @@ END_VAR]]></Declaration>
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_GantryXY.Initialize">
-      <LineId Id="3" Count="55" />
+      <LineId Id="3" Count="10" />
+      <LineId Id="69" Count="1" />
+      <LineId Id="95" Count="0" />
+      <LineId Id="68" Count="0" />
+      <LineId Id="42" Count="16" />
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_GantryXY.RaiseAlarm2Args">
+    <LineIds Name="FB_GantryXY.RaiseTwoArgumentAlarm">
       <LineId Id="3" Count="2" />
       <LineId Id="2" Count="0" />
     </LineIds>

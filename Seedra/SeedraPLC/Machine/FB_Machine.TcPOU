@@ -66,12 +66,7 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Folder Name="I_CyclicFB" Id="{c2b7af95-c402-4115-b5e6-e32c5abd7442}" />
-    <Folder Name="Methods" Id="{9b31e10f-2f7d-47d0-8b03-ede4de2288d4}">
-      <Folder Name="AlarmHandling" Id="{a6320f6e-50c1-47d2-91fb-4b1b67c24593}" />
-      <Folder Name="HMI" Id="{2790fade-5dfc-4738-ae5f-b9a7fc939b52}" />
-    </Folder>
-    <Method Name="CreateEvents" Id="{3ef7297b-dc6e-4a47-8d8e-332da0b8eab2}" FolderPath="Methods\">
+    <Method Name="CreateEvents" Id="{3ef7297b-dc6e-4a47-8d8e-332da0b8eab2}">
       <Declaration><![CDATA[METHOD PROTECTED CreateEvents
 VAR_INPUT
 END_VAR]]></Declaration>
@@ -86,7 +81,7 @@ F_CreateAllEventsInClass(Alarms     := MachineAlarms,
 SUPER^.CreateEvents();]]></ST>
       </Implementation>
     </Method>
-    <Method Name="CyclicLogic" Id="{3a2f2751-120e-49d4-84e7-dd5883d6841e}" FolderPath="I_CyclicFB\">
+    <Method Name="CyclicLogic" Id="{3a2f2751-120e-49d4-84e7-dd5883d6841e}">
       <Declaration><![CDATA[METHOD CyclicLogic
 VAR_INPUT
 END_VAR]]></Declaration>
@@ -107,7 +102,7 @@ _PackTags.Status.UnitModeCurrent := _CurrentMode;
 CyclicLogic_Simulation();]]></ST>
       </Implementation>
     </Method>
-    <Method Name="CyclicLogic_Simulation" Id="{71f5236c-9d28-412c-8bd3-07ce42ed551f}" FolderPath="Methods\">
+    <Method Name="CyclicLogic_Simulation" Id="{71f5236c-9d28-412c-8bd3-07ce42ed551f}">
       <Declaration><![CDATA[METHOD CyclicLogic_Simulation
 VAR_INPUT
 END_VAR
@@ -120,13 +115,13 @@ This is just for testing. Real hardware can be setup in other places
 Here the alarms will raise and clear on its own if the input changes	
 *)
 IF EstopInput AND NOT MachineAlarms[E_Seedra.EmergencyStop].bRaised THEN
-    RaiseAlarm2Args(MachineAlarms[E_Seedra.EmergencyStop], '', '');
+    RaiseTwoArgumentAlarm(MachineAlarms[E_Seedra.EmergencyStop], '', '');
 ELSIF NOT EstopInput AND MachineAlarms[E_Seedra.EmergencyStop].bRaised THEN
     MachineAlarms[E_Seedra.EmergencyStop].Clear(0, 0);
 END_IF
 
 IF LowAirInput AND NOT MachineAlarms[E_Seedra.LowAir].bRaised THEN
-    RaiseAlarm2Args(MachineAlarms[E_Seedra.LowAir], '', '');
+    RaiseTwoArgumentAlarm(MachineAlarms[E_Seedra.LowAir], '', '');
 ELSIF NOT LowAirInput AND MachineAlarms[E_Seedra.LowAir].bRaised THEN
     MachineAlarms[E_Seedra.LowAir].Clear(0, 0);
 END_IF
@@ -151,61 +146,37 @@ END_IF
 //END_IF]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Held" Id="{630272c0-ba2b-083b-3eb9-78a6577810b1}">
-      <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Held</b> state
-METHOD PROTECTED Held
-
-(*! <description> <b>The base implementation of this method is empty. User must override this method to provide functionality.</b>
-<table> 
-	<tr>
-		<th> Previous State </th>
-		<th> Transition In </th>
-		<th> Transition Out </th>
-		<th> Next State  </th> 
-	</tr>
-	<tr>
-		<td> Holding </td>
-		<td> State Complete <i>(Holding)</i></td> 
-		<td> Unhold Command </td>
-		<td> Unholding </td> 
-	</tr>
-</table>
-This method is called as required by <c>StateControl()</c>
-</description> 
-
-*)]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[SUPER^.Holding();
-]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="HMIPermissions" Id="{01f1aea6-e802-48f8-abd4-50a2a3d31fba}" FolderPath="Methods\HMI\">
+    <Method Name="HMIPermissions" Id="{01f1aea6-e802-48f8-abd4-50a2a3d31fba}">
       <Declaration><![CDATA[METHOD PROTECTED HMIPermissions
 VAR_INPUT
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[//General Mode Based Monitoring and handling of HMI control
+        <ST><![CDATA[ //BlockHMIControl();
+//General Mode Based Monitoring and handling of HMI control
 CASE _CurrentMode OF
-    E_PMLUnitMode.ePMLUnitMode_Production:
-        CASE _CurrentState OF
-            E_PMLState.ePMLState_Stopped:
-                AllowHMIControl(ThisModuleOnly := TRUE); //Allow control for recovery
-            E_PMLState.ePMLState_Idle:
-                //BlockHMIControl();
-				     AllowHMIControl(ThisModuleOnly := FALSE); //Allow control for recovery
-            E_PMLState.ePMLState_Suspended:
-                   AllowHMIControl(ThisModuleOnly := FALSE); //Allow control for recovery
-            E_PMLState.ePMLState_Execute:
-                 AllowHMIControl(ThisModuleOnly := FALSE); //Allow control for recovery
-            E_PMLState.ePMLState_Aborted:
-                     AllowHMIControl(ThisModuleOnly := FALSE); //Allow control for recovery
-            E_PMLState.ePMLState_Held:
-                    AllowHMIControl(ThisModuleOnly := FALSE); //Allow control for recovery
-            E_PMLState.ePMLState_Complete:
-                BlockHMIControl();
-        END_CASE
+   
+ E_PMLUnitMode.ePMLUnitMode_Production:
+ 
+ 	AllowHMIControl(ThisModuleOnly := FALSE);
+ 
+//        CASE _CurrentState OF
+//            E_PMLState.ePMLState_Stopped:
+//                AllowHMIControl(ThisModuleOnly := FALSE); //Allow control for recovery
+//            E_PMLState.ePMLState_Idle:
+//				AllowHMIControl(ThisModuleOnly := FALSE); //Allow control for recovery
+//            E_PMLState.ePMLState_Suspended:
+//                AllowHMIControl(ThisModuleOnly := FALSE); //Allow control for recovery
+//            E_PMLState.ePMLState_Execute:
+//                AllowHMIControl(ThisModuleOnly := FALSE); //Allow control for recovery
+//            E_PMLState.ePMLState_Aborted:
+//                AllowHMIControl(ThisModuleOnly := FALSE); //Allow control for recovery
+//            E_PMLState.ePMLState_Held:
+//                AllowHMIControl(ThisModuleOnly := FALSE); //Allow control for recovery
+//            E_PMLState.ePMLState_Complete:
+//				AllowHMIControl(ThisModuleOnly := FALSE); //Allow control for recovery
+//        END_CASE
 		
-        //AllowHMIControl(ThisModuleOnly := FALSE);
+      
     E_PMLUnitMode.ePMLUnitMode_Manual:
         AllowHMIControl(ThisModuleOnly := FALSE);
     E_PMLUnitMode.ePMLUnitMode_Maintenance:
@@ -213,8 +184,8 @@ CASE _CurrentMode OF
 END_CASE]]></ST>
       </Implementation>
     </Method>
-    <Method Name="HoldImmediate" Id="{84b7ed94-99a4-4ce2-a25d-701c2131ac5b}" FolderPath="Methods\AlarmHandling\">
-      <Declaration><![CDATA[METHOD PROTECTED HoldImmediate
+    <Method Name="HoldImmediateAlarmHandling" Id="{84b7ed94-99a4-4ce2-a25d-701c2131ac5b}">
+      <Declaration><![CDATA[METHOD PROTECTED HoldImmediateAlarmHandling
 VAR_INPUT
 END_VAR
 ]]></Declaration>
@@ -222,39 +193,7 @@ END_VAR
         <ST><![CDATA[ChangeState(E_PMLCommand.ePMLCommand_Hold);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Holding" Id="{b2b2c62d-c478-06a1-2be5-5c58be64d099}">
-      <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Holding</b> state
-METHOD PROTECTED Holding
-VAR
-	i				: UDINT;
-	SubModulesReady : BOOL := TRUE;
-END_VAR
-
-(*! <description><b>Note:</b> The <i>Hold</i> command is intended to be given by an operator. It is meant to be distinct from a <i>Suspend</i> in that upstream/downstream jams, etc. should be handled automatically using <i>Suspend</i>.  Both <i>Hold</i>and<i>Suspend</i> result in a <i>paused</i> state which should allow resumption of the <b>Execute</b> state. 
-<table> 
-	<tr>
-		<th> Previous State </th>
-		<th> Transition In </th>
-		<th> Transition Out </th>
-		<th> Next State  </th> 
-	</tr>
-	<tr>
-		<td> Execute </td>
-		<td> Hold Command </td> 
-		<td> State Complete </td>
-		<td> Held </td> 
-	</tr>
-</table>
-This method is called as required by <c>StateControl()</c>
-</description> 
-
-*)]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[SUPER^.Holding();
-]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="Initialize" Id="{c8e5bfb3-7a5f-4315-8e43-29ab3e5bd8c9}" FolderPath="Methods\">
+    <Method Name="Initialize" Id="{c8e5bfb3-7a5f-4315-8e43-29ab3e5bd8c9}">
       <Declaration><![CDATA[METHOD PROTECTED Initialize : BOOL
 VAR
     i : UDINT; //Generic iteration value
@@ -271,32 +210,6 @@ CASE DescendantSequenceState OF
         DescendantSequenceState := DescendantSequenceState + 10;
     10:
         //Setup Custom modes here
-
-        (*CustomModes(eMode                          :=,
-                    sName                          :=,
-                    bDisableClearing               :=,
-                    bDisableStarting               :=,
-                    bDisableSuspended              :=,
-                    bDisableStopping               :=,
-                    bDisableAborting               :=,
-                    bDisableHolding                :=,
-                    bDisableHeld                   :=,
-                    bDisableUnholding              :=,
-                    bDisableSuspending             :=,
-                    bDisableUnsuspending           :=,
-                    bDisableResetting              :=,
-                    bDisableIdle                   :=,
-                    bDisableCompleting             :=,
-                    bDisableComplete               :=,
-                    bEnableUnitModeChangeStopped   :=,
-                    bEnableUnitModeChangeIdle      :=,
-                    bEnableUnitModeChangeSuspended :=,
-                    bEnableUnitModeChangeExecute   :=,
-                    bEnableUnitModeChangeAborted   :=,
-                    bEnableUnitModeChangeHeld      :=,
-                    bEnableUnitModeChangeComplete  :=,
-                    bError                         =>,
-                    nErrorId                       =>);*)
         DescendantSequenceState := DescendantSequenceState + 10;
     20:
         //Copy Mode names
@@ -319,8 +232,8 @@ CASE DescendantSequenceState OF
 END_CASE]]></ST>
       </Implementation>
     </Method>
-    <Method Name="RaiseAlarm2Args" Id="{45171f7d-6922-46eb-a058-ee14fb1eff75}" FolderPath="Methods\">
-      <Declaration><![CDATA[METHOD RaiseAlarm2Args
+    <Method Name="RaiseTwoArgumentAlarm" Id="{45171f7d-6922-46eb-a058-ee14fb1eff75}">
+      <Declaration><![CDATA[METHOD RaiseTwoArgumentAlarm
 VAR_IN_OUT
     Alarm : FB_TcAlarm; //Alarm to be raised
 END_VAR
@@ -336,7 +249,7 @@ END_VAR]]></Declaration>
                                  String_3 := String_2);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="SubModuleMonitor" Id="{dcbc78eb-4598-4276-aefb-1642881bb3aa}" FolderPath="Methods\">
+    <Method Name="SubModuleMonitor" Id="{dcbc78eb-4598-4276-aefb-1642881bb3aa}">
       <Declaration><![CDATA[METHOD PROTECTED SubModuleMonitor : BOOL
 VAR
     AlarmResponses : ARRAY[0..4] OF E_AlarmResponse; //Temporary response array	
@@ -362,7 +275,7 @@ IF _CurrentState <> E_PMLState.ePMLState_Aborted AND _CurrentState <> E_PMLState
         E_AlarmResponse.Stop_Controlled:
             StopControlled();
         E_AlarmResponse.Hold_Immediate:
-            HoldImmediate();
+            HoldImmediateAlarmHandling();
         E_AlarmResponse.Suspend_Immediate:
             SuspendImmediate();
         E_AlarmResponse.Suspend_Controlled:
@@ -383,37 +296,6 @@ ELSIF _CurrentState = E_PMLState.ePMLState_Stopped OR _CurrentState = E_PMLState
 END_IF]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Unholding" Id="{f394e07b-32d0-05db-0f14-0f62ceafed2e}">
-      <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Unholding</b> state
-METHOD PROTECTED Unholding
-VAR
-	i				: UDINT;
-	SubModulesReady : BOOL := TRUE;
-END_VAR
-
-(*! <description><b></b><table> 
-	<tr>
-		<th> Previous State </th>
-		<th> Transition In </th>
-		<th> Transition Out </th>
-		<th> Next State  </th> 
-	</tr>
-	<tr>
-		<td> Held </td>
-		<td> Unhold Command </td> 
-		<td> State Complete </td>
-		<td> Execute </td> 
-	</tr>
-</table>
-This method is called as required by <c>StateControl()</c>
-</description> 
-
-*)]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[SUPER^.Holding();
-]]></ST>
-      </Implementation>
-    </Method>
     <LineIds Name="FB_Machine">
       <LineId Id="2" Count="0" />
     </LineIds>
@@ -426,38 +308,36 @@ This method is called as required by <c>StateControl()</c>
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_Machine.CyclicLogic_Simulation">
-      <LineId Id="3" Count="32" />
+      <LineId Id="41" Count="32" />
       <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Machine.Held">
-      <LineId Id="24" Count="0" />
-      <LineId Id="23" Count="0" />
     </LineIds>
     <LineIds Name="FB_Machine.HMIPermissions">
-      <LineId Id="3" Count="25" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="3" Count="2" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="46" Count="0" />
+      <LineId Id="48" Count="0" />
+      <LineId Id="47" Count="0" />
+      <LineId Id="6" Count="0" />
+      <LineId Id="33" Count="12" />
+      <LineId Id="21" Count="7" />
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_Machine.HoldImmediate">
+    <LineIds Name="FB_Machine.HoldImmediateAlarmHandling">
       <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Machine.Holding">
-      <LineId Id="27" Count="1" />
     </LineIds>
     <LineIds Name="FB_Machine.Initialize">
-      <LineId Id="3" Count="55" />
+      <LineId Id="3" Count="10" />
+      <LineId Id="40" Count="18" />
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_Machine.RaiseAlarm2Args">
+    <LineIds Name="FB_Machine.RaiseTwoArgumentAlarm">
       <LineId Id="3" Count="2" />
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_Machine.SubModuleMonitor">
       <LineId Id="3" Count="37" />
       <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Machine.Unholding">
-      <LineId Id="51" Count="0" />
-      <LineId Id="26" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
