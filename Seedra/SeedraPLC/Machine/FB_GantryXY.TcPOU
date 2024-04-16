@@ -16,14 +16,7 @@ VAR
     //Alarms for this module
     GantryAlarms : ARRAY[1..GANTRY_ALARM_COUNT] OF FB_TcAlarm;
 
-	//Data for recipe
-	Recipe : ST_GantryXY;
-    (*Parameters from PackTags for module
-    _Param  : ARRAY[1..10] OF ST_Descriptor2;*)
-    _Report : ARRAY[1..10] OF ST_Descriptor2;
 
-    //HMI Control for EM
-    fbControlSourceHMI : FB_ControlSource_HMI;
 END_VAR
 
 VAR CONSTANT
@@ -44,18 +37,6 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Property Name="Acceleration" Id="{fb737272-8121-443f-bb81-17cc6deb00e3}">
-      <Declaration><![CDATA[PROPERTY Acceleration : LREAL]]></Declaration>
-      <Set Name="Set" Id="{a82221d7-d213-426a-9fb3-1813ff8529dc}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[Recipe.LeftAxis.Acceleration := Acceleration;
-Recipe.RightAxis.Acceleration := Acceleration;]]></ST>
-        </Implementation>
-      </Set>
-    </Property>
     <Method Name="CreateEvents" Id="{4ec0ace2-c308-44b2-84a1-60ba649bd547}">
       <Declaration><![CDATA[METHOD PROTECTED CreateEvents
 VAR_INPUT
@@ -82,9 +63,6 @@ END_VAR]]></Declaration>
 END_IF
 
 SUPER^.CyclicLogic();
-
-//HMI control for EM
-fbControlSourceHMI.CyclicLogic();
 
 //Set the current alarm severity for this module
 _CurrentAlarmSeverity := F_GetMaxSeverityRaised(Alarms := GantryAlarms, CurrentSeverity := _CurrentAlarmSeverity);
@@ -150,9 +128,6 @@ CASE DescendantSequenceState OF
             ModeNames[i] := F_UnitModeToString(UDINT_TO_DINT(i));
         END_FOR
 
-        Initialize_TagData();
-		RegisterExternalController(Controller := fbControlSourceHMI);
-		fbControlSourceHMI.CyclicLogic();
         DescendantSequenceState := DescendantSequenceState + 10;
     30:
         //Call the Super
@@ -164,72 +139,23 @@ CASE DescendantSequenceState OF
 END_CASE]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Initialize_TagData" Id="{32a2e019-abce-425f-8e3c-cc5fca6b6f69}">
-      <Declaration><![CDATA[METHOD Initialize_TagData
-VAR_INPUT
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[// Reports
-_Report[FAULT].ID    := TO_DINT(1 * 10 + 1);
-_Report[FAULT].Name  := 'Fault ID';
-_Report[FAULT].Unit  := 'n/a';
-
-//Recipe
-Recipe.Length := 100;
-Recipe.LeftAxis.Velocity := 100;
-Recipe.LeftAxis.Acceleration := 1000;
-Recipe.RightAxis.Velocity := 100;
-Recipe.RightAxis.Acceleration := 1000;
-]]></ST>
-      </Implementation>
-    </Method>
-    <Property Name="Length" Id="{25f83960-2850-4c98-aac0-0474e792dc9b}">
-      <Declaration><![CDATA[PROPERTY Length : LREAL]]></Declaration>
-      <Get Name="Get" Id="{49a64ec1-b283-4c39-b495-d337d077c39a}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[Length := Recipe.Length;]]></ST>
-        </Implementation>
-      </Get>
-      <Set Name="Set" Id="{62003e52-0dea-4a17-a8a3-a51e509c6ad2}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[Recipe.Length := Length;]]></ST>
-        </Implementation>
-      </Set>
-    </Property>
-    <Method Name="RaiseAlarm2Args" Id="{3b444795-a02f-4331-ab15-8dec5e002fb2}">
-      <Declaration><![CDATA[METHOD RaiseAlarm2Args
-VAR_IN_OUT
-    Alarm : FB_TcAlarm; //Alarm to be raised
-END_VAR
-
-VAR_INPUT
-    String_1 : STRING; //First String Parameter (The Name of this component will be applied first automatically)
-    String_2 : STRING; //Second String Parameter
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[F_RaiseAlarmWithStringParameters(Alarm    := Alarm,
-                                 String_1 := Name,
-                                 String_2 := String_1,
-                                 String_3 := String_2);]]></ST>
-      </Implementation>
-    </Method>
-    <Property Name="Velocity" Id="{95139607-01c7-400b-9b34-9fbd90d24f62}">
-      <Declaration><![CDATA[PROPERTY Velocity : LREAL]]></Declaration>
-      <Set Name="Set" Id="{e26bea52-2635-4098-a40e-4dd141afac28}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[Recipe.LeftAxis.Velocity := Velocity;
-Recipe.RightAxis.Velocity := Velocity;]]></ST>
-        </Implementation>
-      </Set>
-    </Property>
+    <LineIds Name="FB_GantryXY">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_GantryXY.CreateEvents">
+      <LineId Id="3" Count="6" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_GantryXY.CyclicLogic">
+      <LineId Id="3" Count="5" />
+      <LineId Id="12" Count="4" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_GantryXY.Initialize">
+      <LineId Id="3" Count="43" />
+      <LineId Id="48" Count="0" />
+      <LineId Id="51" Count="7" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

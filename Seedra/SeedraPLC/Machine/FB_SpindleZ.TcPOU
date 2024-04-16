@@ -15,15 +15,13 @@ VAR
     //Alarms for this module
     SpindleAlarms : ARRAY[1..SPINDLE_ALARM_COUNT] OF FB_TcAlarm;
 
-    //Data for recipe
-    Recipe : ST_SpindleZRecipe;
+
 
     (*Parameters from PackTags for module
     //_Param  : ARRAY[1..10] OF ST_Descriptor2;*)
-    _Report : ARRAY[1..10] OF ST_Descriptor2;
+
 
     //HMI Control for EM
-    fbControlSourceHMI : FB_ControlSource_HMI;
 END_VAR
 
 VAR CONSTANT
@@ -43,29 +41,15 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Property Name="Acceleration" Id="{1c2276ee-9cba-4c99-b7d6-1838f1184aea}">
-      <Declaration><![CDATA[PROPERTY Acceleration : LREAL]]></Declaration>
-      <Set Name="Set" Id="{d411bf23-e43c-40ef-b49c-52a8af7b1701}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[Recipe.Axis.Acceleration := Acceleration;
-]]></ST>
-        </Implementation>
-      </Set>
-    </Property>
     <Method Name="CreateEvents" Id="{99ddd031-78aa-46a7-b2f9-f0b68a19d02e}">
       <Declaration><![CDATA[METHOD PROTECTED CreateEvents
-VAR_INPUT
-END_VAR]]></Declaration>
+]]></Declaration>
       <Implementation>
         <ST><![CDATA[// Add your event creation here
 F_CreateAllEventsInClass(Alarms     := SpindleAlarms,
                          ClassSize  := SIZEOF(TC_EVENTS.Spindle),
                          pInitEvent := ADR(TC_EVENTS.Spindle.InitReferenceEvent),
                          Prefix     := Name);
-
 // Super call to base
 SUPER^.CreateEvents();]]></ST>
       </Implementation>
@@ -82,8 +66,7 @@ END_IF
 
 SUPER^.CyclicLogic();
 
-//HMI control for EM
-fbControlSourceHMI.CyclicLogic();
+
 
 //Set the current alarm severity for this module
 _CurrentAlarmSeverity := F_GetMaxSeverityRaised(Alarms := SpindleAlarms, CurrentSeverity := _CurrentAlarmSeverity);
@@ -149,9 +132,9 @@ CASE DescendantSequenceState OF
             ModeNames[i] := F_UnitModeToString(UDINT_TO_DINT(i));
         END_FOR
 
-        Initialize_TagData();
-		RegisterExternalController(Controller := fbControlSourceHMI);
-		fbControlSourceHMI.CyclicLogic();
+
+
+	
 		
 		//Set the Parent Response here
 		_ParentFaultResponseDefinitions[TcEventSeverity.Error] := E_AlarmResponse.Hold_Immediate;
@@ -166,49 +149,22 @@ CASE DescendantSequenceState OF
 END_CASE]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Initialize_TagData" Id="{cc617178-5960-4d50-b787-6b9fa33e7529}">
-      <Declaration><![CDATA[METHOD Initialize_TagData
-VAR_INPUT
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[//Recipe
-Recipe.Axis.Velocity     := 100;
-Recipe.Axis.Acceleration := 1000;
-
-//Report
-_Report[FAULT].ID   := TO_DINT(3 * 10 + 1);
-_Report[FAULT].Name := 'Fault ID';
-_Report[FAULT].Unit := 'n/a';]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="RaiseAlarm2Args" Id="{7b5fcd4f-47a7-4be3-b737-1f985fad3866}">
-      <Declaration><![CDATA[METHOD RaiseAlarm2Args
-VAR_IN_OUT
-    Alarm : FB_TcAlarm; //Alarm to be raised
-END_VAR
-
-VAR_INPUT
-    String_1 : STRING; //First String Parameter (The Name of this component will be applied first automatically)
-    String_2 : STRING; //Second String Parameter
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[F_RaiseAlarmWithStringParameters(Alarm    := Alarm,
-                                 String_1 := Name,
-                                 String_2 := String_1,
-                                 String_3 := String_2);]]></ST>
-      </Implementation>
-    </Method>
-    <Property Name="Velocity" Id="{4a353ca3-1dd1-4a51-9960-fbed664b7b4b}">
-      <Declaration><![CDATA[PROPERTY Velocity : LREAL]]></Declaration>
-      <Set Name="Set" Id="{ad25254f-0304-481d-9e2a-87a66fc50f23}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[Recipe.Axis.Velocity := Velocity;
-]]></ST>
-        </Implementation>
-      </Set>
-    </Property>
+    <LineIds Name="FB_SpindleZ">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SpindleZ.CreateEvents">
+      <LineId Id="3" Count="4" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SpindleZ.CyclicLogic">
+      <LineId Id="3" Count="6" />
+      <LineId Id="11" Count="7" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SpindleZ.Initialize">
+      <LineId Id="3" Count="56" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

@@ -20,24 +20,6 @@
     <CombineIds>true</CombineIds>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DUTs\Recipe\ST_AxisRecipe.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\Recipe\ST_GantryXY.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\Recipe\ST_SpindleZRecipe.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\ST_Descriptor2.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\ST_PackML_ControlX.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\ST_PackML_Control_SimplifiedX.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="GlobalTextList.TcGTLO">
       <SubType>Code</SubType>
     </Compile>
@@ -72,12 +54,6 @@
     <Compile Include="Machine\FB_SpindleZ.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Machine\HMI Connections\FB_ControlSource_HMI.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Machine\HMI Connections\FB_ControlSource_HMI_Machine.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Machine\VISUs\V_MachineModule.TcVIS">
       <SubType>Code</SubType>
       <DependentUpon>VisualizationManager.TcVMO</DependentUpon>
@@ -101,11 +77,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DUTs\Recipe" />
     <Folder Include="Machine" />
     <Folder Include="Machine\Components" />
     <Folder Include="DUTs" />
-    <Folder Include="Machine\HMI Connections" />
     <Folder Include="Machine\VISUs" />
   </ItemGroup>
   <ItemGroup>
