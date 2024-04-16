@@ -90,8 +90,8 @@ CASE DescendantSequenceState OF
 		RegisterComponent(GantryAxisY);		
 		RegisterComponent(GantryCylinder);
 		
-        _LogModeChanges         := FALSE;
-        _LogStateChanges        := FALSE;
+        _LogModeChanges         := TRUE;
+        _LogStateChanges        := TRUE;
         DescendantSequenceState := DescendantSequenceState + 10;
     10:
         //Setup Custom modes here

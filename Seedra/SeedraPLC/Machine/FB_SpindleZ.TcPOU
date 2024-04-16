@@ -94,8 +94,8 @@ CASE DescendantSequenceState OF
     0:
 		RegisterComponent(Axis);
 		RegisterComponent(Sensor);
-        _LogModeChanges         := FALSE;
-        _LogStateChanges        := FALSE;
+        _LogModeChanges         := TRUE;
+        _LogStateChanges        := TRUE;
         DescendantSequenceState := DescendantSequenceState + 10;
     10:
         //Setup Custom modes here
