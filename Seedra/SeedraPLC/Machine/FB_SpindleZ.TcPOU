@@ -15,29 +15,14 @@ VAR
     //Alarms for this module
     SpindleAlarms : ARRAY[1..SPINDLE_ALARM_COUNT] OF FB_TcAlarm;
 
-
-
-    (*Parameters from PackTags for module
-    //_Param  : ARRAY[1..10] OF ST_Descriptor2;*)
-
-
-    //HMI Control for EM
 END_VAR
 
 VAR CONSTANT
-    //reports 
-    FAULT : INT := 1;
-
     //Alarms
     SPINDLE_ALARM_COUNT : INT := 5;
 END_VAR
 
-//Simulation variables for messaging
-VAR
-    ErrorInput : BOOL;
-    WarnInput  : BOOL;
-    InfoInput  : BOOL;
-END_VAR]]></Declaration>
+]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>

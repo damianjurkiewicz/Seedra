@@ -14,59 +14,19 @@ VAR
 
     //Alarms for this module
     MachineAlarms : ARRAY[1..MACHINE_ALARM_COUNT] OF FB_TcAlarm;
-	
-	//Current Recipe Name
-	CurrentRecipeName : STRING;
 
-    //Get Data From PackML? Else RecipeManager is running
-    DataFromPackML : BOOL := TRUE;
+	//Simulation variables
+	LowAirInput :BOOL;
+	EstopInput :BOOL;
 
-    //Data 
-    sealTimeStart : ULINT;
-    sealTimeEnd   : ULINT;
-    sealingTime   : LREAL;
-    sealTrig      : R_TRIG;
-    gantrylTimeStart : ULINT;
-    gantryTimeEnd   : ULINT;
-    gantryTime   : LREAL;
-    gantryTrig      : R_TRIG;
-    partTimeStart : ULINT;
-    partTimeEnd   : ULINT;
-    partTime      : LREAL;
-    parts         : DINT;
-    product       : DINT;
-
-    //Pack Tags for System
-    {attribute 'OPC.UA.DA' := '1'}
-    _PackTags : ST_PackMLv30Ext; //ST_PackMLv30 is obsolete in Tc3_PackML_V2
 END_VAR
 
 VAR CONSTANT
-    //PackTag parameter IDs
-    LENGTH         : INT := 1;
-    SEALTEMP       : INT := 2;
-    SEALTIME       : INT := 3;
-    GANTRY_VEL     : INT := 4;
-    GANTRY_ACC     : INT := 5;
-  //S3ALER_VEL     : INT := 6;
- // S3ALER_ACC     : INT := 7;
-    UNWIND_VEL     : INT := 8;
-    UNWIND_ACC     : INT := 9;
-    OPEN_POS       : INT := 10;
-    CLOSED_POS     : INT := 11;
-
     //Alarm count constant
     MACHINE_ALARM_COUNT : INT := 6;
 END_VAR
 
-// Simulation variables
-VAR
-    EstopInput  : BOOL;
-    LowAirInput : BOOL;
-    ErrorInput  : BOOL;
-    WarnInput   : BOOL;
-    InfoInput   : BOOL;
-END_VAR]]></Declaration>
+]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>

@@ -11,29 +11,18 @@ VAR
     // Component definitions here
     GantryAxisX       : FB_Component_BasicSlaveAxis := (Name := 'Left');
     GantryAxisY    	  : FB_Component_BasicSlaveAxis := (Name := 'Right');
-    GantryCylinder    : FB_GantryXYCylinder                 := (Name := 'Cylinder');
+    GantryCylinder    : FB_GantryXYCylinder         := (Name := 'Cylinder');
 
     //Alarms for this module
     GantryAlarms : ARRAY[1..GANTRY_ALARM_COUNT] OF FB_TcAlarm;
-
-
 END_VAR
 
 VAR CONSTANT
-
-    //reports 
-    FAULT : INT := 1;
-
     //Alarms
     GANTRY_ALARM_COUNT : INT := 5;
 END_VAR
 
-//Simulation variables for messaging
-VAR
-    ErrorInput : BOOL;
-    WarnInput  : BOOL;
-    InfoInput  : BOOL;
-END_VAR]]></Declaration>
+]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
