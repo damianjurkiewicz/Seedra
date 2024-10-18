@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_GantryXY" Id="{496b17f1-4b0a-4954-89f4-eec9ef72b2f5}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_GantryXY EXTENDS FB_PackML_BaseModule
+VAR
+    // Sub module definitions here
+
+    // List of sub modules
+    ipSubModules_Init : ARRAY[1..Parameters_PackML_Base.MAX_NO_OF_SUBMODULES] OF I_PackML_BaseModule := [];
+
+    // Component definitions here
+    GantryAxisX       : FB_Component_BasicSlaveAxis := (Name := 'Left');
+    GantryAxisY    	  : FB_Component_BasicSlaveAxis := (Name := 'Right');
+    GantryCylinder    : FB_GantryXYCylinder                 := (Name := 'Cylinder');
+
+    //Alarms for this module
+    GantryAlarms : ARRAY[1..GANTRY_ALARM_COUNT] OF FB_TcAlarm;
+
+
+END_VAR
+
+VAR CONSTANT
+
+    //reports 
+    FAULT : INT := 1;
+
+    //Alarms
+    GANTRY_ALARM_COUNT : INT := 5;
+END_VAR
+
+//Simulation variables for messaging
+VAR
+    ErrorInput : BOOL;
+    WarnInput  : BOOL;
+    InfoInput  : BOOL;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="CreateEvents" Id="{4ec0ace2-c308-44b2-84a1-60ba649bd547}">
+      <Declaration><![CDATA[METHOD PROTECTED CreateEvents
+VAR_INPUT
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Add your event creation here
+F_CreateAllEventsInClass(Alarms     := GantryAlarms,
+                         ClassSize  := SIZEOF(TC_EVENTS.Gantry),
+                         pInitEvent := ADR(TC_EVENTS.Gantry.InitReferenceEvent),
+                         Prefix     := _Name);
+
+// Super call to base
+SUPER^.CreateEvents();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="CyclicLogic" Id="{02def406-fced-425b-89cd-43b7d8052b02}">
+      <Declaration><![CDATA[METHOD CyclicLogic
+VAR_INPUT
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT _InitComplete THEN
+    _InitComplete := Initialize();
+    RETURN;
+END_IF
+
+SUPER^.CyclicLogic();
+
+//Set the current alarm severity for this module
+_CurrentAlarmSeverity := F_GetMaxSeverityRaised(Alarms := GantryAlarms, CurrentSeverity := _CurrentAlarmSeverity);
+
+//Simulate Alarm Messaging
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Initialize" Id="{b4a0fd62-4385-4420-ae43-9bea35a3f798}">
+      <Declaration><![CDATA[//! @summary Basic module initialization logic
+METHOD PROTECTED Initialize : BOOL;
+VAR
+    i                        : UDINT;
+    varInfo                  : __SYSTEM.VAR_INFO;
+    AllSubUnitsInitialized   : BOOL := TRUE;
+    AllComponentsInitialized : BOOL := TRUE;
+END_VAR
+
+//! @description This method is called by <c>CyclicLogic()</c> as required]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Initialize := FALSE;
+CASE DescendantSequenceState OF
+    0:
+		RegisterComponent(GantryAxisX);
+		RegisterComponent(GantryAxisY);		
+		RegisterComponent(GantryCylinder);
+		
+        _LogModeChanges         := TRUE;
+        _LogStateChanges        := TRUE;
+        DescendantSequenceState := DescendantSequenceState + 10;
+    10:
+        //Setup Custom modes here
+
+        (*CustomModes(eMode                          :=,
+                    sName                          :=,
+                    bDisableClearing               :=,
+                    bDisableStarting               :=,
+                    bDisableSuspended              :=,
+                    bDisableStopping               :=,
+                    bDisableAborting               :=,
+                    bDisableHolding                :=,
+                    bDisableHeld                   :=,
+                    bDisableUnholding              :=,
+                    bDisableSuspending             :=,
+                    bDisableUnsuspending           :=,
+                    bDisableResetting              :=,
+                    bDisableIdle                   :=,
+                    bDisableCompleting             :=,
+                    bDisableComplete               :=,
+                    bEnableUnitModeChangeStopped   :=,
+                    bEnableUnitModeChangeIdle      :=,
+                    bEnableUnitModeChangeSuspended :=,
+                    bEnableUnitModeChangeExecute   :=,
+                    bEnableUnitModeChangeAborted   :=,
+                    bEnableUnitModeChangeHeld      :=,
+                    bEnableUnitModeChangeComplete  :=,
+                    bError                         =>,
+                    nErrorId                       =>);*)
+        DescendantSequenceState := DescendantSequenceState + 10;
+    20:
+        //Copy Mode names
+        FOR i := 1 TO 3 DO
+            ModeNames[i] := F_UnitModeToString(UDINT_TO_DINT(i));
+        END_FOR
+
+        DescendantSequenceState := DescendantSequenceState + 10;
+    30:
+        //Call the Super
+        IF SUPER^.Initialize() THEN
+            DescendantSequenceState := DescendantSequenceState + 10;
+        END_IF
+    40:
+        Initialize := TRUE;
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_GantryXY">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_GantryXY.CreateEvents">
+      <LineId Id="3" Count="6" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_GantryXY.CyclicLogic">
+      <LineId Id="3" Count="5" />
+      <LineId Id="12" Count="4" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_GantryXY.Initialize">
+      <LineId Id="3" Count="43" />
+      <LineId Id="48" Count="0" />
+      <LineId Id="51" Count="7" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
