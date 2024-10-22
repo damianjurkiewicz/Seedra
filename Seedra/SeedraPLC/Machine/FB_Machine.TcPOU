@@ -61,48 +61,6 @@ SUPER^.CyclicLogic();
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Execute" Id="{8d9cf37d-4012-0acb-01e4-be86aea7490d}" FolderPath="MachineStates\">
-      <Declaration><![CDATA[METHOD PROTECTED FINAL Execute
-VAR
-	Delay: TON;
-	Count : INT :=0;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[CASE _CurrentMode OF
-//===================PRODUCTION MODE=======================
-	E_PMLUnitMode.ePMLUnitMode_Production:
-	CASE SequenceState OF
-		0:
-			Delay(IN:=TRUE, PT:=T#5S);
-			IF NOT(Delay.Q) THEN
-				SequenceState := SequenceState + 10;
-			END_IF
-			
-		10:	//There is an idea to Activate EM slowly, by Starting them from the Idle state
-			Delay(IN:=FALSE);   
-//			FB_GantryXY.ChangeState(E_PMLCommand.ePMLCommand_Start);
-//			FB_SpindleZ.ChangeState(E_PMLCommand.ePMLCommand_Start);
-			SUPER^.Starting();
-
-	END_CASE
-
-//===================MAINTENANCE MODE=======================
-//Go to the most convinient position for the cleaning 
-    E_PMLUnitMode.ePMLUnitMode_Maintenance:
-        ;
-
-
-//===================MANUAL MODE=======================
-//Allow individual Control of each Module
-	E_PMLUnitMode.ePMLUnitMode_Manual:
-	
-		;
-END_CASE
-	
-
-	]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="HMIPermissions" Id="{01f1aea6-e802-48f8-abd4-50a2a3d31fba}">
       <Declaration><![CDATA[METHOD PROTECTED HMIPermissions
 VAR_INPUT
@@ -139,9 +97,10 @@ END_CASE]]></ST>
     <Method Name="Idle" Id="{b8a07900-266f-0b30-359e-8e8df7b36472}" FolderPath="MachineStates\">
       <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Idle</b> state
 METHOD PROTECTED Idle
-	VAR
+	VAR_INST
 		Delay :TON;
 	END_VAR
+	
 (*! <description> <b>The base implementation of this method is empty. User must override this method to provide functionality.</b>
 <table> 
 	<tr>
@@ -169,15 +128,17 @@ This method is called as required by <c>StateControl()</c>
 		0:
 			Delay(IN:=TRUE, PT:=T#5S);
 			Trace('Wait before Idle');
-
-			
+			IF Delay.Q = TRUE THEN
+				SequenceState := SequenceState + 10;
+			END_IF
 		10:	//Started
+			
 			Trace('Idle');
 
 	END_CASE
+//==========================MAINTENANCE MODE=======================
 	E_PMLUnitMode.ePMLUnitMode_Maintenance, E_PMLUnitMode.ePMLUnitMode_Manual:
-	
-	SUPER^.Idle();
+	;
 END_CASE]]></ST>
       </Implementation>
     </Method>
@@ -246,61 +207,6 @@ CASE DescendantSequenceState OF
 END_CASE]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Starting" Id="{085d02f0-516d-061c-276a-6d5cef6a38a4}" FolderPath="MachineStates\">
-      <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Starting</b> state
-METHOD PROTECTED Starting
-VAR
-	i				: UDINT;
-	SubModulesReady : BOOL := TRUE;
-	Delay : TON;
-END_VAR
-
-(*! <description><b></b><table> 
-	<tr>
-		<th> Previous State </th>
-		<th> Transition In </th>
-		<th> Transition Out </th>
-		<th> Next State  </th> 
-	</tr>
-	<tr>
-		<td> Idle </td>
-		<td> Start Command </td> 
-		<td> State Complete </td>
-		<td> Execute </td> 
-	</tr>
-</table>
-This method is called as required by <c>StateControl()</c>
-</description> 
-
-*)]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[CASE _CurrentMode OF
-//===================PRODUCTION MODE=======================
-E_PMLUnitMode.ePMLUnitMode_Production:
-CASE SequenceState OF
-		0:
-			Trace('Wait for Starting');
-			Delay(IN:=TRUE, PT:=T#5S);
-			IF NOT(Delay.Q) THEN
-				SequenceState := SequenceState + 10;
-			END_IF
-			
-		10:	//Started
-			Delay(IN:=FALSE);   
-			Trace('Starting');
-
-	END_CASE
-E_PMLUnitMode.ePMLUnitMode_Maintenance:
-;
-E_PMLUnitMode.ePMLUnitMode_Manual:
-;
-			SUPER^.Starting();
-
-END_CASE
-
-]]></ST>
-      </Implementation>
-    </Method>
     <LineIds Name="FB_Machine">
       <LineId Id="2" Count="0" />
     </LineIds>
@@ -313,28 +219,6 @@ END_CASE
       <LineId Id="3" Count="5" />
       <LineId Id="13" Count="1" />
       <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Machine.Execute">
-      <LineId Id="23" Count="3" />
-      <LineId Id="39" Count="0" />
-      <LineId Id="32" Count="3" />
-      <LineId Id="27" Count="0" />
-      <LineId Id="42" Count="0" />
-      <LineId Id="69" Count="0" />
-      <LineId Id="64" Count="0" />
-      <LineId Id="71" Count="0" />
-      <LineId Id="70" Count="0" />
-      <LineId Id="43" Count="1" />
-      <LineId Id="57" Count="1" />
-      <LineId Id="66" Count="0" />
-      <LineId Id="59" Count="4" />
-      <LineId Id="67" Count="0" />
-      <LineId Id="56" Count="0" />
-      <LineId Id="68" Count="0" />
-      <LineId Id="55" Count="0" />
-      <LineId Id="46" Count="0" />
-      <LineId Id="41" Count="0" />
-      <LineId Id="53" Count="1" />
     </LineIds>
     <LineIds Name="FB_Machine.HMIPermissions">
       <LineId Id="3" Count="2" />
@@ -354,32 +238,19 @@ END_CASE
       <LineId Id="35" Count="0" />
       <LineId Id="44" Count="1" />
       <LineId Id="36" Count="1" />
+      <LineId Id="71" Count="0" />
       <LineId Id="41" Count="2" />
+      <LineId Id="70" Count="0" />
       <LineId Id="27" Count="0" />
       <LineId Id="31" Count="0" />
-      <LineId Id="28" Count="1" />
-      <LineId Id="32" Count="0" />
+      <LineId Id="72" Count="0" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="73" Count="0" />
       <LineId Id="30" Count="0" />
     </LineIds>
     <LineIds Name="FB_Machine.Initialize">
       <LineId Id="3" Count="55" />
       <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Machine.Starting">
-      <LineId Id="29" Count="0" />
-      <LineId Id="26" Count="0" />
-      <LineId Id="30" Count="0" />
-      <LineId Id="39" Count="1" />
-      <LineId Id="51" Count="0" />
-      <LineId Id="41" Count="8" />
-      <LineId Id="34" Count="1" />
-      <LineId Id="37" Count="0" />
-      <LineId Id="36" Count="0" />
-      <LineId Id="38" Count="0" />
-      <LineId Id="32" Count="0" />
-      <LineId Id="31" Count="0" />
-      <LineId Id="33" Count="0" />
-      <LineId Id="27" Count="1" />
     </LineIds>
   </POU>
 </TcPlcObject>
