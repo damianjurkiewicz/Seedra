@@ -26,6 +26,7 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Folder Name="SpindleZStates" Id="{ab80c913-e975-04a3-0590-b0c624c2977b}" />
     <Method Name="CreateEvents" Id="{99ddd031-78aa-46a7-b2f9-f0b68a19d02e}">
       <Declaration><![CDATA[METHOD PROTECTED CreateEvents
 ]]></Declaration>
