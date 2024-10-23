@@ -1023,7 +1023,7 @@ External Setpoint Generation:
 		</Motion>
 		<Plc>
 			<Project GUID="{0E250E61-BC3B-478D-8CD8-ACAB8830117A}" Name="SeedraPLC" PrjFilePath="SeedraPLC\SeedraPLC.plcproj" TmcFilePath="SeedraPLC\SeedraPLC.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" CopyTmcToTarget="true" CopyTpyToTarget="false" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="SeedraPLC\SeedraPLC.tmc" TmcHash="{C2488BB2-7ED8-9315-F332-9A20557E685E}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="SeedraPLC\SeedraPLC.tmc" TmcHash="{4A906C8D-76DF-87FD-FA3B-5C890901E3C6}">
 					<Name>SeedraPLC Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">
@@ -1039,11 +1039,6 @@ External Setpoint Generation:
 						<Var>
 							<Name>MAIN.Seedra.SpindleZ.Axis.BasicAxis._Axis.NcToPlc</Name>
 							<Type GUID="{25521FAA-EA5F-4C7F-8864-BBCCDACD2E98}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Seedra.SpindleZ.Sensor.HardwareInput</Name>
-							<Comment><![CDATA[Hardware input bit from the hysical sensor]]></Comment>
-							<Type>BOOL</Type>
 						</Var>
 					</Vars>
 					<Vars VarGrpType="2" AreaNo="1">

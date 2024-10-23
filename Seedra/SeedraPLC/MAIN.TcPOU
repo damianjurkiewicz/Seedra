@@ -2,15 +2,11 @@
 <TcPlcObject Version="1.1.0.1">
   <POU Name="MAIN" Id="{0a415e5e-1cd5-4d94-8552-fcd14dfd2571}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
-VAR
 
-    Seedra          : FB_Machine := (Name := 'SeedraMAIN');
-    InitComplete      : BOOL;
-
-    //Debug testing Recipe manager
-    Value1 : INT;
-    Value2 : INT;
-END_VAR]]></Declaration>
+	VAR
+		Seedra          : FB_Machine := (Name := 'SeedraMAIN');
+		InitComplete    : BOOL;
+	END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[CyclicLogic();]]></ST>
     </Implementation>

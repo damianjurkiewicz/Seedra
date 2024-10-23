@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <GVL Name="SafetyGlobalVariableList" Id="{53a690fb-35fd-0704-1992-de4393784afd}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+
+VAR_GLOBAL
+	
+	eStop						 :BOOL;
+
+(*	//State
+	SafetySate: INT;
+	ERR_ACK_RESETED : BOOL;
+	AX5805_ErrACK_RESETED : BOOL;
+	
+	//TWinSafe Group
+	ERR_FB						AT %I* :BOOL;
+	ERR_COM						AT %I* :BOOL;
+	ERR_OTHER					AT %I* :BOOL;
+	IN_RUN						AT %I* :BOOL;
+	RUN_STOP					AT %Q* :BOOL;
+	ERR_ACK						AT %Q* :BOOL;
+	
+	//AX580x
+	AX5805_Error_Ch1			AT %I* :BOOL;
+	AX5805_Error_Ch2			AT %I* :BOOL;
+	AX5805_STO_State_Ch1		AT %I* :BOOL;
+	AX5805_STO_State_Ch2		AT %I* :BOOL;
+	AX5805_ErrACK				AT %Q* :BOOL;
+	
+	//Other
+	SAFETY_Permission			AT %I* :BOOL;
+	RestartFBs_TSG				AT %Q* :BOOL;
+*)
+
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

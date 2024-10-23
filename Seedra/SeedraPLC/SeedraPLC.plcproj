@@ -20,10 +20,7 @@
     <CombineIds>true</CombineIds>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="GlobalTextList.TcGTLO">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GlobalVariableList.TcGVL">
+    <Compile Include="GVL\SafetyGlobalVariableList.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
@@ -81,6 +78,7 @@
     <Folder Include="Machine\Components" />
     <Folder Include="DUTs" />
     <Folder Include="Machine\VISUs" />
+    <Folder Include="GVL" />
   </ItemGroup>
   <ItemGroup>
     <PlaceholderReference Include="SPT Base Types">

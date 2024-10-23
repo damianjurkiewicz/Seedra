@@ -5,19 +5,19 @@
 VAR
     // Sub Modules
     GantryXY   : FB_GantryXY  := (Name := 'Gantry', LogStateChanges := TRUE);
-    SpindleZ   : FB_SpindleZ    := (Name := 'Spindle', LogStateChanges := TRUE);
+    SpindleZ   : FB_SpindleZ  := (Name := 'Spindle', LogStateChanges := TRUE);
 
     // Components
 
     //Initial List of Components
     ipComponents_Init : ARRAY[1..Parameters_PackML_Base.MAX_NO_OF_COMPONENTS] OF I_ComponentBase := [];
 
-    //Alarms for this module
-    MachineAlarms : ARRAY[1..MACHINE_ALARM_COUNT] OF FB_TcAlarm;
+	//Alarms for this module
+	MachineAlarms : ARRAY[1..MACHINE_ALARM_COUNT] OF FB_TcAlarm;
 
 	//Simulation variables
 	LowAirInput :BOOL;
-	EstopInput :BOOL;
+
 
 END_VAR
 
@@ -77,12 +77,20 @@ SUPER^.CreateEvents();]]></ST>
 VAR_INPUT
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF NOT _InitComplete THEN
+        <ST><![CDATA[
+IF NOT _InitComplete THEN
     _InitComplete := Initialize();
     RETURN;
 END_IF
 
 SUPER^.CyclicLogic();
+
+//Here the alarms will raise and clear on its own if the input changes
+IF SafetyGlobalVariableList.eStop AND NOT MachineAlarms[E_Seedra.EmergencyStop].bRaised THEN
+	RaiseAlarmWithStrings(MachineAlarms[E_Seedra.EmergencyStop],'','');
+ELSIF NOT SafetyGlobalVariableList.eStop AND MachineAlarms[E_Seedra.EmergencyStop].bRaised THEN
+    MachineAlarms[E_Seedra.EmergencyStop].Clear(0, 0);
+END_IF
 
 
 ]]></ST>
@@ -189,7 +197,6 @@ This method is called as required by <c>StateControl()</c>
 				SequenceState := SequenceState + 10;
 			END_IF
 		10:	//Started
-
 			Trace('Idle after 5s');
 
 	END_CASE
@@ -215,33 +222,6 @@ CASE DescendantSequenceState OF
         _LogStateChanges        := FALSE;
         DescendantSequenceState := DescendantSequenceState + 10;
     10:
-        //Setup Custom modes here
-
-        (*CustomModes(eMode                          :=,
-                    sName                          :=,
-                    bDisableClearing               :=,
-                    bDisableStarting               :=,
-                    bDisableSuspended              :=,
-                    bDisableStopping               :=,
-                    bDisableAborting               :=,
-                    bDisableHolding                :=,
-                    bDisableHeld                   :=,
-                    bDisableUnholding              :=,
-                    bDisableSuspending             :=,
-                    bDisableUnsuspending           :=,
-                    bDisableResetting              :=,
-                    bDisableIdle                   :=,
-                    bDisableCompleting             :=,
-                    bDisableComplete               :=,
-                    bEnableUnitModeChangeStopped   :=,
-                    bEnableUnitModeChangeIdle      :=,
-                    bEnableUnitModeChangeSuspended :=,
-                    bEnableUnitModeChangeExecute   :=,
-                    bEnableUnitModeChangeAborted   :=,
-                    bEnableUnitModeChangeHeld      :=,
-                    bEnableUnitModeChangeComplete  :=,
-                    bError                         =>,
-                    nErrorId                       =>);*)
         DescendantSequenceState := DescendantSequenceState + 10;
     20:
         //Copy Mode names
@@ -303,8 +283,15 @@ This method is called as required by <c>StateControl()</c>
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_Machine.CyclicLogic">
+      <LineId Id="18" Count="0" />
       <LineId Id="3" Count="5" />
-      <LineId Id="13" Count="1" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="19" Count="1" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="22" Count="1" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="14" Count="0" />
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_Machine.Execute">
@@ -330,7 +317,7 @@ This method is called as required by <c>StateControl()</c>
       <LineId Id="36" Count="1" />
       <LineId Id="107" Count="0" />
       <LineId Id="71" Count="0" />
-      <LineId Id="41" Count="2" />
+      <LineId Id="41" Count="1" />
       <LineId Id="70" Count="0" />
       <LineId Id="27" Count="0" />
       <LineId Id="31" Count="0" />
@@ -340,7 +327,8 @@ This method is called as required by <c>StateControl()</c>
       <LineId Id="30" Count="0" />
     </LineIds>
     <LineIds Name="FB_Machine.Initialize">
-      <LineId Id="3" Count="55" />
+      <LineId Id="3" Count="9" />
+      <LineId Id="40" Count="18" />
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_Machine.Stopped">

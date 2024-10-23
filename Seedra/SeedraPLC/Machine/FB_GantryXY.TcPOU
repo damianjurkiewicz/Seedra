@@ -15,6 +15,10 @@ VAR
 
     //Alarms for this module
     GantryAlarms : ARRAY[1..GANTRY_ALARM_COUNT] OF FB_TcAlarm;
+
+	//IO
+	PositionSensorX :BOOL;
+	PositionSensorY :BOOL;
 END_VAR
 
 VAR CONSTANT
@@ -165,33 +169,6 @@ CASE DescendantSequenceState OF
         _LogStateChanges        := FALSE;
         DescendantSequenceState := DescendantSequenceState + 10;
     10:
-        //Setup Custom modes here
-
-        (*CustomModes(eMode                          :=,
-                    sName                          :=,
-                    bDisableClearing               :=,
-                    bDisableStarting               :=,
-                    bDisableSuspended              :=,
-                    bDisableStopping               :=,
-                    bDisableAborting               :=,
-                    bDisableHolding                :=,
-                    bDisableHeld                   :=,
-                    bDisableUnholding              :=,
-                    bDisableSuspending             :=,
-                    bDisableUnsuspending           :=,
-                    bDisableResetting              :=,
-                    bDisableIdle                   :=,
-                    bDisableCompleting             :=,
-                    bDisableComplete               :=,
-                    bEnableUnitModeChangeStopped   :=,
-                    bEnableUnitModeChangeIdle      :=,
-                    bEnableUnitModeChangeSuspended :=,
-                    bEnableUnitModeChangeExecute   :=,
-                    bEnableUnitModeChangeAborted   :=,
-                    bEnableUnitModeChangeHeld      :=,
-                    bEnableUnitModeChangeComplete  :=,
-                    bError                         =>,
-                    nErrorId                       =>);*)
         DescendantSequenceState := DescendantSequenceState + 10;
     20:
         //Copy Mode names
@@ -208,6 +185,36 @@ CASE DescendantSequenceState OF
     40:
         Initialize := TRUE;
 END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Starting" Id="{07b37d87-d0a5-0278-3737-1fd808e976a5}" FolderPath="GantryXYStates\">
+      <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Starting</b> state
+METHOD PROTECTED Starting
+VAR
+	i				: UDINT;
+	SubModulesReady : BOOL := TRUE;
+END_VAR
+
+(*! <description><b></b><table> 
+	<tr>
+		<th> Previous State </th>
+		<th> Transition In </th>
+		<th> Transition Out </th>
+		<th> Next State  </th> 
+	</tr>
+	<tr>
+		<td> Idle </td>
+		<td> Start Command </td> 
+		<td> State Complete </td>
+		<td> Execute </td> 
+	</tr>
+</table>
+This method is called as required by <c>StateControl()</c>
+</description> 
+
+*)]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//homing here]]></ST>
       </Implementation>
     </Method>
     <Method Name="Stopped" Id="{4651aaa0-3084-0692-39f1-f4fedfe67bb4}" FolderPath="GantryXYStates\">
@@ -259,10 +266,14 @@ This method is called as required by <c>StateControl()</c>
       <LineId Id="23" Count="0" />
     </LineIds>
     <LineIds Name="FB_GantryXY.Initialize">
-      <LineId Id="3" Count="43" />
+      <LineId Id="3" Count="10" />
+      <LineId Id="41" Count="5" />
       <LineId Id="48" Count="0" />
       <LineId Id="51" Count="7" />
       <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_GantryXY.Starting">
+      <LineId Id="26" Count="0" />
     </LineIds>
     <LineIds Name="FB_GantryXY.Stopped">
       <LineId Id="23" Count="0" />
