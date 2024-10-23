@@ -1003,7 +1003,7 @@ External Setpoint Generation:
 		</Motion>
 		<Plc>
 			<Project GUID="{0E250E61-BC3B-478D-8CD8-ACAB8830117A}" Name="SeedraPLC" PrjFilePath="SeedraPLC\SeedraPLC.plcproj" TmcFilePath="SeedraPLC\SeedraPLC.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" CopyTmcToTarget="true" CopyTpyToTarget="false" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="SeedraPLC\SeedraPLC.tmc" TmcHash="{4F0F8069-4FD5-F6D1-C6A3-13CD9E607AD0}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="SeedraPLC\SeedraPLC.tmc" TmcHash="{B0CE89BC-CE5E-BBAE-68C9-EF5F8C59CCBC}">
 					<Name>SeedraPLC Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">

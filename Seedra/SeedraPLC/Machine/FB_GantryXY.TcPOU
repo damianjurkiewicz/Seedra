@@ -187,7 +187,7 @@ CASE DescendantSequenceState OF
 END_CASE]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Starting" Id="{07b37d87-d0a5-0278-3737-1fd808e976a5}" FolderPath="GantryXYStates\">
+    <Method Name="Starting" Id="{7539693f-63b4-09d4-0a7e-598ba148d1a2}" FolderPath="GantryXYStates\">
       <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Starting</b> state
 METHOD PROTECTED Starting
 VAR
@@ -214,7 +214,7 @@ This method is called as required by <c>StateControl()</c>
 
 *)]]></Declaration>
       <Implementation>
-        <ST><![CDATA[//homing here]]></ST>
+        <ST><![CDATA[SUPER^.Starting();]]></ST>
       </Implementation>
     </Method>
     <Method Name="Stopped" Id="{4651aaa0-3084-0692-39f1-f4fedfe67bb4}" FolderPath="GantryXYStates\">

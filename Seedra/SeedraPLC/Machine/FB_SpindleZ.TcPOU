@@ -30,6 +30,33 @@ END_VAR
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Folder Name="SpindleZStates" Id="{ab80c913-e975-04a3-0590-b0c624c2977b}" />
+    <Method Name="Aborted" Id="{48ff66e6-be97-056f-3aaa-e54b8954978d}" FolderPath="SpindleZStates\">
+      <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Aborted</b> state
+METHOD PROTECTED Aborted
+
+(*! <description> <b>The base implementation of this method is empty. User must override this method to provide functionality.</b>
+<table> 
+	<tr>
+		<th> Previous State </th>
+		<th> Transition In </th>
+		<th> Transition Out </th>
+		<th> Next State  </th> 
+	</tr>
+	<tr>
+		<td> Aborting </td>
+		<td> State Complete <i>(Aborting)</i></td> 
+		<td> Clear Command </td>
+		<td> Clearing </td> 
+	</tr>
+</table>
+This method is called as required by <c>StateControl()</c>
+</description> 
+
+*)]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="CreateEvents" Id="{99ddd031-78aa-46a7-b2f9-f0b68a19d02e}">
       <Declaration><![CDATA[METHOD PROTECTED CreateEvents
 ]]></Declaration>
@@ -64,6 +91,60 @@ IF _CurrentAlarmSeverity >= TcEventSeverity.Error THEN
 END_IF
 
 ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Execute" Id="{e0aa4992-fdfb-031c-314b-07087e1164f9}" FolderPath="SpindleZStates\">
+      <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Execute</b> state
+METHOD PROTECTED Execute
+
+(*! <description> <b>The base implementation of this method is empty. User must override this method to provide functionality.</b>
+<table> 
+	<tr>
+		<th> Previous State </th>
+		<th> Transition In </th>
+		<th> Transition Out </th>
+		<th> Next State  </th> 
+	</tr>
+	<tr>
+		<td> Starting<b>-or-</b>Unholding <b>-or-</b>Unsuspending</td>
+		<td> State Complete<i>(Starting<b>-or-</b>Unholding<b>-or-</b>Unsuspending)</i></td> 
+		<td> State Complete<b>-or-</b>Hold Command<b>-or-</b>Suspend Command</td>
+		<td> Completing<b>-or-</b>Holding<b>-or-</b>Suspending</td>
+	</tr>
+</table>
+This method is called as required by <c>StateControl()</c>
+</description> 
+
+*)]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Idle" Id="{e28efcf4-97ab-065d-046e-2d60c7870a7f}" FolderPath="SpindleZStates\">
+      <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Idle</b> state
+METHOD PROTECTED Idle
+
+(*! <description> <b>The base implementation of this method is empty. User must override this method to provide functionality.</b>
+<table> 
+	<tr>
+		<th> Previous State </th>
+		<th> Transition In </th>
+		<th> Transition Out </th>
+		<th> Next State  </th> 
+	</tr>
+	<tr>
+		<td> Resetting </td>
+		<td> State Complete <i>(Resetting)</i></td> 
+		<td> Start Command </td>
+		<td> Starting </td> 
+	</tr>
+</table>
+This method is called as required by <c>StateControl()</c>
+</description> 
+
+*)]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
     <Method Name="Initialize" Id="{59d1fe7d-28ec-4cbf-a3ef-81f06735b3ba}">
@@ -107,8 +188,69 @@ CASE DescendantSequenceState OF
 END_CASE]]></ST>
       </Implementation>
     </Method>
+    <Method Name="Starting" Id="{e5cf656c-590f-0da0-0486-e5c72a4b41a8}" FolderPath="SpindleZStates\">
+      <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Starting</b> state
+METHOD PROTECTED Starting
+VAR
+	i				: UDINT;
+	SubModulesReady : BOOL := TRUE;
+END_VAR
+
+(*! <description><b></b><table> 
+	<tr>
+		<th> Previous State </th>
+		<th> Transition In </th>
+		<th> Transition Out </th>
+		<th> Next State  </th> 
+	</tr>
+	<tr>
+		<td> Idle </td>
+		<td> Start Command </td> 
+		<td> State Complete </td>
+		<td> Execute </td> 
+	</tr>
+</table>
+This method is called as required by <c>StateControl()</c>
+</description> 
+
+*)]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[SUPER^.Starting();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Stopped" Id="{21d2fe31-d375-0a11-296a-bfb07a6836a6}" FolderPath="SpindleZStates\">
+      <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Stopped</b> state
+METHOD PROTECTED Stopped
+
+(*! <description> <b>The base implementation of this method is empty. User must override this method to provide functionality.</b>
+<table> 
+	<tr>
+		<th> Previous State </th>
+		<th> Transition In </th>
+		<th> Transition Out </th>
+		<th> Next State  </th> 
+	</tr>
+	<tr>
+		<td> Stopping<b>-or-</b>Clearing </td>
+		<td> State Complete <i>(Stopping<b>-or-</b>Clearing)</i></td> 
+		<td> Reset Command </td>
+		<td> Resetting </td> 
+	</tr>
+</table>
+This method is called as required by <c>StateControl()</c>
+</description> 
+
+*)]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="FB_SpindleZ">
       <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SpindleZ.Aborted">
+      <LineId Id="23" Count="0" />
     </LineIds>
     <LineIds Name="FB_SpindleZ.CreateEvents">
       <LineId Id="3" Count="4" />
@@ -120,6 +262,12 @@ END_CASE]]></ST>
       <LineId Id="11" Count="7" />
       <LineId Id="2" Count="0" />
     </LineIds>
+    <LineIds Name="FB_SpindleZ.Execute">
+      <LineId Id="23" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SpindleZ.Idle">
+      <LineId Id="23" Count="0" />
+    </LineIds>
     <LineIds Name="FB_SpindleZ.Initialize">
       <LineId Id="3" Count="3" />
       <LineId Id="69" Count="0" />
@@ -127,6 +275,12 @@ END_CASE]]></ST>
       <LineId Id="39" Count="5" />
       <LineId Id="49" Count="10" />
       <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SpindleZ.Starting">
+      <LineId Id="26" Count="1" />
+    </LineIds>
+    <LineIds Name="FB_SpindleZ.Stopped">
+      <LineId Id="23" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
