@@ -999,56 +999,36 @@ External Setpoint Generation:
 			</TypeSystem>
 		</System>
 		<Motion>
-			<NC>
-				<SafTask Priority="4" CycleTime="20000" AmsPort="501" IoAtBegin="true" SafTaskInfo="256">
-					<Name>TaskNC_SAF</Name>
-					<Vars VarGrpType="1" InsertType="1">
-						<Name>Inputs</Name>
-					</Vars>
-					<Vars VarGrpType="2" InsertType="1">
-						<Name>Outputs</Name>
-					</Vars>
-					<Image Id="1" AddrType="1" ImageType="1">
-						<Name>Image</Name>
-					</Image>
-				</SafTask>
-				<SvbTask Priority="8" CycleTime="100000" AmsPort="511">
-					<Name>TaskNC_SVB</Name>
-				</SvbTask>
-				<Axis File="Unwind.xti" Id="4"/>
-				<Axis File="Seal.xti" Id="5"/>
-				<Axis File="Pull 1.xti" Id="6"/>
-				<Axis File="Pull 2.xti" Id="7"/>
-			</NC>
+			<NC File="NC.xti"/>
 		</Motion>
 		<Plc>
 			<Project GUID="{0E250E61-BC3B-478D-8CD8-ACAB8830117A}" Name="SeedraPLC" PrjFilePath="SeedraPLC\SeedraPLC.plcproj" TmcFilePath="SeedraPLC\SeedraPLC.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" CopyTmcToTarget="true" CopyTpyToTarget="false" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="SeedraPLC\SeedraPLC.tmc" TmcHash="{4A906C8D-76DF-87FD-FA3B-5C890901E3C6}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="SeedraPLC\SeedraPLC.tmc" TmcHash="{4F0F8069-4FD5-F6D1-C6A3-13CD9E607AD0}">
 					<Name>SeedraPLC Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">
 						<Name>TaskPLC Inputs</Name>
 						<Var>
-							<Name>MAIN.Seedra.GantryXY.GantryAxisX.BasicSlaveAxis._Axis.NcToPlc</Name>
+							<Name>MAIN.Seedra.GantryXY.AxisX.BasicAxis._Axis.NcToPlc</Name>
 							<Type GUID="{25521FAA-EA5F-4C7F-8864-BBCCDACD2E98}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.Seedra.GantryXY.GantryAxisY.BasicSlaveAxis._Axis.NcToPlc</Name>
+							<Name>MAIN.Seedra.GantryXY.AxisY.BasicAxis._Axis.NcToPlc</Name>
 							<Type GUID="{25521FAA-EA5F-4C7F-8864-BBCCDACD2E98}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.Seedra.SpindleZ.Axis.BasicAxis._Axis.NcToPlc</Name>
+							<Name>MAIN.Seedra.SpindleZ.AxisZ.BasicAxis._Axis.NcToPlc</Name>
 							<Type GUID="{25521FAA-EA5F-4C7F-8864-BBCCDACD2E98}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 						</Var>
 					</Vars>
 					<Vars VarGrpType="2" AreaNo="1">
 						<Name>TaskPLC Outputs</Name>
 						<Var>
-							<Name>MAIN.Seedra.GantryXY.GantryAxisX.BasicSlaveAxis._Axis.PlcToNc</Name>
+							<Name>MAIN.Seedra.GantryXY.AxisX.BasicAxis._Axis.PlcToNc</Name>
 							<Type GUID="{96B75FEB-2D84-43BE-A3EC-D9A681F27D52}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.Seedra.GantryXY.GantryAxisY.BasicSlaveAxis._Axis.PlcToNc</Name>
+							<Name>MAIN.Seedra.GantryXY.AxisY.BasicAxis._Axis.PlcToNc</Name>
 							<Type GUID="{96B75FEB-2D84-43BE-A3EC-D9A681F27D52}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
@@ -1057,7 +1037,7 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.Seedra.SpindleZ.Axis.BasicAxis._Axis.PlcToNc</Name>
+							<Name>MAIN.Seedra.SpindleZ.AxisZ.BasicAxis._Axis.PlcToNc</Name>
 							<Type GUID="{96B75FEB-2D84-43BE-A3EC-D9A681F27D52}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 					</Vars>
@@ -1131,17 +1111,17 @@ External Setpoint Generation:
 	<Mappings>
 		<MappingInfo Identifier="{05000010-2001-0850-1000-040300205008}" Id="#x02030010" Watchdog="14000000040000000400000004000000"/>
 		<OwnerA Name="TIPC^SeedraPLC^SeedraPLC Instance">
-			<OwnerB Name="TINC^TaskNC_SAF^Axes^Pull 1">
-				<Link VarA="TaskPLC Inputs^MAIN.Seedra.GantryXY.GantryAxisX.BasicSlaveAxis._Axis.NcToPlc" VarB="Outputs^ToPlc"/>
-				<Link VarA="TaskPLC Outputs^MAIN.Seedra.GantryXY.GantryAxisX.BasicSlaveAxis._Axis.PlcToNc" VarB="Inputs^FromPlc"/>
+			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^AxisX">
+				<Link VarA="TaskPLC Inputs^MAIN.Seedra.GantryXY.AxisX.BasicAxis._Axis.NcToPlc" VarB="Outputs^ToPlc"/>
+				<Link VarA="TaskPLC Outputs^MAIN.Seedra.GantryXY.AxisX.BasicAxis._Axis.PlcToNc" VarB="Inputs^FromPlc"/>
 			</OwnerB>
-			<OwnerB Name="TINC^TaskNC_SAF^Axes^Pull 2">
-				<Link VarA="TaskPLC Inputs^MAIN.Seedra.GantryXY.GantryAxisY.BasicSlaveAxis._Axis.NcToPlc" VarB="Outputs^ToPlc"/>
-				<Link VarA="TaskPLC Outputs^MAIN.Seedra.GantryXY.GantryAxisY.BasicSlaveAxis._Axis.PlcToNc" VarB="Inputs^FromPlc"/>
+			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^AxisY">
+				<Link VarA="TaskPLC Inputs^MAIN.Seedra.GantryXY.AxisY.BasicAxis._Axis.NcToPlc" VarB="Outputs^ToPlc"/>
+				<Link VarA="TaskPLC Outputs^MAIN.Seedra.GantryXY.AxisY.BasicAxis._Axis.PlcToNc" VarB="Inputs^FromPlc"/>
 			</OwnerB>
-			<OwnerB Name="TINC^TaskNC_SAF^Axes^Unwind">
-				<Link VarA="TaskPLC Inputs^MAIN.Seedra.SpindleZ.Axis.BasicAxis._Axis.NcToPlc" VarB="Outputs^ToPlc"/>
-				<Link VarA="TaskPLC Outputs^MAIN.Seedra.SpindleZ.Axis.BasicAxis._Axis.PlcToNc" VarB="Inputs^FromPlc"/>
+			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^AxisZ">
+				<Link VarA="TaskPLC Inputs^MAIN.Seedra.SpindleZ.AxisZ.BasicAxis._Axis.NcToPlc" VarB="Outputs^ToPlc"/>
+				<Link VarA="TaskPLC Outputs^MAIN.Seedra.SpindleZ.AxisZ.BasicAxis._Axis.PlcToNc" VarB="Inputs^FromPlc"/>
 			</OwnerB>
 		</OwnerA>
 	</Mappings>

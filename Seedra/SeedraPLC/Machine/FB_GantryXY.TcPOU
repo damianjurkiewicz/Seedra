@@ -9,9 +9,9 @@ VAR
     ipSubModules_Init : ARRAY[1..Parameters_PackML_Base.MAX_NO_OF_SUBMODULES] OF I_PackML_BaseModule := [];
 
     // Component definitions here
-    GantryAxisX       : FB_Component_BasicSlaveAxis := (Name := 'Left');
-    GantryAxisY    	  : FB_Component_BasicSlaveAxis := (Name := 'Right');
-    GantryCylinder    : FB_GantryXYCylinder         := (Name := 'Cylinder');
+    AxisX       		: FB_Component_BasicAxis 		:= (Name := 'AxisX');
+    AxisY    			: FB_Component_BasicAxis 		:= (Name := 'AxisY');
+    GantryCylinder		: FB_GantryXYCylinder			:= (Name := 'Cylinder');
 
     //Alarms for this module
     GantryAlarms : ARRAY[1..GANTRY_ALARM_COUNT] OF FB_TcAlarm;
@@ -161,8 +161,8 @@ END_VAR
         <ST><![CDATA[Initialize := FALSE;
 CASE DescendantSequenceState OF
     0:
-		RegisterComponent(GantryAxisX);
-		RegisterComponent(GantryAxisY);		
+		RegisterComponent(AxisX);
+		RegisterComponent(AxisY);		
 		RegisterComponent(GantryCylinder);
 		
         _LogModeChanges         := FALSE;

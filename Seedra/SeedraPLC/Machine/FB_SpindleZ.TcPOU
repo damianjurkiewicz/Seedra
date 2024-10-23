@@ -9,7 +9,7 @@ VAR
     ipSubModules_Init : ARRAY[1..Parameters_PackML_Base.MAX_NO_OF_SUBMODULES] OF I_PackML_BaseModule := [];
 
     // Component definitions here
-    Axis   : FB_Component_BasicAxis := (Name := 'Axis');
+    AxisZ   : FB_Component_BasicAxis := (Name := 'AxisZ');
 
 
     //Alarms for this module
@@ -81,7 +81,7 @@ END_VAR
         <ST><![CDATA[Initialize := FALSE;
 CASE DescendantSequenceState OF
     0:
-		RegisterComponent(Axis);
+		RegisterComponent(AxisZ);
 
         _LogModeChanges         := FALSE;
         _LogStateChanges        := FALSE;
