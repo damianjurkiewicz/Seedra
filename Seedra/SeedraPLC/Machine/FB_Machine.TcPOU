@@ -160,7 +160,7 @@ END_CASE]]></ST>
       <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Idle</b> state
 METHOD PROTECTED Idle
 	VAR_INST
-		Delay :TON;
+		DelayMachine :TON;
 	END_VAR
 
 
@@ -190,10 +190,10 @@ This method is called as required by <c>StateControl()</c>
 	E_PMLUnitMode.ePMLUnitMode_Production:
 	CASE SequenceState OF	
 		0:		
-			Delay(IN:=TRUE, PT:=T#5S);
+			DelayMachine(IN:=TRUE, PT:=T#5S);
 			Trace('Wait before Idle');
-			IF Delay.Q = TRUE THEN
-				Delay(IN:=FALSE);
+			IF DelayMachine.Q = TRUE THEN
+				DelayMachine(IN:=FALSE);
 				SequenceState := SequenceState + 10;
 			END_IF
 		10:	//Started
@@ -217,7 +217,7 @@ CASE DescendantSequenceState OF
     0:
 		RegisterSubmodule(GantryXY);
 		RegisterSubmodule(SpindleZ);
-		
+		GantryXY();
         _LogModeChanges         := FALSE;
         _LogStateChanges        := FALSE;
         DescendantSequenceState := DescendantSequenceState + 10;
@@ -242,6 +242,60 @@ CASE DescendantSequenceState OF
     50:
         Initialize := TRUE;
 END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Starting" Id="{84d465d6-2428-0a95-3731-3dc93d252fa9}" FolderPath="MachineStates\">
+      <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Starting</b> state
+METHOD PROTECTED Starting
+VAR
+	i				: UDINT;
+	SubModulesReady : BOOL := TRUE;
+END_VAR
+
+(*! <description><b></b><table> 
+	<tr>
+		<th> Previous State </th>
+		<th> Transition In </th>
+		<th> Transition Out </th>
+		<th> Next State  </th> 
+	</tr>
+	<tr>
+		<td> Idle </td>
+		<td> Start Command </td> 
+		<td> State Complete </td>
+		<td> Execute </td> 
+	</tr>
+</table>
+This method is called as required by <c>StateControl()</c>
+</description> 
+
+*)]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE _CurrentMode OF
+
+	//=================================PRODUCTION MODE==================================
+	E_PMLUnitMode.ePMLUnitMode_Production:
+		CASE SequenceState OF
+			0:
+					
+				NoStateTasksToComplete := FALSE;
+					SequenceState := SequenceState + 10;
+
+			10:
+					
+					SequenceState := SequenceState + 10;
+					
+			20:
+				StateTasksComplete := TRUE;
+				SUPER^.Starting();
+
+		END_CASE
+
+	//=================================MAINTENANCE & MANUAL MODE==================================
+	E_PMLUnitMode.ePMLUnitMode_Maintenance, E_PMLUnitMode.ePMLUnitMode_Manual:
+		;
+END_CASE
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="Stopped" Id="{e851376d-fa40-0e9f-0fc1-332397061534}" FolderPath="MachineStates\">
@@ -319,7 +373,7 @@ This method is called as required by <c>StateControl()</c>
       <LineId Id="71" Count="0" />
       <LineId Id="41" Count="1" />
       <LineId Id="70" Count="0" />
-      <LineId Id="27" Count="0" />
+      <LineId Id="136" Count="0" />
       <LineId Id="31" Count="0" />
       <LineId Id="72" Count="0" />
       <LineId Id="28" Count="0" />
@@ -330,6 +384,17 @@ This method is called as required by <c>StateControl()</c>
       <LineId Id="3" Count="9" />
       <LineId Id="40" Count="18" />
       <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Machine.Starting">
+      <LineId Id="51" Count="7" />
+      <LineId Id="66" Count="0" />
+      <LineId Id="86" Count="0" />
+      <LineId Id="85" Count="0" />
+      <LineId Id="73" Count="4" />
+      <LineId Id="114" Count="0" />
+      <LineId Id="113" Count="0" />
+      <LineId Id="78" Count="5" />
+      <LineId Id="26" Count="0" />
     </LineIds>
     <LineIds Name="FB_Machine.Stopped">
       <LineId Id="23" Count="0" />

@@ -20,6 +20,10 @@
     <CombineIds>true</CombineIds>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GVL\IO.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
     <Compile Include="GVL\SafetyGlobalVariableList.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>

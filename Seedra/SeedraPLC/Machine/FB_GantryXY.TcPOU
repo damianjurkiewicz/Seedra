@@ -19,6 +19,10 @@ VAR
 	//IO
 	PositionSensorX :BOOL;
 	PositionSensorY :BOOL;
+
+	AxisXHomingComplete :BOOL;
+	AxisYHomingComplete :BOOL;
+
 END_VAR
 
 VAR CONSTANT
@@ -56,6 +60,58 @@ This method is called as required by <c>StateControl()</c>
 *)]]></Declaration>
       <Implementation>
         <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Clearing" Id="{fd669db8-130b-0177-023d-92edf1bab84d}" FolderPath="GantryXYStates\">
+      <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Clearing</b> state
+METHOD PROTECTED Clearing
+VAR
+	i				: UDINT;
+	SubModulesReady : BOOL := TRUE;
+END_VAR
+
+(*! <description> <b>Note:</b> The <i>Clear</i> command can also be thought of as a <i>fault reset</i> depite the ambiguity in the naming of the <i>Reset</i> state. 
+<table> 
+	<tr>
+		<th> Previous State </th>
+		<th> Transition In </th>
+		<th> Transition Out </th>
+		<th> Next State  </th> 
+	</tr>
+	<tr>
+		<td> Aborted </td>
+		<td> Clear Command </td> 
+		<td> State Complete </td>
+		<td> Stopped </td> 
+	</tr>
+</table>
+This method is called as required by <c>StateControl()</c>
+</description> 
+
+*)]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE SequenceState OF
+    0:
+        NoStateTasksToComplete := FALSE;
+        SequenceState          := SequenceState + 10;
+    10:
+        //Reset any alarms that get latched
+        GantryAlarms[E_Gantry.StartTimeout].Clear(0,0);
+        SequenceState := SequenceState + 10;
+    20:
+        // Enable here
+        AxisX.Enable();
+		AxisY.Enable();
+
+        // Check enabled here
+        IF AxisX.Enabled AND AxisY.Enabled THEN
+            SequenceState := SequenceState + 10;
+        END_IF
+    30:
+        StateTasksComplete := TRUE;
+END_CASE
+
+SUPER^.Clearing();]]></ST>
       </Implementation>
     </Method>
     <Method Name="CreateEvents" Id="{4ec0ace2-c308-44b2-84a1-60ba649bd547}">
@@ -188,33 +244,38 @@ END_CASE]]></ST>
       </Implementation>
     </Method>
     <Method Name="Starting" Id="{7539693f-63b4-09d4-0a7e-598ba148d1a2}" FolderPath="GantryXYStates\">
-      <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Starting</b> state
-METHOD PROTECTED Starting
+      <Declaration><![CDATA[METHOD PROTECTED Starting
 VAR
 	i				: UDINT;
 	SubModulesReady : BOOL := TRUE;
 END_VAR
-
-(*! <description><b></b><table> 
-	<tr>
-		<th> Previous State </th>
-		<th> Transition In </th>
-		<th> Transition Out </th>
-		<th> Next State  </th> 
-	</tr>
-	<tr>
-		<td> Idle </td>
-		<td> Start Command </td> 
-		<td> State Complete </td>
-		<td> Execute </td> 
-	</tr>
-</table>
-This method is called as required by <c>StateControl()</c>
-</description> 
-
-*)]]></Declaration>
+]]></Declaration>
       <Implementation>
-        <ST><![CDATA[SUPER^.Starting();]]></ST>
+        <ST><![CDATA[CASE _CurrentMode OF
+
+	//=================================PRODUCTION MODE==================================
+	E_PMLUnitMode.ePMLUnitMode_Production:
+		CASE SequenceState OF
+			0:
+				
+				NoStateTasksToComplete := FALSE;
+
+					AxisX.Home();
+					AxisY.Home();
+					SequenceState := SequenceState + 10;
+
+			10:
+				StateTasksComplete := TRUE;
+
+
+		END_CASE
+
+	//=================================MAINTENANCE & MANUAL MODE==================================
+	E_PMLUnitMode.ePMLUnitMode_Maintenance, E_PMLUnitMode.ePMLUnitMode_Manual:
+		;
+END_CASE
+
+SUPER^.Starting();]]></ST>
       </Implementation>
     </Method>
     <Method Name="Stopped" Id="{4651aaa0-3084-0692-39f1-f4fedfe67bb4}" FolderPath="GantryXYStates\">
@@ -250,6 +311,12 @@ This method is called as required by <c>StateControl()</c>
     <LineIds Name="FB_GantryXY.Aborted">
       <LineId Id="23" Count="0" />
     </LineIds>
+    <LineIds Name="FB_GantryXY.Clearing">
+      <LineId Id="28" Count="10" />
+      <LineId Id="48" Count="0" />
+      <LineId Id="39" Count="8" />
+      <LineId Id="27" Count="0" />
+    </LineIds>
     <LineIds Name="FB_GantryXY.CreateEvents">
       <LineId Id="3" Count="6" />
       <LineId Id="2" Count="0" />
@@ -273,6 +340,17 @@ This method is called as required by <c>StateControl()</c>
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_GantryXY.Starting">
+      <LineId Id="53" Count="0" />
+      <LineId Id="90" Count="0" />
+      <LineId Id="54" Count="2" />
+      <LineId Id="122" Count="4" />
+      <LineId Id="131" Count="0" />
+      <LineId Id="127" Count="3" />
+      <LineId Id="116" Count="0" />
+      <LineId Id="80" Count="1" />
+      <LineId Id="91" Count="0" />
+      <LineId Id="83" Count="3" />
+      <LineId Id="89" Count="0" />
       <LineId Id="26" Count="0" />
     </LineIds>
     <LineIds Name="FB_GantryXY.Stopped">

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <GVL Name="IO" Id="{5c633ecf-caed-058c-1a16-2b1fdf36f8a0}">
+    <Declaration><![CDATA[VAR_GLOBAL
+
+	ProximitySensorX			AT%I*		:	BOOL;
+	ProximitySensorY			AT%I*		:	BOOL;
+	ProximitySensorZ			AT%I*		:	BOOL;
+
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

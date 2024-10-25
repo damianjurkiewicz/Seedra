@@ -57,6 +57,57 @@ This method is called as required by <c>StateControl()</c>
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
+    <Method Name="Clearing" Id="{dd41981c-12ec-05ba-3bc4-b43dc4f38288}" FolderPath="SpindleZStates\">
+      <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Clearing</b> state
+METHOD PROTECTED Clearing
+VAR
+	i				: UDINT;
+	SubModulesReady : BOOL := TRUE;
+END_VAR
+
+(*! <description> <b>Note:</b> The <i>Clear</i> command can also be thought of as a <i>fault reset</i> depite the ambiguity in the naming of the <i>Reset</i> state. 
+<table> 
+	<tr>
+		<th> Previous State </th>
+		<th> Transition In </th>
+		<th> Transition Out </th>
+		<th> Next State  </th> 
+	</tr>
+	<tr>
+		<td> Aborted </td>
+		<td> Clear Command </td> 
+		<td> State Complete </td>
+		<td> Stopped </td> 
+	</tr>
+</table>
+This method is called as required by <c>StateControl()</c>
+</description> 
+
+*)]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE SequenceState OF
+    0:
+        NoStateTasksToComplete := FALSE;
+        SequenceState          := SequenceState + 10;
+    10:
+        //Reset any alarms that get latched
+        SpindleAlarms[E_Spindle.StartTimeout].Clear(0,0);
+        SequenceState := SequenceState + 10;
+    20:
+        // Enable here
+        AxisZ.Enable();
+		
+        // Check enabled here
+        IF AxisZ.Enabled THEN
+            SequenceState := SequenceState + 10;
+        END_IF
+    30:
+        StateTasksComplete := TRUE;
+END_CASE
+
+SUPER^.Clearing();]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="CreateEvents" Id="{99ddd031-78aa-46a7-b2f9-f0b68a19d02e}">
       <Declaration><![CDATA[METHOD PROTECTED CreateEvents
 ]]></Declaration>
@@ -144,7 +195,19 @@ This method is called as required by <c>StateControl()</c>
 
 *)]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[CASE _CurrentMode OF
+
+	//=================================PRODUCTION MODE==================================
+	E_PMLUnitMode.ePMLUnitMode_Production:
+		
+
+
+	//=================================MAINTENANCE & MANUAL MODE==================================
+	E_PMLUnitMode.ePMLUnitMode_Maintenance, E_PMLUnitMode.ePMLUnitMode_Manual:
+		;
+END_CASE
+
+SUPER^.Starting();]]></ST>
       </Implementation>
     </Method>
     <Method Name="Initialize" Id="{59d1fe7d-28ec-4cbf-a3ef-81f06735b3ba}">
@@ -189,33 +252,37 @@ END_CASE]]></ST>
       </Implementation>
     </Method>
     <Method Name="Starting" Id="{e5cf656c-590f-0da0-0486-e5c72a4b41a8}" FolderPath="SpindleZStates\">
-      <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Starting</b> state
-METHOD PROTECTED Starting
-VAR
+      <Declaration><![CDATA[METHOD PROTECTED Starting
+VAR  
 	i				: UDINT;
 	SubModulesReady : BOOL := TRUE;
 END_VAR
 
-(*! <description><b></b><table> 
-	<tr>
-		<th> Previous State </th>
-		<th> Transition In </th>
-		<th> Transition Out </th>
-		<th> Next State  </th> 
-	</tr>
-	<tr>
-		<td> Idle </td>
-		<td> Start Command </td> 
-		<td> State Complete </td>
-		<td> Execute </td> 
-	</tr>
-</table>
-This method is called as required by <c>StateControl()</c>
-</description> 
-
-*)]]></Declaration>
+]]></Declaration>
       <Implementation>
-        <ST><![CDATA[SUPER^.Starting();
+        <ST><![CDATA[CASE _CurrentMode OF
+
+	//=================================PRODUCTION MODE==================================
+	E_PMLUnitMode.ePMLUnitMode_Production:
+		CASE SequenceState OF
+			0:
+				
+				NoStateTasksToComplete := FALSE;
+
+					AxisZ.Home();
+					SequenceState := SequenceState + 10;
+
+			10:
+				StateTasksComplete := TRUE;
+
+		END_CASE
+
+	//=================================MAINTENANCE & MANUAL MODE==================================
+	E_PMLUnitMode.ePMLUnitMode_Maintenance, E_PMLUnitMode.ePMLUnitMode_Manual:
+		;
+END_CASE
+
+SUPER^.Starting();
 ]]></ST>
       </Implementation>
     </Method>
@@ -252,6 +319,11 @@ This method is called as required by <c>StateControl()</c>
     <LineIds Name="FB_SpindleZ.Aborted">
       <LineId Id="23" Count="0" />
     </LineIds>
+    <LineIds Name="FB_SpindleZ.Clearing">
+      <LineId Id="28" Count="11" />
+      <LineId Id="41" Count="7" />
+      <LineId Id="27" Count="0" />
+    </LineIds>
     <LineIds Name="FB_SpindleZ.CreateEvents">
       <LineId Id="3" Count="4" />
       <LineId Id="9" Count="0" />
@@ -266,6 +338,11 @@ This method is called as required by <c>StateControl()</c>
       <LineId Id="23" Count="0" />
     </LineIds>
     <LineIds Name="FB_SpindleZ.Idle">
+      <LineId Id="45" Count="3" />
+      <LineId Id="69" Count="0" />
+      <LineId Id="78" Count="0" />
+      <LineId Id="75" Count="0" />
+      <LineId Id="70" Count="4" />
       <LineId Id="23" Count="0" />
     </LineIds>
     <LineIds Name="FB_SpindleZ.Initialize">
@@ -277,6 +354,15 @@ This method is called as required by <c>StateControl()</c>
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_SpindleZ.Starting">
+      <LineId Id="35" Count="7" />
+      <LineId Id="83" Count="0" />
+      <LineId Id="47" Count="0" />
+      <LineId Id="51" Count="0" />
+      <LineId Id="63" Count="0" />
+      <LineId Id="73" Count="0" />
+      <LineId Id="65" Count="1" />
+      <LineId Id="76" Count="0" />
+      <LineId Id="67" Count="5" />
       <LineId Id="26" Count="1" />
     </LineIds>
     <LineIds Name="FB_SpindleZ.Stopped">
