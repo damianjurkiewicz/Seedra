@@ -20,13 +20,11 @@ VAR
 	PositionSensorX :BOOL;
 	PositionSensorY :BOOL;
 
-	AxisXHomingComplete :BOOL;
-	AxisYHomingComplete :BOOL;
+	HomeComplete :BOOL;
 
 END_VAR
 
 VAR CONSTANT
-    //Alarms
     GANTRY_ALARM_COUNT : INT := 5;
 END_VAR
 
@@ -35,85 +33,6 @@ END_VAR
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Folder Name="GantryXYStates" Id="{83d122fa-7c6a-0e7c-1bbf-3cae8b533243}" />
-    <Method Name="Aborted" Id="{7a5dcb3e-2759-094f-1862-434dd6d18864}" FolderPath="GantryXYStates\">
-      <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Aborted</b> state
-METHOD PROTECTED Aborted
-
-(*! <description> <b>The base implementation of this method is empty. User must override this method to provide functionality.</b>
-<table> 
-	<tr>
-		<th> Previous State </th>
-		<th> Transition In </th>
-		<th> Transition Out </th>
-		<th> Next State  </th> 
-	</tr>
-	<tr>
-		<td> Aborting </td>
-		<td> State Complete <i>(Aborting)</i></td> 
-		<td> Clear Command </td>
-		<td> Clearing </td> 
-	</tr>
-</table>
-This method is called as required by <c>StateControl()</c>
-</description> 
-
-*)]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="Clearing" Id="{fd669db8-130b-0177-023d-92edf1bab84d}" FolderPath="GantryXYStates\">
-      <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Clearing</b> state
-METHOD PROTECTED Clearing
-VAR
-	i				: UDINT;
-	SubModulesReady : BOOL := TRUE;
-END_VAR
-
-(*! <description> <b>Note:</b> The <i>Clear</i> command can also be thought of as a <i>fault reset</i> depite the ambiguity in the naming of the <i>Reset</i> state. 
-<table> 
-	<tr>
-		<th> Previous State </th>
-		<th> Transition In </th>
-		<th> Transition Out </th>
-		<th> Next State  </th> 
-	</tr>
-	<tr>
-		<td> Aborted </td>
-		<td> Clear Command </td> 
-		<td> State Complete </td>
-		<td> Stopped </td> 
-	</tr>
-</table>
-This method is called as required by <c>StateControl()</c>
-</description> 
-
-*)]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[CASE SequenceState OF
-    0:
-        NoStateTasksToComplete := FALSE;
-        SequenceState          := SequenceState + 10;
-    10:
-        //Reset any alarms that get latched
-        GantryAlarms[E_Gantry.StartTimeout].Clear(0,0);
-        SequenceState := SequenceState + 10;
-    20:
-        // Enable here
-        AxisX.Enable();
-		AxisY.Enable();
-
-        // Check enabled here
-        IF AxisX.Enabled AND AxisY.Enabled THEN
-            SequenceState := SequenceState + 10;
-        END_IF
-    30:
-        StateTasksComplete := TRUE;
-END_CASE
-
-SUPER^.Clearing();]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="CreateEvents" Id="{4ec0ace2-c308-44b2-84a1-60ba649bd547}">
       <Declaration><![CDATA[METHOD PROTECTED CreateEvents
 VAR_INPUT
@@ -148,34 +67,40 @@ _CurrentAlarmSeverity := F_GetMaxSeverityRaised(Alarms := GantryAlarms, CurrentS
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Execute" Id="{8bbd73eb-f81f-0125-146b-eb6c70f49230}" FolderPath="GantryXYStates\">
-      <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Execute</b> state
-METHOD PROTECTED Execute
+    <Method Name="HMIPermissions" Id="{a98019a5-2d4d-097b-1c9d-7422486c9b5b}">
+      <Declaration><![CDATA[METHOD PROTECTED HMIPermissions
 
-(*! <description> <b>The base implementation of this method is empty. User must override this method to provide functionality.</b>
-<table> 
-	<tr>
-		<th> Previous State </th>
-		<th> Transition In </th>
-		<th> Transition Out </th>
-		<th> Next State  </th> 
-	</tr>
-	<tr>
-		<td> Starting<b>-or-</b>Unholding <b>-or-</b>Unsuspending</td>
-		<td> State Complete<i>(Starting<b>-or-</b>Unholding<b>-or-</b>Unsuspending)</i></td> 
-		<td> State Complete<b>-or-</b>Hold Command<b>-or-</b>Suspend Command</td>
-		<td> Completing<b>-or-</b>Holding<b>-or-</b>Suspending</td>
-	</tr>
-</table>
-This method is called as required by <c>StateControl()</c>
-</description> 
-
-*)]]></Declaration>
+]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[//General Mode Based Monitoring and handling of HMI control
+CASE _CurrentMode OF
+   
+ E_PMLUnitMode.ePMLUnitMode_Production:
+        CASE _CurrentState OF
+            E_PMLState.ePMLState_Stopped:
+				AllowHMIControl(ThisModuleOnly := FALSE);
+            E_PMLState.ePMLState_Idle:
+				AllowHMIControl(ThisModuleOnly := FALSE);
+            E_PMLState.ePMLState_Suspended:
+         		AllowHMIControl(ThisModuleOnly := FALSE);
+            E_PMLState.ePMLState_Execute:
+            	AllowHMIControl(ThisModuleOnly := FALSE); 
+            E_PMLState.ePMLState_Aborted:
+                AllowHMIControl(ThisModuleOnly := FALSE); 
+            E_PMLState.ePMLState_Held:
+                AllowHMIControl(ThisModuleOnly := FALSE); 
+            E_PMLState.ePMLState_Complete:
+          		AllowHMIControl(ThisModuleOnly := FALSE); 
+        END_CASE
+		
+    E_PMLUnitMode.ePMLUnitMode_Manual:
+        AllowHMIControl(ThisModuleOnly := FALSE); 
+	E_PMLUnitMode.ePMLUnitMode_Maintenance:
+        AllowHMIControl(ThisModuleOnly := FALSE); 
+END_CASE]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Idle" Id="{0745b186-03c9-09b7-0039-cfbaac37c0d8}" FolderPath="GantryXYStates\">
+    <Method Name="Idle" Id="{bb0deaec-a9ee-0964-0472-8b7a666f0722}" FolderPath="GantryXYStates\">
       <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Idle</b> state
 METHOD PROTECTED Idle
 
@@ -222,7 +147,7 @@ CASE DescendantSequenceState OF
 		RegisterComponent(GantryCylinder);
 		
         _LogModeChanges         := FALSE;
-        _LogStateChanges        := FALSE;
+        _LogStateChanges        := TRUE;
         DescendantSequenceState := DescendantSequenceState + 10;
     10:
         DescendantSequenceState := DescendantSequenceState + 10;
@@ -243,46 +168,15 @@ CASE DescendantSequenceState OF
 END_CASE]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Starting" Id="{7539693f-63b4-09d4-0a7e-598ba148d1a2}" FolderPath="GantryXYStates\">
-      <Declaration><![CDATA[METHOD PROTECTED Starting
+    <Method Name="Resetting" Id="{e9851c76-6213-0482-2237-5496172b7e77}" FolderPath="GantryXYStates\">
+      <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Resetting</b> state
+METHOD PROTECTED Resetting
 VAR
 	i				: UDINT;
 	SubModulesReady : BOOL := TRUE;
 END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[CASE _CurrentMode OF
 
-	//=================================PRODUCTION MODE==================================
-	E_PMLUnitMode.ePMLUnitMode_Production:
-		CASE SequenceState OF
-			0:
-				
-				NoStateTasksToComplete := FALSE;
-
-					AxisX.Home();
-					AxisY.Home();
-					SequenceState := SequenceState + 10;
-
-			10:
-				StateTasksComplete := TRUE;
-
-
-		END_CASE
-
-	//=================================MAINTENANCE & MANUAL MODE==================================
-	E_PMLUnitMode.ePMLUnitMode_Maintenance, E_PMLUnitMode.ePMLUnitMode_Manual:
-		;
-END_CASE
-
-SUPER^.Starting();]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="Stopped" Id="{4651aaa0-3084-0692-39f1-f4fedfe67bb4}" FolderPath="GantryXYStates\">
-      <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Stopped</b> state
-METHOD PROTECTED Stopped
-
-(*! <description> <b>The base implementation of this method is empty. User must override this method to provide functionality.</b>
+(*! <description> <b>Note:</b> The <i>Reset</i> command can also be thought of as an <i>enable</i> depite the ambiguity in the naming of the <i>Clearing</i> state.
 <table> 
 	<tr>
 		<th> Previous State </th>
@@ -291,10 +185,10 @@ METHOD PROTECTED Stopped
 		<th> Next State  </th> 
 	</tr>
 	<tr>
-		<td> Stopping<b>-or-</b>Clearing </td>
-		<td> State Complete <i>(Stopping<b>-or-</b>Clearing)</i></td> 
-		<td> Reset Command </td>
-		<td> Resetting </td> 
+		<td> Stopped<b>-or-</b>Completed </td>
+		<td> Reset Command </td> 
+		<td> State Complete </td>
+		<td> Idle </td> 
 	</tr>
 </table>
 This method is called as required by <c>StateControl()</c>
@@ -302,20 +196,39 @@ This method is called as required by <c>StateControl()</c>
 
 *)]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[CASE _CurrentMode OF
+
+	//=================================PRODUCTION MODE==================================
+	E_PMLUnitMode.ePMLUnitMode_Production:
+		CASE SequenceState OF
+			0:
+				
+				NoStateTasksToComplete := TRUE;
+				
+					AxisX.Home();
+					Trace('Axis X Home Complete');
+
+					AxisY.Home();
+					Trace('Axis Y Home Complete');
+					 
+					SequenceState := SequenceState + 10;			
+
+			10:		
+
+				StateTasksComplete := TRUE;
+				
+		END_CASE
+
+	//=================================MAINTENANCE & MANUAL MODE==================================
+	E_PMLUnitMode.ePMLUnitMode_Maintenance, E_PMLUnitMode.ePMLUnitMode_Manual:
+		;
+END_CASE
+
+]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="FB_GantryXY">
       <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_GantryXY.Aborted">
-      <LineId Id="23" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_GantryXY.Clearing">
-      <LineId Id="28" Count="10" />
-      <LineId Id="48" Count="0" />
-      <LineId Id="39" Count="8" />
-      <LineId Id="27" Count="0" />
     </LineIds>
     <LineIds Name="FB_GantryXY.CreateEvents">
       <LineId Id="3" Count="6" />
@@ -326,8 +239,9 @@ This method is called as required by <c>StateControl()</c>
       <LineId Id="12" Count="4" />
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_GantryXY.Execute">
-      <LineId Id="23" Count="0" />
+    <LineIds Name="FB_GantryXY.HMIPermissions">
+      <LineId Id="6" Count="24" />
+      <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="FB_GantryXY.Idle">
       <LineId Id="23" Count="0" />
@@ -339,22 +253,15 @@ This method is called as required by <c>StateControl()</c>
       <LineId Id="51" Count="7" />
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_GantryXY.Starting">
-      <LineId Id="53" Count="0" />
-      <LineId Id="90" Count="0" />
-      <LineId Id="54" Count="2" />
-      <LineId Id="122" Count="4" />
-      <LineId Id="131" Count="0" />
-      <LineId Id="127" Count="3" />
-      <LineId Id="116" Count="0" />
-      <LineId Id="80" Count="1" />
-      <LineId Id="91" Count="0" />
-      <LineId Id="83" Count="3" />
-      <LineId Id="89" Count="0" />
-      <LineId Id="26" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_GantryXY.Stopped">
-      <LineId Id="23" Count="0" />
+    <LineIds Name="FB_GantryXY.Resetting">
+      <LineId Id="28" Count="13" />
+      <LineId Id="61" Count="0" />
+      <LineId Id="57" Count="0" />
+      <LineId Id="44" Count="1" />
+      <LineId Id="59" Count="1" />
+      <LineId Id="66" Count="0" />
+      <LineId Id="48" Count="6" />
+      <LineId Id="27" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

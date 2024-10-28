@@ -7,6 +7,8 @@
 	ProximitySensorY			AT%I*		:	BOOL;
 	ProximitySensorZ			AT%I*		:	BOOL;
 
+
+
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>
