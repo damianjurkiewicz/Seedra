@@ -984,6 +984,9 @@ External Setpoint Generation:
 	</DataTypes>
 	<Project ProjectGUID="{2126A66F-FE8A-4C96-83E4-B39377416EDB}" Target64Bit="true" ShowHideConfigurations="#x106">
 		<System>
+			<Settings MaxCpus="6" NonWinCpus="1">
+				<Cpu CpuId="5"/>
+			</Settings>
 			<Licenses>
 				<Target>
 					<ManualSelect>{BDCC0070-42D5-49AE-ABF1-1D4434813D60}</ManualSelect>
@@ -1003,7 +1006,7 @@ External Setpoint Generation:
 		</Motion>
 		<Plc>
 			<Project GUID="{0E250E61-BC3B-478D-8CD8-ACAB8830117A}" Name="SeedraPLC" PrjFilePath="SeedraPLC\SeedraPLC.plcproj" TmcFilePath="SeedraPLC\SeedraPLC.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" CopyTmcToTarget="true" CopyTpyToTarget="false" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="SeedraPLC\SeedraPLC.tmc" TmcHash="{B43A61C2-1E39-38CA-0B77-5F0B082109CC}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="SeedraPLC\SeedraPLC.tmc" TmcHash="{1C04F516-2278-7C96-81FA-5C1381B5CD8B}">
 					<Name>SeedraPLC Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">
@@ -1130,6 +1133,10 @@ External Setpoint Generation:
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^AxisY">
 				<Link VarA="TaskPLC Inputs^MAIN.Seedra.GantryXYZ.AxisY.BasicAxis._Axis.NcToPlc" VarB="Outputs^ToPlc"/>
 				<Link VarA="TaskPLC Outputs^MAIN.Seedra.GantryXYZ.AxisY.BasicAxis._Axis.PlcToNc" VarB="Inputs^FromPlc"/>
+			</OwnerB>
+			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^AxisZ">
+				<Link VarA="TaskPLC Inputs^MAIN.Seedra.GantryXYZ.AxisZ.BasicAxis._Axis.NcToPlc" VarB="Outputs^ToPlc"/>
+				<Link VarA="TaskPLC Outputs^MAIN.Seedra.GantryXYZ.AxisZ.BasicAxis._Axis.PlcToNc" VarB="Inputs^FromPlc"/>
 			</OwnerB>
 		</OwnerA>
 	</Mappings>

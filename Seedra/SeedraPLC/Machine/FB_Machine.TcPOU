@@ -61,61 +61,6 @@ END_IF
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Execute" Id="{5c2a525a-0a16-0712-2c6f-648ad7466b48}" FolderPath="MachineStates\">
-      <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Execute</b> state
-METHOD PROTECTED Execute
-
-(*! <description> <b>The base implementation of this method is empty. User must override this method to provide functionality.</b>
-<table> 
-	<tr>
-		<th> Previous State </th>
-		<th> Transition In </th>
-		<th> Transition Out </th>
-		<th> Next State  </th> 
-	</tr>
-	<tr>
-		<td> Starting<b>-or-</b>Unholding <b>-or-</b>Unsuspending</td>
-		<td> State Complete<i>(Starting<b>-or-</b>Unholding<b>-or-</b>Unsuspending)</i></td> 
-		<td> State Complete<b>-or-</b>Hold Command<b>-or-</b>Suspend Command</td>
-		<td> Completing<b>-or-</b>Holding<b>-or-</b>Suspending</td>
-	</tr>
-</table>
-This method is called as required by <c>StateControl()</c>
-</description> 
-
-*)]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[CASE _CurrentMode OF
-
-	//=================================PRODUCTION MODE==================================
-	E_PMLUnitMode.ePMLUnitMode_Production:
-		CASE SequenceState OF
-			0:
-				NoStateTasksToComplete := TRUE;
-				//Advance Gantry to Resetting (Homing)
-				
-			
-					SequenceState := SequenceState + 10;
-				
-			10:
-				//Advance Spindle to Resetting(Homing)
-				
-				
-					SequenceState := SequenceState + 10;
-				
-			20:
-				StateTasksComplete := TRUE;
-				SUPER^.Execute();
-				
-			
-		END_CASE
-
-	//=================================MAINTENANCE & MANUAL MODE==================================
-	E_PMLUnitMode.ePMLUnitMode_Maintenance, E_PMLUnitMode.ePMLUnitMode_Manual:
-		;
-END_CASE]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="HMIPermissions" Id="{01f1aea6-e802-48f8-abd4-50a2a3d31fba}">
       <Declaration><![CDATA[METHOD PROTECTED HMIPermissions
 ]]></Declaration>
@@ -201,12 +146,12 @@ END_VAR
 	E_PMLUnitMode.ePMLUnitMode_Production:
 		CASE SequenceState OF
 			0:
-				NoStateTasksToComplete := TRUE;
+				NoStateTasksToComplete := FALSE;
 				//Advance Gantry to Resetting (Homing)
 				GantryXYZ.ChangeState(E_PMLCommand.ePMLCommand_Reset);
 				
 					SequenceState := SequenceState + 10;
-								
+					
 			10:
 				StateTasksComplete := TRUE;
 				SUPER^.Resetting();
@@ -291,10 +236,6 @@ END_IF]]></ST>
       <LineId Id="26" Count="0" />
       <LineId Id="14" Count="0" />
       <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Machine.Execute">
-      <LineId Id="24" Count="27" />
-      <LineId Id="23" Count="0" />
     </LineIds>
     <LineIds Name="FB_Machine.HMIPermissions">
       <LineId Id="3" Count="2" />

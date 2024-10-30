@@ -6,7 +6,7 @@
 	ProximitySensorX			AT%I*		:	BOOL;
 	ProximitySensorY			AT%I*		:	BOOL;
 	ProximitySensorZ			AT%I*		:	BOOL;
-
+	kot : UDINT;
 
 
 END_VAR]]></Declaration>
