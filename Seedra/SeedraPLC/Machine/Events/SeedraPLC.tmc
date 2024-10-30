@@ -1,23 +1,11 @@
 <?xml version="1.0"?>
 <TcModuleClass>
 	<Translations>
+		<Text TxtId="Seedra"/>
 		<Text TxtId="DT_GLOBAL_INIT_REFERENCE_EVENT">
 			<Text LcId="1033"><![CDATA[Init Reference should never be set]]></Text>
 		</Text>
 		<Text TxtId="Reference Event that should be the first in all event classes"/>
-		<Text TxtId="DT_Spindle_Event_StartTimeout">
-			<Text LcId="1033"><![CDATA[{0} - Start timeout]]></Text>
-		</Text>
-		<Text TxtId="DT_Spindle_Event_InfoMessage">
-			<Text LcId="1033"><![CDATA[{0} - Info Message]]></Text>
-		</Text>
-		<Text TxtId="DT_Spindle_Event_WarnMessage">
-			<Text LcId="1033"><![CDATA[{0} - Warning Message]]></Text>
-		</Text>
-		<Text TxtId="DT_Spindle_Event_AlarmMessage">
-			<Text LcId="1033"><![CDATA[{0} - Error Message]]></Text>
-		</Text>
-		<Text TxtId="Seedra"/>
 		<Text TxtId="DT_Seedra_Event_EmergencyStop">
 			<Text LcId="1033"><![CDATA[{0} - Emergency stop]]></Text>
 		</Text>
@@ -47,43 +35,6 @@
 		</Text>
 	</Translations>
 	<DataTypes>
-		<DataType>
-			<Name GUID="{DC33E5F0-2A23-4F00-9360-764E0DFFF890}">Spindle</Name>
-			<DisplayName TxtId=""><![CDATA[Spindle]]></DisplayName>
-			<EventId>
-				<Name Id="1">InitReferenceEvent</Name>
-				<DisplayName TxtId=""><![CDATA[DT_GLOBAL_INIT_REFERENCE_EVENT]]></DisplayName>
-				<Comment TxtId=""><![CDATA[Reference Event that should be the first in all event classes]]></Comment>
-				<Severity>Info</Severity>
-			</EventId>
-			<EventId>
-				<Name Id="2">StartTimeout</Name>
-				<DisplayName TxtId=""><![CDATA[DT_Spindle_Event_StartTimeout]]></DisplayName>
-				<Severity>Error</Severity>
-			</EventId>
-			<EventId>
-				<Name Id="3">InfoMessage</Name>
-				<DisplayName TxtId=""><![CDATA[DT_Spindle_Event_InfoMessage]]></DisplayName>
-				<Severity>Info</Severity>
-			</EventId>
-			<EventId>
-				<Name Id="4">WarnMessage</Name>
-				<DisplayName TxtId=""><![CDATA[DT_Spindle_Event_WarnMessage]]></DisplayName>
-				<Severity>Warning</Severity>
-			</EventId>
-			<EventId>
-				<Name Id="5">AlarmMessage</Name>
-				<DisplayName TxtId=""><![CDATA[DT_Spindle_Event_AlarmMessage]]></DisplayName>
-				<Severity>Error</Severity>
-			</EventId>
-			<Hides>
-				<Hide GUID="{EEC7A54A-2C27-4CAE-A61D-8683FA038652}"/>
-				<Hide GUID="{9A9C8F97-6E43-48C5-9CA3-C1BEED0ABFD5}"/>
-				<Hide GUID="{B705D49C-5592-4042-9801-798CA9022F9A}"/>
-				<Hide GUID="{52AB4CCA-7290-4BB8-BAC6-EA0F9EFA8872}"/>
-				<Hide GUID="{4DE2D6FE-B4D6-4BB2-9BDA-50493297BA56}"/>
-			</Hides>
-		</DataType>
 		<DataType>
 			<Name GUID="{2D473CF4-5832-4FF1-91A5-58F2A44AB92F}">Seedra</Name>
 			<DisplayName TxtId=""><![CDATA[Seedra]]></DisplayName>

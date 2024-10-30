@@ -46,13 +46,10 @@
     <Compile Include="Machine\Components\ST_CylinderX_Status.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Machine\FB_GantryXY.TcPOU">
+    <Compile Include="Machine\FB_GantryXYZ.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Machine\FB_Machine.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Machine\FB_SpindleZ.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Machine\VISUs\V_MachineModule.TcVIS">

@@ -4,8 +4,7 @@
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Machine EXTENDS FB_PackML_BaseModule // IMPLEMENTS I_ControlsProductionRate
 VAR
     // Sub Modules
-    GantryXY   : FB_GantryXY  := (Name := 'Gantry', LogStateChanges := TRUE);
-    SpindleZ   : FB_SpindleZ  := (Name := 'Spindle', LogStateChanges := TRUE);
+    GantryXYZ   : FB_GantryXYZ  := (Name := 'Gantry', LogStateChanges := TRUE);
 
     //Initial List of Components
     ipComponents_Init : ARRAY[1..Parameters_PackML_Base.MAX_NO_OF_COMPONENTS] OF I_ComponentBase := [];
@@ -62,6 +61,61 @@ END_IF
 ]]></ST>
       </Implementation>
     </Method>
+    <Method Name="Execute" Id="{5c2a525a-0a16-0712-2c6f-648ad7466b48}" FolderPath="MachineStates\">
+      <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Execute</b> state
+METHOD PROTECTED Execute
+
+(*! <description> <b>The base implementation of this method is empty. User must override this method to provide functionality.</b>
+<table> 
+	<tr>
+		<th> Previous State </th>
+		<th> Transition In </th>
+		<th> Transition Out </th>
+		<th> Next State  </th> 
+	</tr>
+	<tr>
+		<td> Starting<b>-or-</b>Unholding <b>-or-</b>Unsuspending</td>
+		<td> State Complete<i>(Starting<b>-or-</b>Unholding<b>-or-</b>Unsuspending)</i></td> 
+		<td> State Complete<b>-or-</b>Hold Command<b>-or-</b>Suspend Command</td>
+		<td> Completing<b>-or-</b>Holding<b>-or-</b>Suspending</td>
+	</tr>
+</table>
+This method is called as required by <c>StateControl()</c>
+</description> 
+
+*)]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE _CurrentMode OF
+
+	//=================================PRODUCTION MODE==================================
+	E_PMLUnitMode.ePMLUnitMode_Production:
+		CASE SequenceState OF
+			0:
+				NoStateTasksToComplete := TRUE;
+				//Advance Gantry to Resetting (Homing)
+				
+			
+					SequenceState := SequenceState + 10;
+				
+			10:
+				//Advance Spindle to Resetting(Homing)
+				
+				
+					SequenceState := SequenceState + 10;
+				
+			20:
+				StateTasksComplete := TRUE;
+				SUPER^.Execute();
+				
+			
+		END_CASE
+
+	//=================================MAINTENANCE & MANUAL MODE==================================
+	E_PMLUnitMode.ePMLUnitMode_Maintenance, E_PMLUnitMode.ePMLUnitMode_Manual:
+		;
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="HMIPermissions" Id="{01f1aea6-e802-48f8-abd4-50a2a3d31fba}">
       <Declaration><![CDATA[METHOD PROTECTED HMIPermissions
 ]]></Declaration>
@@ -94,56 +148,6 @@ CASE _CurrentMode OF
 END_CASE]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Idle" Id="{b8a07900-266f-0b30-359e-8e8df7b36472}" FolderPath="MachineStates\">
-      <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Idle</b> state
-METHOD PROTECTED Idle
-	VAR_INST
-		DelayMachine :TON;
-	END_VAR
-
-
-	
-(*! <description> <b>The base implementation of this method is empty. User must override this method to provide functionality.</b>
-<table> 
-	<tr>
-		<th> Previous State </th>
-		<th> Transition In </th>
-		<th> Transition Out </th>
-		<th> Next State  </th> 
-	</tr>
-	<tr>
-		<td> Resetting </td>
-		<td> State Complete <i>(Resetting)</i></td> 
-		<td> Start Command </td>
-		<td> Starting </td> 
-	</tr>
-</table>
-This method is called as required by <c>StateControl()</c>
-</description> 
-
-*)]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[CASE _CurrentMode OF
-//==========================PRODUCTION MODE=======================
-	E_PMLUnitMode.ePMLUnitMode_Production:
-	CASE SequenceState OF	
-		0:		
-			DelayMachine(IN:=TRUE, PT:=T#5S);
-			IF DelayMachine.Q = TRUE THEN
-				DelayMachine(IN:=FALSE);
-				SequenceState := SequenceState + 10;
-			END_IF
-		10:	//Started
-			Trace('Idle after 5s');
-			
-
-	END_CASE
-//==========================MAINTENANCE MODE=======================
-	E_PMLUnitMode.ePMLUnitMode_Maintenance, E_PMLUnitMode.ePMLUnitMode_Manual:
-	;
-END_CASE]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="Initialize" Id="{c8e5bfb3-7a5f-4315-8e43-29ab3e5bd8c9}">
       <Declaration><![CDATA[METHOD PROTECTED Initialize : BOOL
 VAR
@@ -153,11 +157,12 @@ END_VAR]]></Declaration>
         <ST><![CDATA[Initialize := FALSE;
 CASE DescendantSequenceState OF
     0:
-		RegisterSubmodule(GantryXY);
-		RegisterSubmodule(SpindleZ);
+		RegisterSubmodule(GantryXYZ);
+
         _LogModeChanges         := FALSE;
-        _LogStateChanges        := TRUE;
-        DescendantSequenceState := DescendantSequenceState + 10;
+        _LogStateChanges        := FALSE;
+  
+	    DescendantSequenceState := DescendantSequenceState + 10;
     10:
         DescendantSequenceState := DescendantSequenceState + 10;
     20:
@@ -182,32 +187,13 @@ END_CASE]]></ST>
       </Implementation>
     </Method>
     <Method Name="Resetting" Id="{eb35d2e2-9f41-0dd4-1b31-77e01c38a5cd}" FolderPath="MachineStates\">
-      <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Resetting</b> state
-METHOD PROTECTED Resetting
+      <Declaration><![CDATA[METHOD PROTECTED Resetting
 VAR
 	i				: UDINT;
 	SubModulesReady : BOOL := TRUE;
 END_VAR
 
-(*! <description> <b>Note:</b> The <i>Reset</i> command can also be thought of as an <i>enable</i> depite the ambiguity in the naming of the <i>Clearing</i> state.
-<table> 
-	<tr>
-		<th> Previous State </th>
-		<th> Transition In </th>
-		<th> Transition Out </th>
-		<th> Next State  </th> 
-	</tr>
-	<tr>
-		<td> Stopped<b>-or-</b>Completed </td>
-		<td> Reset Command </td> 
-		<td> State Complete </td>
-		<td> Idle </td> 
-	</tr>
-</table>
-This method is called as required by <c>StateControl()</c>
-</description> 
-
-*)]]></Declaration>
+]]></Declaration>
       <Implementation>
         <ST><![CDATA[CASE _CurrentMode OF
 
@@ -217,19 +203,13 @@ This method is called as required by <c>StateControl()</c>
 			0:
 				NoStateTasksToComplete := TRUE;
 				//Advance Gantry to Resetting (Homing)
-				GantryXY.ChangeState(E_PMLCommand.ePMLCommand_Reset);
-				IF GantryXY.Busy THEN
+				GantryXYZ.ChangeState(E_PMLCommand.ePMLCommand_Reset);
+				
 					SequenceState := SequenceState + 10;
-				END_IF
+								
 			10:
-				//Advance Spindle to Resetting(Homing)
-				SpindleZ.ChangeState(E_PMLCommand.ePMLCommand_Reset);
-				IF SpindleZ.Busy THEN
-					SequenceState := SequenceState + 10;
-				END_IF	
-			20:
 				StateTasksComplete := TRUE;
-				StateComplete();
+				SUPER^.Resetting();
 				
 			
 		END_CASE
@@ -312,6 +292,10 @@ END_IF]]></ST>
       <LineId Id="14" Count="0" />
       <LineId Id="2" Count="0" />
     </LineIds>
+    <LineIds Name="FB_Machine.Execute">
+      <LineId Id="24" Count="27" />
+      <LineId Id="23" Count="0" />
+    </LineIds>
     <LineIds Name="FB_Machine.HMIPermissions">
       <LineId Id="3" Count="2" />
       <LineId Id="35" Count="0" />
@@ -325,31 +309,18 @@ END_IF]]></ST>
       <LineId Id="29" Count="0" />
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_Machine.Idle">
-      <LineId Id="23" Count="2" />
-      <LineId Id="35" Count="0" />
-      <LineId Id="44" Count="1" />
-      <LineId Id="37" Count="0" />
-      <LineId Id="107" Count="0" />
-      <LineId Id="71" Count="0" />
-      <LineId Id="41" Count="1" />
-      <LineId Id="70" Count="0" />
-      <LineId Id="163" Count="0" />
-      <LineId Id="136" Count="0" />
-      <LineId Id="31" Count="0" />
-      <LineId Id="72" Count="0" />
-      <LineId Id="28" Count="0" />
-      <LineId Id="73" Count="0" />
-      <LineId Id="30" Count="0" />
-    </LineIds>
     <LineIds Name="FB_Machine.Initialize">
-      <LineId Id="3" Count="4" />
-      <LineId Id="9" Count="3" />
+      <LineId Id="3" Count="3" />
+      <LineId Id="62" Count="0" />
+      <LineId Id="9" Count="2" />
+      <LineId Id="63" Count="0" />
+      <LineId Id="12" Count="0" />
       <LineId Id="40" Count="18" />
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_Machine.Resetting">
-      <LineId Id="28" Count="18" />
+      <LineId Id="28" Count="11" />
+      <LineId Id="46" Count="0" />
       <LineId Id="57" Count="0" />
       <LineId Id="63" Count="1" />
       <LineId Id="61" Count="0" />

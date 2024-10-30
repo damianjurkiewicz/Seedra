@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
-  <POU Name="FB_GantryXY" Id="{496b17f1-4b0a-4954-89f4-eec9ef72b2f5}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_GantryXY EXTENDS FB_PackML_BaseModule
+  <POU Name="FB_GantryXYZ" Id="{496b17f1-4b0a-4954-89f4-eec9ef72b2f5}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_GantryXYZ EXTENDS FB_PackML_BaseModule
 VAR
     // Sub module definitions here
 
@@ -11,14 +11,16 @@ VAR
     // Component definitions here
     AxisX       		: FB_Component_BasicAxis 		:= (Name := 'AxisX');
     AxisY    			: FB_Component_BasicAxis 		:= (Name := 'AxisY');
+	AxisZ				: FB_Component_BasicAxis		:= (Name := 'AxisZ');
     GantryCylinder		: FB_GantryXYCylinder			:= (Name := 'Cylinder');
 
     //Alarms for this module
     GantryAlarms : ARRAY[1..GANTRY_ALARM_COUNT] OF FB_TcAlarm;
 
 	//IO
-	PositionSensorX :BOOL;
-	PositionSensorY :BOOL;
+	LimitSwitchX :BOOL;
+	LimitSwitchY :BOOL;
+	LimitSwitchZ :BOOL;
 
 	HomeComplete :BOOL;
 
@@ -32,7 +34,7 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Folder Name="GantryXYStates" Id="{83d122fa-7c6a-0e7c-1bbf-3cae8b533243}" />
+    <Folder Name="GantryXYZStates" Id="{83d122fa-7c6a-0e7c-1bbf-3cae8b533243}" />
     <Method Name="CreateEvents" Id="{4ec0ace2-c308-44b2-84a1-60ba649bd547}">
       <Declaration><![CDATA[METHOD PROTECTED CreateEvents
 VAR_INPUT
@@ -65,6 +67,61 @@ _CurrentAlarmSeverity := F_GetMaxSeverityRaised(Alarms := GantryAlarms, CurrentS
 
 //Simulate Alarm Messaging
 ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Execute" Id="{5fb27593-abe1-0ede-3a2a-27773aa05457}" FolderPath="GantryXYZStates\">
+      <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Execute</b> state
+METHOD PROTECTED Execute
+
+(*! <description> <b>The base implementation of this method is empty. User must override this method to provide functionality.</b>
+<table> 
+	<tr>
+		<th> Previous State </th>
+		<th> Transition In </th>
+		<th> Transition Out </th>
+		<th> Next State  </th> 
+	</tr>
+	<tr>
+		<td> Starting<b>-or-</b>Unholding <b>-or-</b>Unsuspending</td>
+		<td> State Complete<i>(Starting<b>-or-</b>Unholding<b>-or-</b>Unsuspending)</i></td> 
+		<td> State Complete<b>-or-</b>Hold Command<b>-or-</b>Suspend Command</td>
+		<td> Completing<b>-or-</b>Holding<b>-or-</b>Suspending</td>
+	</tr>
+</table>
+This method is called as required by <c>StateControl()</c>
+</description> 
+
+*)]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE _CurrentMode OF
+
+	//=================================PRODUCTION MODE==================================
+	E_PMLUnitMode.ePMLUnitMode_Production:
+		CASE SequenceState OF
+			0:
+				NoStateTasksToComplete := TRUE;
+				//Advance Gantry to Resetting (Homing)
+				
+				
+					SequenceState := SequenceState + 10;
+				
+			10:
+				//Advance Spindle to Resetting(Homing)
+				
+				
+					SequenceState := SequenceState + 10;
+				
+			20:
+				StateTasksComplete := TRUE;
+				SUPER^.Execute();
+				
+			
+		END_CASE
+
+	//=================================MAINTENANCE & MANUAL MODE==================================
+	E_PMLUnitMode.ePMLUnitMode_Maintenance, E_PMLUnitMode.ePMLUnitMode_Manual:
+		;
+END_CASE]]></ST>
       </Implementation>
     </Method>
     <Method Name="HMIPermissions" Id="{a98019a5-2d4d-097b-1c9d-7422486c9b5b}">
@@ -100,33 +157,6 @@ CASE _CurrentMode OF
 END_CASE]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Idle" Id="{bb0deaec-a9ee-0964-0472-8b7a666f0722}" FolderPath="GantryXYStates\">
-      <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Idle</b> state
-METHOD PROTECTED Idle
-
-(*! <description> <b>The base implementation of this method is empty. User must override this method to provide functionality.</b>
-<table> 
-	<tr>
-		<th> Previous State </th>
-		<th> Transition In </th>
-		<th> Transition Out </th>
-		<th> Next State  </th> 
-	</tr>
-	<tr>
-		<td> Resetting </td>
-		<td> State Complete <i>(Resetting)</i></td> 
-		<td> Start Command </td>
-		<td> Starting </td> 
-	</tr>
-</table>
-This method is called as required by <c>StateControl()</c>
-</description> 
-
-*)]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="Initialize" Id="{b4a0fd62-4385-4420-ae43-9bea35a3f798}">
       <Declaration><![CDATA[//! @summary Basic module initialization logic
 METHOD PROTECTED Initialize : BOOL;
@@ -147,7 +177,7 @@ CASE DescendantSequenceState OF
 		RegisterComponent(GantryCylinder);
 		
         _LogModeChanges         := FALSE;
-        _LogStateChanges        := TRUE;
+        _LogStateChanges        := FALSE;
         DescendantSequenceState := DescendantSequenceState + 10;
     10:
         DescendantSequenceState := DescendantSequenceState + 10;
@@ -168,33 +198,14 @@ CASE DescendantSequenceState OF
 END_CASE]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Resetting" Id="{e9851c76-6213-0482-2237-5496172b7e77}" FolderPath="GantryXYStates\">
-      <Declaration><![CDATA[//! @summary This method contains code which will execute when this PackML module is in the <b>Resetting</b> state
-METHOD PROTECTED Resetting
+    <Method Name="Resetting" Id="{e9851c76-6213-0482-2237-5496172b7e77}" FolderPath="GantryXYZStates\">
+      <Declaration><![CDATA[METHOD PROTECTED Resetting
 VAR
 	i				: UDINT;
 	SubModulesReady : BOOL := TRUE;
 END_VAR
 
-(*! <description> <b>Note:</b> The <i>Reset</i> command can also be thought of as an <i>enable</i> depite the ambiguity in the naming of the <i>Clearing</i> state.
-<table> 
-	<tr>
-		<th> Previous State </th>
-		<th> Transition In </th>
-		<th> Transition Out </th>
-		<th> Next State  </th> 
-	</tr>
-	<tr>
-		<td> Stopped<b>-or-</b>Completed </td>
-		<td> Reset Command </td> 
-		<td> State Complete </td>
-		<td> Idle </td> 
-	</tr>
-</table>
-This method is called as required by <c>StateControl()</c>
-</description> 
-
-*)]]></Declaration>
+]]></Declaration>
       <Implementation>
         <ST><![CDATA[CASE _CurrentMode OF
 
@@ -210,13 +221,15 @@ This method is called as required by <c>StateControl()</c>
 
 					AxisY.Home();
 					Trace('Axis Y Home Complete');
-					 
+
+					AxisZ.Home();
+					Trace('Axis Z Home Complete');					 
+
 					SequenceState := SequenceState + 10;			
 
 			10:		
-
 				StateTasksComplete := TRUE;
-				
+				SUPER^.Resetting();
 		END_CASE
 
 	//=================================MAINTENANCE & MANUAL MODE==================================
@@ -227,38 +240,42 @@ END_CASE
 ]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_GantryXY">
+    <LineIds Name="FB_GantryXYZ">
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_GantryXY.CreateEvents">
+    <LineIds Name="FB_GantryXYZ.CreateEvents">
       <LineId Id="3" Count="6" />
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_GantryXY.CyclicLogic">
+    <LineIds Name="FB_GantryXYZ.CyclicLogic">
       <LineId Id="3" Count="5" />
       <LineId Id="12" Count="4" />
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_GantryXY.HMIPermissions">
+    <LineIds Name="FB_GantryXYZ.Execute">
+      <LineId Id="24" Count="27" />
+      <LineId Id="23" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_GantryXYZ.HMIPermissions">
       <LineId Id="6" Count="24" />
       <LineId Id="5" Count="0" />
     </LineIds>
-    <LineIds Name="FB_GantryXY.Idle">
-      <LineId Id="23" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_GantryXY.Initialize">
+    <LineIds Name="FB_GantryXYZ.Initialize">
       <LineId Id="3" Count="10" />
       <LineId Id="41" Count="5" />
       <LineId Id="48" Count="0" />
       <LineId Id="51" Count="7" />
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_GantryXY.Resetting">
+    <LineIds Name="FB_GantryXYZ.Resetting">
       <LineId Id="28" Count="13" />
+      <LineId Id="74" Count="0" />
+      <LineId Id="73" Count="0" />
       <LineId Id="61" Count="0" />
+      <LineId Id="75" Count="0" />
       <LineId Id="57" Count="0" />
       <LineId Id="44" Count="1" />
-      <LineId Id="59" Count="1" />
+      <LineId Id="60" Count="0" />
       <LineId Id="66" Count="0" />
       <LineId Id="48" Count="6" />
       <LineId Id="27" Count="0" />
