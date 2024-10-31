@@ -37,8 +37,32 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Folder Name="GantryXYZStates" Id="{83d122fa-7c6a-0e7c-1bbf-3cae8b533243}" />
     <Folder Name="MyMethods" Id="{df43c4fc-4941-0a05-2048-b885d685c5f2}" />
+    <Folder Name="States" Id="{83d122fa-7c6a-0e7c-1bbf-3cae8b533243}" />
+    <Method Name="BoxMilling" Id="{72d228ce-b399-0094-138d-59f534ec17d5}" FolderPath="MyMethods\">
+      <Declaration><![CDATA[METHOD BoxMilling : BOOL
+
+VAR_INST
+	Step : INT ;	
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[	CASE Step OF
+		
+		0: 
+			Trace(' first line');
+			Step := Step + 10; 
+		10:
+			Trace('HomeY');
+			Step := Step + 10;
+	
+		20:	
+			Trace('HomeZ');
+			BoxMilling := TRUE;
+			Step := 0;	
+
+	END_CASE]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="CreateEvents" Id="{4ec0ace2-c308-44b2-84a1-60ba649bd547}">
       <Declaration><![CDATA[METHOD PROTECTED CreateEvents
 VAR_INPUT
@@ -110,22 +134,72 @@ END_CASE]]></ST>
       <Declaration><![CDATA[METHOD HomeAllAxes : BOOL
 
 VAR_INST
-	HomingState : INT ;	
-END_VAR]]></Declaration>
+	Step : INT ;	
+END_VAR
+
+(*
+	F			H
+	|			|
+D---+-----------+---C
+	|			|
+	|			| 
+B---+-----------+---A
+	|			|
+	E			G
+*)]]></Declaration>
       <Implementation>
-        <ST><![CDATA[	CASE HomingState OF
+        <ST><![CDATA[	CASE Step OF
 		
-		0: 
-			Trace('HomeX');
-			HomingState := HomingState + 10; 
-		10:
-			Trace('HomeY');
-			HomingState := HomingState + 10;
-	
-		20:	
+		0:  //Print Info
+			
+			Trace('Start of the Milling');
+			
+			Step := Step + 10;	
+
+		10:	//Set Speed
+			
+			AxisX.Velocity := 10; 
+			AxisY.Velocity := 10;
+			AxisZ.Velocity := 5;
+			
+			Step := Step + 10;
+
+		20:	//Positioning Motion to the Point A
+   			
+			AxisX.MoveAbsolute(0,0);
+			AxisY.MoveAbsolute(250,0);		
+			
+			Step := Step + 10; 
+		
+		30: //Set Cutting Height
+			
+			AxisZ.MoveAbsolute(-30,0);
+			
+			Step := Step + 10;
+
+		40: //Cutting Motion from point A to the Point B
+			
+			AxisX.MoveAbsolute(500,0);		
+			
+			Step := Step + 10;
+		
+		50: //Returning from Cutting Height 
+			
+			AxisZ.MoveAbsolute(50,0);
+
+			Step := Step + 10;
+		
+		60: //Positioning Motion to the Point C
+			
+			AxisX.MoveAbsolute(0,0);
+			AxisY.MoveAbsolute(50,0);
+
+
+		90:	
 			Trace('HomeZ');
 			HomeAllAxes := TRUE;
-			HomingState := 0;	
+			Step := 0;	
+
 	END_CASE]]></ST>
       </Implementation>
     </Method>
@@ -171,7 +245,7 @@ CASE DescendantSequenceState OF
 END_CASE]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Resetting" Id="{e9851c76-6213-0482-2237-5496172b7e77}" FolderPath="GantryXYZStates\">
+    <Method Name="Resetting" Id="{e9851c76-6213-0482-2237-5496172b7e77}" FolderPath="States\">
       <Declaration><![CDATA[METHOD PROTECTED Resetting
 VAR
 	i				: UDINT;
@@ -210,6 +284,10 @@ END_CASE
     <LineIds Name="FB_GantryXYZ">
       <LineId Id="2" Count="0" />
     </LineIds>
+    <LineIds Name="FB_GantryXYZ.BoxMilling">
+      <LineId Id="27" Count="13" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
     <LineIds Name="FB_GantryXYZ.CreateEvents">
       <LineId Id="3" Count="6" />
       <LineId Id="2" Count="0" />
@@ -224,15 +302,40 @@ END_CASE
       <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="FB_GantryXYZ.HomeAllAxes">
-      <LineId Id="21" Count="1" />
-      <LineId Id="53" Count="0" />
-      <LineId Id="55" Count="1" />
-      <LineId Id="68" Count="0" />
-      <LineId Id="58" Count="0" />
-      <LineId Id="62" Count="0" />
-      <LineId Id="72" Count="2" />
-      <LineId Id="77" Count="0" />
-      <LineId Id="67" Count="0" />
+      <LineId Id="96" Count="3" />
+      <LineId Id="156" Count="0" />
+      <LineId Id="143" Count="0" />
+      <LineId Id="148" Count="1" />
+      <LineId Id="118" Count="0" />
+      <LineId Id="100" Count="2" />
+      <LineId Id="152" Count="0" />
+      <LineId Id="146" Count="1" />
+      <LineId Id="117" Count="0" />
+      <LineId Id="103" Count="1" />
+      <LineId Id="157" Count="0" />
+      <LineId Id="105" Count="2" />
+      <LineId Id="144" Count="0" />
+      <LineId Id="150" Count="0" />
+      <LineId Id="145" Count="0" />
+      <LineId Id="158" Count="0" />
+      <LineId Id="153" Count="0" />
+      <LineId Id="155" Count="0" />
+      <LineId Id="154" Count="0" />
+      <LineId Id="108" Count="0" />
+      <LineId Id="119" Count="0" />
+      <LineId Id="159" Count="0" />
+      <LineId Id="110" Count="0" />
+      <LineId Id="160" Count="0" />
+      <LineId Id="124" Count="0" />
+      <LineId Id="161" Count="0" />
+      <LineId Id="125" Count="1" />
+      <LineId Id="138" Count="1" />
+      <LineId Id="162" Count="1" />
+      <LineId Id="140" Count="0" />
+      <LineId Id="164" Count="0" />
+      <LineId Id="141" Count="1" />
+      <LineId Id="123" Count="0" />
+      <LineId Id="112" Count="4" />
       <LineId Id="19" Count="0" />
     </LineIds>
     <LineIds Name="FB_GantryXYZ.Initialize">

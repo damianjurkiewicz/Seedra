@@ -22,7 +22,7 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Folder Name="MachineStates" Id="{7e41413f-6ba1-0380-01c0-e5e34869e80f}" />
+    <Folder Name="States" Id="{7e41413f-6ba1-0380-01c0-e5e34869e80f}" />
     <Method Name="CreateEvents" Id="{3ef7297b-dc6e-4a47-8d8e-332da0b8eab2}">
       <Declaration><![CDATA[METHOD PROTECTED CreateEvents
 VAR_INPUT
@@ -59,6 +59,15 @@ END_IF
 
 
 ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Execute" Id="{4f0c52b1-9f4a-07d5-15ff-8cf9698bc434}" FolderPath="States\">
+      <Declaration><![CDATA[METHOD Execute : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
     <Method Name="HMIPermissions" Id="{01f1aea6-e802-48f8-abd4-50a2a3d31fba}">
@@ -131,7 +140,7 @@ CASE DescendantSequenceState OF
 END_CASE]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Resetting" Id="{eb35d2e2-9f41-0dd4-1b31-77e01c38a5cd}" FolderPath="MachineStates\">
+    <Method Name="Resetting" Id="{eb35d2e2-9f41-0dd4-1b31-77e01c38a5cd}" FolderPath="States\">
       <Declaration><![CDATA[METHOD PROTECTED Resetting
 VAR
 	i				: UDINT;
@@ -236,6 +245,9 @@ END_IF]]></ST>
       <LineId Id="26" Count="0" />
       <LineId Id="14" Count="0" />
       <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Machine.Execute">
+      <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="FB_Machine.HMIPermissions">
       <LineId Id="3" Count="2" />
