@@ -61,13 +61,35 @@ END_IF
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Execute" Id="{4f0c52b1-9f4a-07d5-15ff-8cf9698bc434}" FolderPath="States\">
-      <Declaration><![CDATA[METHOD Execute : BOOL
-VAR_INPUT
-END_VAR
+    <Method Name="Execute" Id="{7cb75aab-bfc8-0c34-147d-281c1f960f16}" FolderPath="States\">
+      <Declaration><![CDATA[METHOD PROTECTED Execute
+
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[CASE _CurrentMode OF
+
+	//=================================PRODUCTION MODE==================================
+	E_PMLUnitMode.ePMLUnitMode_Production:
+		CASE SequenceState OF
+			0:
+				NoStateTasksToComplete := FALSE;
+
+				//Advance Gantry to Resetting (Homing)
+				GantryXYZ.ChangeState(E_PMLCommand.ePMLCommand_Start);
+				
+				SequenceState := SequenceState + 10;
+					
+			10:
+				StateTasksComplete := TRUE;
+				StateComplete();
+				
+			
+		END_CASE
+
+	//=================================MAINTENANCE & MANUAL MODE==================================
+	E_PMLUnitMode.ePMLUnitMode_Maintenance, E_PMLUnitMode.ePMLUnitMode_Manual:
+		;
+END_CASE]]></ST>
       </Implementation>
     </Method>
     <Method Name="HMIPermissions" Id="{01f1aea6-e802-48f8-abd4-50a2a3d31fba}">
@@ -156,10 +178,11 @@ END_VAR
 		CASE SequenceState OF
 			0:
 				NoStateTasksToComplete := FALSE;
+
 				//Advance Gantry to Resetting (Homing)
 				GantryXYZ.ChangeState(E_PMLCommand.ePMLCommand_Reset);
 				
-					SequenceState := SequenceState + 10;
+				SequenceState := SequenceState + 10;
 					
 			10:
 				StateTasksComplete := TRUE;
@@ -247,7 +270,8 @@ END_IF]]></ST>
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_Machine.Execute">
-      <LineId Id="5" Count="0" />
+      <LineId Id="24" Count="22" />
+      <LineId Id="23" Count="0" />
     </LineIds>
     <LineIds Name="FB_Machine.HMIPermissions">
       <LineId Id="3" Count="2" />
@@ -272,7 +296,9 @@ END_IF]]></ST>
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_Machine.Resetting">
-      <LineId Id="28" Count="11" />
+      <LineId Id="28" Count="6" />
+      <LineId Id="71" Count="0" />
+      <LineId Id="35" Count="4" />
       <LineId Id="46" Count="0" />
       <LineId Id="57" Count="0" />
       <LineId Id="63" Count="1" />
