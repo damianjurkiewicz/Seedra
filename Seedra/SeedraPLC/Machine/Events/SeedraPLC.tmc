@@ -36,7 +36,7 @@
 	</Translations>
 	<DataTypes>
 		<DataType>
-			<Name GUID="{2D473CF4-5832-4FF1-91A5-58F2A44AB92F}">Seedra</Name>
+			<Name GUID="{8529CA6B-8AA5-4A44-B853-3B0DC6381178}">Seedra</Name>
 			<DisplayName TxtId=""><![CDATA[Seedra]]></DisplayName>
 			<EventId>
 				<Name Id="1">InitReferenceEvent</Name>
@@ -47,7 +47,7 @@
 			<EventId>
 				<Name Id="2">EmergencyStop</Name>
 				<DisplayName TxtId=""><![CDATA[DT_Seedra_Event_EmergencyStop]]></DisplayName>
-				<Severity>Error</Severity>
+				<Severity>Critical</Severity>
 			</EventId>
 			<EventId>
 				<Name Id="3">LowAir</Name>
@@ -73,6 +73,7 @@
 				<Hide GUID="{FE9A29DC-E7F7-4FBC-BA63-9EF8F58A116B}"/>
 				<Hide GUID="{A57A63D3-319B-49B6-9D4A-5C2DDCEE5F11}"/>
 				<Hide GUID="{253CBB3E-FA4D-478D-8422-9E3E0A457FEC}"/>
+				<Hide GUID="{2D473CF4-5832-4FF1-91A5-58F2A44AB92F}"/>
 			</Hides>
 		</DataType>
 		<DataType>

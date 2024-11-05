@@ -1427,6 +1427,8 @@ External Setpoint Generation:
 	<Axis Id="3" CreateSymbols="true" AxisType="1">
 		<Name>__FILENAME__</Name>
 		<AxisPara>
+			<PositionAreaControl Enable="false"/>
+			<TargetPosControl Enable="false"/>
 			<OtherSettings AllowMotionCmdToSlave="true"/>
 		</AxisPara>
 		<Encoder Name="Enc" EncType="1">
@@ -1560,6 +1562,7 @@ External Setpoint Generation:
 		</Drive>
 		<Controller Name="Ctrl" CtrType="1">
 			<CtrPara PriorControlFactor="1">
+				<PosDiffControl Enable="false"/>
 				<Observer BandWidth="20"/>
 			</CtrPara>
 		</Controller>

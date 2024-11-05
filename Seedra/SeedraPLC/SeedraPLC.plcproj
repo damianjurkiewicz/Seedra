@@ -20,6 +20,9 @@
     <CombineIds>true</CombineIds>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GlobalTextList.TcGTLO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="GVL\IO.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>

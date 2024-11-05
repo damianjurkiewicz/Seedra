@@ -23,6 +23,31 @@ END_VAR
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Folder Name="States" Id="{7e41413f-6ba1-0380-01c0-e5e34869e80f}" />
+    <Method Name="Clearing" Id="{3ebb3e75-7d85-074b-0fde-eeba5d64b905}" FolderPath="States\">
+      <Declaration><![CDATA[
+METHOD PROTECTED Clearing
+VAR
+	i				: UDINT;
+	SubModulesReady : BOOL := TRUE;
+END_VAR
+
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE SequenceState OF
+    0:
+        NoStateTasksToComplete := FALSE;
+        SequenceState          := SequenceState + 10;
+    10:
+        
+       	MachineAlarms[E_Seedra.EmergencyStop].Clear(0, 0);
+        SequenceState := SequenceState + 10;
+    20:
+    	 StateTasksComplete := TRUE; 
+END_CASE
+
+SUPER^.Clearing();]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="CreateEvents" Id="{3ef7297b-dc6e-4a47-8d8e-332da0b8eab2}">
       <Declaration><![CDATA[METHOD PROTECTED CreateEvents
 VAR_INPUT
@@ -53,8 +78,8 @@ SUPER^.CyclicLogic();
 //Here the alarms will raise and clear on its own if the input changes
 IF SafetyGlobalVariableList.eStop AND NOT MachineAlarms[E_Seedra.EmergencyStop].bRaised THEN
 	RaiseAlarmWithStrings(MachineAlarms[E_Seedra.EmergencyStop],'','');
-ELSIF NOT SafetyGlobalVariableList.eStop THEN
-    MachineAlarms[E_Seedra.EmergencyStop].Clear(0, 0);
+	//ELSIF NOT SafetyGlobalVariableList.eStop THEN
+		//MachineAlarms[E_Seedra.EmergencyStop].Clear(0, 0);
 END_IF
 
 
@@ -90,6 +115,23 @@ END_IF
 	E_PMLUnitMode.ePMLUnitMode_Maintenance, E_PMLUnitMode.ePMLUnitMode_Manual:
 		;
 END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="HMICommunication" Id="{15066b15-1fe8-08b0-0bbe-1da888217a7b}">
+      <Declaration><![CDATA[//! @summary Provides interlocks for HMI control and updates HMI status information for this module
+METHOD PROTECTED HMICommunication
+
+//! @description This method is called cyclically by <c>CyclicLogic()</c>]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+IF SafetyGlobalVariableList.eStop THEN
+	PackMLBaseModule_HMI.Status.Error := TRUE;
+	THIS^._Error := TRUE;
+END_IF
+
+
+
+SUPER^.HMICommunication();]]></ST>
       </Implementation>
     </Method>
     <Method Name="HMIPermissions" Id="{01f1aea6-e802-48f8-abd4-50a2a3d31fba}">
@@ -221,6 +263,7 @@ IF _CurrentState <> E_PMLState.ePMLState_Aborted AND _CurrentState <> E_PMLState
     CASE AlarmResponses[CurrentAlarmSeverity] OF
         E_AlarmResponse.Abort_ImmediateError:
             AbortImmediateError(Name, TRUE);
+			AbortImmediateError(Name, FALSE);
         E_AlarmResponse.Abort_Immediate:
             AbortImmediate();
         E_AlarmResponse.Stop_Immediate:
@@ -252,6 +295,12 @@ END_IF]]></ST>
     <LineIds Name="FB_Machine">
       <LineId Id="2" Count="0" />
     </LineIds>
+    <LineIds Name="FB_Machine.Clearing">
+      <LineId Id="28" Count="8" />
+      <LineId Id="45" Count="0" />
+      <LineId Id="48" Count="1" />
+      <LineId Id="27" Count="0" />
+    </LineIds>
     <LineIds Name="FB_Machine.CreateEvents">
       <LineId Id="3" Count="4" />
       <LineId Id="9" Count="0" />
@@ -272,6 +321,16 @@ END_IF]]></ST>
     <LineIds Name="FB_Machine.Execute">
       <LineId Id="24" Count="22" />
       <LineId Id="23" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Machine.HMICommunication">
+      <LineId Id="8" Count="1" />
+      <LineId Id="6" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="FB_Machine.HMIPermissions">
       <LineId Id="3" Count="2" />
@@ -308,7 +367,9 @@ END_IF]]></ST>
       <LineId Id="62" Count="0" />
     </LineIds>
     <LineIds Name="FB_Machine.SubModuleMonitor">
-      <LineId Id="10" Count="37" />
+      <LineId Id="10" Count="12" />
+      <LineId Id="55" Count="0" />
+      <LineId Id="23" Count="24" />
       <LineId Id="9" Count="0" />
     </LineIds>
   </POU>
